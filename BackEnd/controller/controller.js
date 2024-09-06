@@ -71,7 +71,7 @@ const userController = {
             
             const sql = await clientController.validateLogin(email,senha);
             if(sql != null) {
-                res.status(200).json({msg: "Email e senha validados com sucesso!!"})
+                res.status(200).json(sql[0])
             }
 
             else{

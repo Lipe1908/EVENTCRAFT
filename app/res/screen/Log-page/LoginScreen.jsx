@@ -1,5 +1,5 @@
 // Gabriel / RC
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {View, Alert, StyleSheet} from 'react-native';
 import { Center, ScrollView, StatusBar,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
@@ -94,12 +94,13 @@ export default function LoginScreen({navigation}) {
             setEmail('');
             setSenha('');
             const userData = {
-                id:response.data.id,
-                nome:response.data.nome,
-                sobrenome:response.data.sobrenome,
-                email:response.data.email,
-                senha:response.data.senha,
+                id: response.data.id,
+                nome: response.data.nome,
+                sobrenome: response.data.sobrenome,
+                email: response.data.email,
+                senha: response.data.senha,
             }
+            console.log(userData)
             navigation.navigate('Home', {userData});
         }
         else {
@@ -120,6 +121,8 @@ export default function LoginScreen({navigation}) {
         }
     };
   };
+
+  
 
   const [showPassword, setShowPassword] = useState(false)
   const handleState = () => {

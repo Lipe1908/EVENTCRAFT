@@ -18,29 +18,74 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SearchIcon } from "lucide-react";
 import { Card } from '@gluestack-ui/themed';
-import { withTiming, withSpring } from 'react-native-reanimated';
+import { withTiming, withSpring, useAnimatedStyle, withRepeat, useSharedValue } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 import { AvatarFallbackText } from "@gluestack-ui/themed";
 import { Dimensions, } from "react-native";
 import teste from '../../../src/img/evento1.png'
 import teste2 from '../../../src/img/evento2.jpg'
+
+
+
+
+function HomeScreen({navigation, route}) {
+
+  const { id, nome, sobrenome, email, senha } = route.params.obj;
+
+  console.log(id)
+
+  function getRandomElement(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    const randomElement = array[randomIndex];
+    return randomElement;
+}
+
+const array = [
+'https://isep.org.br/wp-content/uploads/2021/02/sp_criancas_festa_aniversario_bacana-1.jpeg',
+'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeDfl-_svu8jLAcWyhD3DcjAbFmvIbBpQwwA&s',
+'https://i.em.com.br/IQ1l_dkc9VYK5P8PW-EaTphOuF4=/790x/smart/imgsapp.em.com.br/app/noticia_127983242361/2023/05/21/1496049/uma-cor-que-esta-totalmente-proibida-para-as-convidadas-de-acordo-com-a-etiqueta-de-casamento-e-o-branco-que-esta-reservado-para-as-noivas-a-nao-ser-que-o-casamento-seja-na-praia_1_55583.jpg',
+'https://cdn.prod.website-files.com/636d4036709c50b9ac704e98/65b157c74e6fb6c92b778c37_eventos-inovacao-tecnologia_2024_numerik.jpg',
+];
+const randomElement = getRandomElement(array);
+
  
-// const imageUrls = [
-//   'https://media.geeksforgeeks.org/wp-content/cdn-uploads/gfg_200x200-min.png',
-//   'https://media.geeksforgeeks.org/wp-content/uploads/20210224040124/JSBinCollaborativeJavaScriptDebugging6-300x160.png',
-//   'https://media.geeksforgeeks.org/wp-content/uploads/20230816223732/geeksgforgeeks-logo.jpg',
-//   'https://media.geeksforgeeks.org/wp-content/uploads/20230816223829/geeksgforgeeks-logo-1.png',
-// ];
-function HomeScreen() {
+
+
+  const AnimatedImage = Animated.createAnimatedComponent(Image);
+  const AnimatedBox = Animated.createAnimatedComponent(Box);
+  const scale = useSharedValue(1);
+
+
+  React.useEffect(() => {
+    scale.value = withRepeat(
+      withTiming(scale.value * 0.9, { duration: 900 }),
+      -1,
+      true
+    );
+  }, []);
+
+  const scaleStyles = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+  const scaleBox = useSharedValue(1);
+
+
+  React.useEffect(() => {
+    scaleBox.value = withRepeat(
+      withTiming(scaleBox.value * 0.98, { duration: 800 }),
+      -1,
+      true
+    );
+  }, []);
+
+  const scaleBoxStyles = useAnimatedStyle(() => ({
+    transform: [{ scale: scaleBox.value }],
+  }));
   const [imageSource, setImageSource] = useState('');
 
 
-//   const generateRandomImage = () => {
-//     const randomIndex = 
-//           Math.floor(Math.random() * imageUrls.length);
-//     setImageSource(imageUrls[randomIndex]);
-// };
+
 
   return (
     <SafeAreaView sharedTransitionTag="sharedTag"  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
@@ -64,14 +109,16 @@ function HomeScreen() {
 <Box h={'auto'}>
 
 
-<Text color={'#AA7E39'} marginTop={60} marginHorizontal={20} fontSize={15}>Olá</Text>
+<Text color={'#AA7E39'} marginTop={70} marginHorizontal={40} fontSize={15}>Olá</Text>
 
-<Text color={'#AA7E39'} marginHorizontal={20} fontWeight='bold' fontSize={17}>XXXX</Text>
+<Text color={'#AA7E39'} marginTop={8} marginHorizontal={40} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
 
 
 <Avatar marginLeft={350} marginTop={-40} bgColor="$coolGray500" size="md" borderRadius="$full">
-  <AvatarFallbackText>Luís Felipe</AvatarFallbackText>
+  <AvatarFallbackText>{nome}</AvatarFallbackText>
 </Avatar>
+
+
 
 </Box>
 
@@ -84,16 +131,39 @@ function HomeScreen() {
 </Input>
 
 
-</Box>
-
-<Center marginVertical={-4}>
-
-
-
-<Box alignSelf="center" alignItems="center" w={400} marginVertical={0}>
 
 
 </Box>
+
+<Center h={'auto'} marginVertical={-3}>
+
+
+
+<AnimatedBox style={[scaleBoxStyles]}  alignSelf="center" alignItems="center" w={400} h={190} marginTop={-25}>
+
+<Image 
+tintColor={'black'}
+position="absolute"
+opacity={0.95}
+ h={160}
+ borderRadius={20}
+
+ w={'90%'}
+ source={{ uri: randomElement }}
+ alt="logo"
+ />
+<Image 
+opacity={0.5}
+ h={160}
+ borderRadius={20}
+ w={'90%'}
+ source={{ uri: randomElement }}
+ alt="logo"
+ />
+ <Text bg={'red'} position="absolute" fontWeight={"$extrabold"} fontSize={15} color={'white'} marginTop={105}> Comece Já! </Text>
+ <Text marginTop={40} fontWeight={"$extrabold"} fontSize={25} color={'white'} position="absolute">Planeje seus eventos</Text>
+ <Text marginTop={70} fontWeight={"$extrabold"} fontSize={20} color={'white'} position="absolute">Da melhor maneira!</Text>
+</AnimatedBox>
 
 
 
@@ -198,9 +268,28 @@ function EventsScreen() {
   );
 }
 
+function CreateEventScreen(){
+
+}
+
 const Tab = createBottomTabNavigator();
-export default function Home({navigation}) {
-  
+export default function Home({navigation, route}) {
+  const AnimatedBox = Animated.createAnimatedComponent(Box);
+  const scale = useSharedValue(1);
+
+
+  React.useEffect(() => {
+    scale.value = withRepeat(
+      withTiming(scale.value * 0.9, { duration: 800 }),
+      -1,
+      true
+    );
+  }, []);
+
+  const scaleStyles = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+  const obj = route.params.userData;
   return (
    
     <Tab.Navigator
@@ -219,6 +308,7 @@ export default function Home({navigation}) {
            ? 'calendar'
            : 'calendar-outline';
         }
+         
 
         // You can return any component that you like here!
         return <Ionicons name={iconName} size={20} color={color} />;
@@ -239,8 +329,19 @@ export default function Home({navigation}) {
     
     )}
   >
-    <Tab.Screen options={{headerShown: false}} name="Página Inicial" component={HomeScreen} />
-    <Tab.Screen options={{headerShown: false}} name="Eventos" component={EventsScreen} />
+    <Tab.Screen initialParams={{obj}} options={{headerShown: false}} name="Página Inicial" component={HomeScreen} />
+    <Tab.Screen initialParams={{ obj }}
+     options={{headerShown: false, tabBarIcon: ({focused, color, size}) => {
+            return (
+              <AnimatedBox style={[scaleStyles]} position="absolute" >
+                <Box alignItens="center" marginBottom={40}>
+                  <Ionicons name={'add-circle'} size={70} color={color}/>
+                </Box>
+              </AnimatedBox>
+            );
+          },
+          }} name="Criar-Evento" component={CreateEventScreen} />
+    <Tab.Screen initialParams={{ obj }} options={{headerShown: false}} name="Eventos" component={EventsScreen} />
   </Tab.Navigator>
 
 
