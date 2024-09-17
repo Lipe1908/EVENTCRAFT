@@ -8,6 +8,7 @@ MERGED from C:\Users\Aluno\Desktop\EVENTCRAFT\app\android\app\src\main\AndroidMa
 MERGED from [com.facebook.flipper:flipper-network-plugin:0.182.0] C:\Users\Aluno\.gradle\caches\transforms-3\e47626a30834dcd66576d826bae55315\transformed\jetified-flipper-network-plugin-0.182.0\AndroidManifest.xml:8:1-15:12
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.182.0] C:\Users\Aluno\.gradle\caches\transforms-3\927874504f02e490d8ef5fc541319ddd\transformed\jetified-flipper-fresco-plugin-0.182.0\AndroidManifest.xml:8:1-15:12
 MERGED from [com.facebook.flipper:flipper:0.182.0] C:\Users\Aluno\.gradle\caches\transforms-3\e13f88164840fe641a466d05cd8edac7\transformed\jetified-flipper-0.182.0\AndroidManifest.xml:8:1-18:12
+MERGED from [:react-native-community_datetimepicker] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\@react-native-community\datetimepicker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-gesture-handler] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:react-native-reanimated] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\react-native-reanimated\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:react-native-safe-area-context] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\react-native-safe-area-context\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
@@ -109,6 +110,8 @@ application
 ADDED from C:\Users\Aluno\Desktop\EVENTCRAFT\app\android\app\src\main\AndroidManifest.xml:5:5-24:19
 MERGED from C:\Users\Aluno\Desktop\EVENTCRAFT\app\android\app\src\main\AndroidManifest.xml:5:5-24:19
 MERGED from C:\Users\Aluno\Desktop\EVENTCRAFT\app\android\app\src\main\AndroidManifest.xml:5:5-24:19
+MERGED from [:react-native-community_datetimepicker] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\@react-native-community\datetimepicker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-20
+MERGED from [:react-native-community_datetimepicker] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\@react-native-community\datetimepicker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-20
 MERGED from [com.facebook.soloader:soloader:0.10.5] C:\Users\Aluno\.gradle\caches\transforms-3\ec3312a013bd7d8a70466a1977a1dba4\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:11:5-15:19
 MERGED from [com.facebook.soloader:soloader:0.10.5] C:\Users\Aluno\.gradle\caches\transforms-3\ec3312a013bd7d8a70466a1977a1dba4\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:11:5-15:19
 MERGED from [com.google.android.material:material:1.6.1] C:\Users\Aluno\.gradle\caches\transforms-3\1d6b356531b01302d8be2dab58de3c36\transformed\material-1.6.1\AndroidManifest.xml:24:5-20
@@ -185,6 +188,8 @@ MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.182.0] C:\Users\Aluno\
 MERGED from [com.facebook.flipper:flipper-fresco-plugin:0.182.0] C:\Users\Aluno\.gradle\caches\transforms-3\927874504f02e490d8ef5fc541319ddd\transformed\jetified-flipper-fresco-plugin-0.182.0\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper:0.182.0] C:\Users\Aluno\.gradle\caches\transforms-3\e13f88164840fe641a466d05cd8edac7\transformed\jetified-flipper-0.182.0\AndroidManifest.xml:11:5-13:41
 MERGED from [com.facebook.flipper:flipper:0.182.0] C:\Users\Aluno\.gradle\caches\transforms-3\e13f88164840fe641a466d05cd8edac7\transformed\jetified-flipper-0.182.0\AndroidManifest.xml:11:5-13:41
+MERGED from [:react-native-community_datetimepicker] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\@react-native-community\datetimepicker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:react-native-community_datetimepicker] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\@react-native-community\datetimepicker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:react-native-gesture-handler] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:react-native-gesture-handler] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:react-native-reanimated] C:\Users\Aluno\Desktop\EVENTCRAFT\app\node_modules\react-native-reanimated\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44

@@ -1,4 +1,4 @@
-// Gabriel / RC
+
 import React, {useEffect, useState} from "react";
 import {View, Alert} from 'react-native';
 import { ArrowLeftIcon, Avatar, CalendarDaysIcon, Center, CloseIcon, HStack, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
@@ -35,7 +35,10 @@ import { AddIcon } from "@gluestack-ui/themed";
 import { EditIcon } from "@gluestack-ui/themed";
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { InfoIcon } from "@gluestack-ui/themed";
-import { PersonStanding, AlignJustify, ImageDown, Pencil } from "lucide-react-native";
+import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock } from "lucide-react-native";
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 function HomeScreen({navigation, route}) {
 
 
@@ -320,9 +323,40 @@ const array = [
 const randomElement = getRandomElement(array);
 
 const [showModal, setShowModal] = useState(false)
-const [teste, setteste] = React.useState('');
-  const ref = React.useRef(null)
 
+const [teste, setteste] = React.useState('');
+  const ref = React.useRef(null);
+  const [selectedDate, setSelectedDate] = useState(new Date('2022-05-31'));
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const handleConfirm = (date) => {
+    setSelectedDate(date);
+    hideDatePicker();
+  };
+
+  const AnimatedButton = Animated.createAnimatedComponent(Button);
+
+  const scale = useSharedValue(1);
+
+  React.useEffect(() => {
+    scale.value = withRepeat(
+      withTiming(scale.value * 1.2, { duration: 900 }),
+      -1,
+      true
+    );
+  }, []);
+
+  const scaleStyles = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
   return (
     
     <SafeAreaView flex={1} >
@@ -358,7 +392,7 @@ const [teste, setteste] = React.useState('');
 
 
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
-                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Descrição do evento: </Text>
+                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Nome do evento: </Text>
                 <Icon as={Pencil} color="#A87B34" w={12} h={15} />
                 </HStack>
                 <Input
@@ -410,12 +444,38 @@ const [teste, setteste] = React.useState('');
                   style={{backgroundColor: 'white', borderRadius: 10, borderWidth: 0.7, borderColor: '#CECDCD', width: 'auto', color: '#A87B34', fontWeight: 'bold', fontSize: 14, textAlign: 'auto',}}
                   mask={Masks.DATE_DDMMYYYY}
                   />
+                <HStack marginTop={20} justifyContent="center" alignContent="center">
+                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Hora do evento: -> </Text>
+                <AnimatedButton style={[scaleStyles]} w={20} h={20} alignItems="center" justifyContent="center" variant="link" onPress={showDatePicker}><ButtonIcon color="#A87B34" as={Clock} /></AnimatedButton>
+                </HStack>
+                
+             
+         
+          
+        <DateTimePickerModal
+          style={{backgroundColor:'red'}}
+          date={selectedDate ? new Date(selectedDate) : undefined}
+          isVisible={datePickerVisible}
+          mode="time"
+          locale=""
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          is24Hour
+        />
+
+        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, color:"#A87B34" }}>
+          {selectedDate ? selectedDate.toLocaleTimeString() : 'Horário não selecionado'}
+        </Text>
+            
+          
 
 
 <Text  marginTop={20}  fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Local do evento:</Text>
 
+<Text marginTop={15}  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Rua: </Text>
+
 <Input
-   marginTop={10}
+   
    
    borderRadius={12}
    bg='#FFFF'
@@ -428,10 +488,11 @@ const [teste, setteste] = React.useState('');
    isReadOnly={false}
    $focus-borderColor={'#A87B34'}
    >
-   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="Rua:" placeholderTextColor={'#A87B34'}  />
+   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
+
+ <Text marginTop={10}  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Bairro: </Text>
 <Input
-   marginTop={10}
    
    borderRadius={12}
    bg='#FFFF'
@@ -444,14 +505,17 @@ const [teste, setteste] = React.useState('');
    isReadOnly={false}
    $focus-borderColor={'#A87B34'}
    >
-   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="Bairro:" placeholderTextColor={'#A87B34'}  />
+   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
+
+ <Text marginTop={10}  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Número: </Text>
+
 <Input
-   marginTop={10}
+  
    
    borderRadius={12}
    bg='#FFFF'
-   w={'25%'}
+   w={'20%'}
    h={50}
    variant="outline"
    size="md"
@@ -460,7 +524,7 @@ const [teste, setteste] = React.useState('');
    isReadOnly={false}
    $focus-borderColor={'#A87B34'}
    >
-   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="Número:" placeholderTextColor={'#A87B34'}  />
+   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
                 </Box>
                 
@@ -504,6 +568,13 @@ const [teste, setteste] = React.useState('');
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+
+
+      
+
+
+
       <ScrollView>
         <Animated.View entering={FadeInDown} style={{backgroundColor: 'black'}} alignItems="center">
           
