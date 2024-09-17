@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from "react";
 import {View, Alert} from 'react-native';
-import { ArrowLeftIcon, Avatar, CalendarDaysIcon, Center, CloseIcon, HStack, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
+import { ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, CloseIcon, HStack, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
@@ -39,6 +39,7 @@ import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock } from "lucide-r
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 function HomeScreen({navigation, route}) {
 
 
@@ -357,6 +358,30 @@ const [teste, setteste] = React.useState('');
   const scaleStyles = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
+
+  const [imagem, setImagem] = useState(null);
+
+
+  const handleImageLibraryLaunch = async () => {
+    const options = {
+        mediaType: 'photo',
+    };
+
+    try {
+        const response = await launchImageLibrary(options);
+        console.log('pickedFile', response);
+
+        // Verifica se a imagem foi selecionada com sucesso
+        if (response.assets && response.assets.length > 0) {
+            const image = response.assets[0];
+            setImagem(image);
+        } else {
+            console.log('Nenhuma imagem selecionada.');
+        }
+    } catch (error) {
+        console.error('Erro ao selecionar a imagem:', error);
+    }
+};
   return (
     
     <SafeAreaView flex={1} >
@@ -380,9 +405,9 @@ const [teste, setteste] = React.useState('');
             <ScrollView>
               <Box  marginTop={25} alignItems="center">
                 <Text marginVertical={15} fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Imagem do Evento</Text>
-                <Button onPress={()=> console.log('teste')} w={300} h={200} variant="link">
+                <Button onPress={handleImageLibraryLaunch} w={300} h={200} variant="link">
                 <Avatar bgColor={'$white'} borderWidth={1} borderRadius={10} w={250} h={180} borderColor="$black">
-                <Icon as={ImageDown} color="#A87B34" size='xl'  />
+                  <AvatarImage w={'100%'} h={'100%'} borderRadius={0} alt="imgEvento" source={imagem ? { uri: imagem.uri } : require('../../../src/img/img.png')}/>
                 </Avatar>
                 </Button>
                 
