@@ -16,6 +16,7 @@ import logo from '../../../src/img/logo.png';
 import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, LightSpeedInLeft, ReduceMotion, SlideInLeft, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SharedTransition, withSpring } from 'react-native-reanimated';
+
 export default function LoginScreen({navigation}) {
   const AnimatedCenter = Animated.createAnimatedComponent(Center);
   const scale = useSharedValue(1);
@@ -100,7 +101,6 @@ export default function LoginScreen({navigation}) {
                 email: response.data.email,
                 senha: response.data.senha,
             }
-            console.log(userData)
             navigation.navigate('Home', {userData});
         }
         else {
@@ -247,7 +247,7 @@ value={senha} type={showPassword ? "text" : "password"} fontSize={12.5} color='#
 <Text color={'#A87B34'} fontSize={13} fontWeight='$extrabold' marginTop={10}>Não tem uma conta?</Text> 
 
 
-<Button w={70} borderWidth={0} marginTop={10} variant="link" onPress={() => navigation.navigate('SignIn')}>
+<Button w={70} borderWidth={0} marginTop={10} variant="link" onPress={() => navigation.push('SignIn')}>
 <ButtonText color={'#6FBFEF'} fontSize={15} fontWeight='$bold' >Crie uma</ButtonText>
 </Button>
 

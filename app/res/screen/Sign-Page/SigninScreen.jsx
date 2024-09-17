@@ -267,7 +267,7 @@ $focus-borderColor={'#A87B34'}
 <Text color={'#A87B34'} fontSize={13} fontWeight='$extrabold' marginTop={10}>Já tem uma conta?</Text> 
 
 
-<Button w={48} borderWidth={0} marginTop={10} variant="link" onPress={() => navigation.navigate('Login')}>
+<Button w={48} borderWidth={0} marginTop={10} variant="link" onPress={() => navigation.push('Login')}>
 <ButtonText color={'#6FBFEF'} fontSize={15} fontWeight='$bold' >Entre</ButtonText>
 </Button>
 
