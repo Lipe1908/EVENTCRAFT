@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from "react";
 import {View, Alert} from 'react-native';
-import { ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, CloseIcon, HStack, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
+import { ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, Checkbox, CheckboxIndicator, CloseIcon, HStack, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
@@ -14,7 +14,7 @@ import topImage from '../../../src/img/image-removebg-preview.png';
 import bottomImage from '../../../src/img/image-removebg-preview2.png';
 import logo from '../../../src/img/logo2.png';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Card } from '@gluestack-ui/themed';
@@ -35,11 +35,15 @@ import { AddIcon } from "@gluestack-ui/themed";
 import { EditIcon } from "@gluestack-ui/themed";
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { InfoIcon } from "@gluestack-ui/themed";
-import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock } from "lucide-react-native";
+import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole } from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { CheckboxIcon } from "@gluestack-ui/themed";
+import { CheckboxLabel } from "@gluestack-ui/themed";
+import { SegmentedButtons } from 'react-native-paper';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 function HomeScreen({navigation, route}) {
 
 
@@ -282,6 +286,8 @@ function EventsScreen() {
 
 function CreateEventScreen({navigation,route}){
 
+  
+
   const { id, nome, sobrenome, email, senha } = route.params.obj;
   const userData = route.params.obj
 
@@ -359,9 +365,18 @@ const [teste, setteste] = React.useState('');
     transform: [{ scale: scale.value }],
   }));
 
+
+
   const [imagem, setImagem] = useState(null);
-
-
+  const [nomeEvento, setNomeEvento] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [dataEvento, setDataEvento] = useState('');
+  const [horaEvento, setHoraEvento] = useState('');
+  const [rua, setRua] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [numero, setnumero] = useState('');
+  const [privacidade, setPrivacidade] = useState('');
+  
   const handleImageLibraryLaunch = async () => {
     const options = {
         mediaType: 'photo',
@@ -382,6 +397,64 @@ const [teste, setteste] = React.useState('');
         console.error('Erro ao selecionar a imagem:', error);
     }
 };
+
+const enviarEventoParaApi = async () => {
+  try {
+      // Verifica se os campos obrigatórios foram preenchidos
+      if (!nomeEvento || !dataEvento || !horaEvento || !rua || !bairro || !numero || !privacidade) {
+          Alert.alert('Todos os campos são obrigatórios.');
+          return;
+      }
+
+      // Lê o arquivo da imagem como base64
+      const imageData = await RNFS.readFile(imagem.uri, 'base64');
+
+      // Configuração da requisição Axios
+      const config = {
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      };
+
+      // URL da sua API para enviar os dados e a imagem
+      const apiUrl = 'http://10.0.2.2:8085/api/register/aluno';
+
+      // Dados a serem enviados para a API
+      const data = {
+          nomeEvento: nomeEvento,
+          descricao: descricao,
+          dataEvento: dataEvento,
+          horaEvento: selectedDate.toLocaleTimeString(),
+          senha: senha,
+          imagemBase64: imageData,
+      };
+
+      // Envia os dados e a imagem para a API usando Axios
+      const response = await axios.post(apiUrl, data, config);
+      console.log('Resposta da API:', response.data);
+
+      // Limpa o formulário após o envio dos dados
+      limparFormulario();
+
+      // Retorna para a página inicial
+      navigation.navigate('LoginAP');
+  } catch (error) {
+      console.error('Erro ao enviar os dados e a imagem para a API:', error);
+
+      if (error.response.status === 401) {
+          Alert.alert('E-mail já cadastrado na base de dados. Tente com um e-mail diferente.');
+      } else {
+          // Caso contrário, exibe uma mensagem genérica de erro
+          Alert.alert('Erro ao enviar os dados. Por favor, tente novamente mais tarde.');
+      }
+  }
+};
+
+
+
+
+const [value, setValue] = React.useState('');
+
   return (
     
     <SafeAreaView flex={1} >
@@ -405,10 +478,14 @@ const [teste, setteste] = React.useState('');
             <ScrollView>
               <Box  marginTop={25} alignItems="center">
                 <Text marginVertical={15} fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Imagem do Evento</Text>
-                <Button onPress={handleImageLibraryLaunch} w={300} h={200} variant="link">
-                <Avatar bgColor={'$white'} borderWidth={1} borderRadius={10} w={250} h={180} borderColor="$black">
-                  <AvatarImage w={'100%'} h={'100%'} borderRadius={0} alt="imgEvento" source={imagem ? { uri: imagem.uri } : require('../../../src/img/img.png')}/>
+                <Button onPress={handleImageLibraryLaunch} w={320} h={220} variant="link">
+                <Avatar bgColor={'$white'} borderWidth={1} borderRadius={10} w={280} h={200} borderColor="$black">
+                  <AvatarImage w={'100%'} h={'100%'} borderRadius={10} alt="imgEvento" source={imagem ? { uri: imagem.uri } : require('../../../src/img/img.png')}/>
                 </Avatar>
+                </Button>
+                <Button onPress={() => {setImagem(null);}} w={320} h={20} variant="link">
+                <Text fontSize={12} color="$red500" fontWeight={'bold'}>Limpar </Text>
+                <ButtonIcon color="$red500" as={CircleX} />
                 </Button>
                 
                 <Box marginTop={20} marginHorizontal={5} alignItems="flex-start">
@@ -470,7 +547,8 @@ const [teste, setteste] = React.useState('');
                   mask={Masks.DATE_DDMMYYYY}
                   />
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
-                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Hora do evento: -> </Text>
+                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Hora do evento: </Text>
+                <Icon as={ArrowBigRight} color="#A87B34" w={15} h={20} />
                 <AnimatedButton style={[scaleStyles]} w={20} h={20} alignItems="center" justifyContent="center" variant="link" onPress={showDatePicker}><ButtonIcon color="#A87B34" as={Clock} /></AnimatedButton>
                 </HStack>
                 
@@ -497,7 +575,10 @@ const [teste, setteste] = React.useState('');
 
 <Text  marginTop={20}  fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Local do evento:</Text>
 
-<Text marginTop={15}  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Rua: </Text>
+<HStack marginTop={20} justifyContent="center" alignContent="center">
+  <Text fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Rua: </Text>
+  <Icon as={StretchVertical} color="#A87B34" w={12} h={15} />
+</HStack>
 
 <Input
    
@@ -516,7 +597,11 @@ const [teste, setteste] = React.useState('');
    <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
 
- <Text marginTop={10}  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Bairro: </Text>
+ <HStack marginTop={20} justifyContent="center" alignContent="center">
+  <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Bairro: </Text>
+  <Icon as={Building2} color="#A87B34" w={12} h={15} margin={1} />
+</HStack>
+
 <Input
    
    borderRadius={12}
@@ -533,7 +618,10 @@ const [teste, setteste] = React.useState('');
    <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
 
- <Text marginTop={10}  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Número: </Text>
+ <HStack marginTop={20} justifyContent="center" alignContent="center">
+  <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Número: </Text>
+  <Icon as={House} color="#A87B34" w={12} h={15} />
+</HStack>
 
 <Input
   
@@ -549,11 +637,44 @@ const [teste, setteste] = React.useState('');
    isReadOnly={false}
    $focus-borderColor={'#A87B34'}
    >
-   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+   <InputField  $focus-borderColor={'#A87B34'} fontSize={14} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
+
+
+ <HStack marginTop={20} justifyContent="center" alignContent="center">
+  <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Privacidade: </Text>
+  <Icon as={LockKeyhole} color="#A87B34" w={12} h={15} />
+</HStack>
+
+<Box marginTop={10} w={200}>
+<SegmentedButtons
+        value={value}
+        theme={{ colors: { secondaryContainer: '#A87B34' } }}
+        onValueChange={setValue}
+        buttons={[
+          {
+            value: 'privado',
+            label: 'Privado',
+            checkedColor:'white',
+            uncheckedColor:'#A87B34',
+            showSelectedCheck: true,
+          },
+          {
+            value: 'publico',
+            label: 'Público',
+            checkedColor:'white',
+            uncheckedColor:'#A87B34',
+            showSelectedCheck: true,
+          },
+        ]}
+      />
+</Box>
+
+
+              
                 </Box>
                 
-                
+                      
 
                 
                 
@@ -583,6 +704,7 @@ const [teste, setteste] = React.useState('');
             <Button
               size="sm"
               action="positive"
+              bg={'#A87B34'}
               borderWidth="$0"
               onPress={() => {
                 setShowModal(false)

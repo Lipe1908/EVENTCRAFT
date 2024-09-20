@@ -13,7 +13,7 @@ import topImage from '../../../src/img/image-removebg-preview.png';
 import bottomImage from '../../../src/img/image-removebg-preview2.png';
 import logo from '../../../src/img/logo.png';
 import axios from 'axios'
-import { BounceIn, Easing, FadeIn, FadeInRight, FadeOut, FadeOutLeft, ReduceMotion, SlideInLeft, SlideInRight, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { BounceIn, Easing, FadeIn, FadeInRight, FadeOut, FadeOutLeft, Keyframe, ReduceMotion, SlideInLeft, SlideInRight, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
 import { SharedTransition, withSpring } from 'react-native-reanimated';
 export default function SigninScreen({navigation}) {
@@ -115,6 +115,73 @@ export default function SigninScreen({navigation}) {
       }
   };
 
+  const enteringAnimation = new Keyframe({
+    0: {
+      opacity: 0,
+     
+    
+    },
+    30: {
+      opacity: 0.3,
+     
+    
+    },
+    50: {
+      opacity: 0.5,
+      easing: Easing.out(Easing.quad),
+    },
+    70: {
+      opacity: 0.8,
+      easing: Easing.out(Easing.quad),
+    },
+    100: {
+      opacity: 1,
+      
+    },
+  }).duration(900);
+
+
+  const enteringInputAnimation = new Keyframe({
+    0: {
+      transform: [
+        { translateX: -150 },
+      ]
+    },
+    
+    50: {
+      transform: [
+        { translateX: -50 },
+      ]
+    },
+  
+    100: {
+      transform: [
+        { translateX: 0 },
+      ]
+      
+    },
+  }).duration(650);
+
+  const enteringInput2Animation = new Keyframe({
+    0: {
+      transform: [
+        { translateX: 150 },
+      ]
+    },
+    
+    50: {
+      transform: [
+        { translateX: 50 },
+      ]
+    },
+  
+    100: {
+      transform: [
+        { translateX: 0 },
+      ]
+      
+    },
+  }).duration(650);
 
 
   return (
@@ -124,7 +191,7 @@ export default function SigninScreen({navigation}) {
     <StatusBar hidden/>
 
 
-<Animated.View entering={FadeInRight} exiting={FadeOutLeft} w={'100%'} h={'100%'}>
+<Animated.View entering={enteringAnimation} exiting={FadeOutLeft} w={'100%'} h={'100%'}>
 
     
 
@@ -160,7 +227,7 @@ alt="topimg"
 <Center marginTop={75} alignItems="center" justifyContent="center">
 
 <Box h={'auto'} w={'100%'} marginTop={-35} marginBottom={15} justifyContent="center" alignItems="center">
-<Animated.View w={'auto'} h={'auto'} entering={BounceIn}>
+<Animated.View w={'auto'} h={'auto'}>
 <Image
 size="xl"
 source={logo}
@@ -171,11 +238,11 @@ alt="logo"
 </Box>
 
 
-<Animated.View entering={StretchInX}>
+<Animated.View>
 <Text color={'#A87B34'} fontSize={24} fontWeight='$extrabold' marginVertical={10}>REGISTRE-SE</Text>
 </Animated.View>
 
-<Animated.View entering={SlideInLeft}>
+<Animated.View entering={enteringInputAnimation}>
 <Input
 borderRadius={12}
 bg='#FFFF'
@@ -213,7 +280,7 @@ $focus-borderColor={'#A87B34'}
 </Animated.View>
 
 
-<Animated.View entering={SlideInRight}>
+<Animated.View entering={enteringInput2Animation}>
 <Input
 marginVertical={10}
 borderRadius={12}

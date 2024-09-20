@@ -13,7 +13,7 @@ import { Box, SafeAreaView, Image, ImageBackground } from '@gluestack-ui/themed'
 import topImage from '../../../src/img/image-removebg-preview.png';
 import bottomImage from '../../../src/img/image-removebg-preview2.png';
 import logo from '../../../src/img/logo.png';
-import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, LightSpeedInLeft, ReduceMotion, SlideInLeft, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, Keyframe, LightSpeedInLeft, ReduceMotion, SlideInLeft, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SharedTransition, withSpring } from 'react-native-reanimated';
 
@@ -43,15 +43,45 @@ export default function LoginScreen({navigation}) {
     console.log(`finished without interruptions: ${finished}`);
   });
 
-  SlideInLeft.duration(900).easing(Easing.ease);
- 
-  SlideInLeft.springify()
-  .damping(30)
-  .mass(10)
-  .stiffness(10)
-  .overshootClamping(false)
-  .restDisplacementThreshold(0.1)
-  .restSpeedThreshold(5);
+  const enteringAnimation = new Keyframe({
+    0: {
+      opacity: 0,
+     
+    
+    },
+    50: {
+      opacity: 0.5,
+      easing: Easing.out(Easing.quad),
+    },
+    100: {
+      opacity: 1,
+      
+    },
+  }).duration(900);
+
+  const enteringInputAnimation = new Keyframe({
+    0: {
+      transform: [
+        { translateX: -150 },
+      ]
+    },
+    
+    50: {
+      transform: [
+        { translateX: -50 },
+      ]
+    },
+  
+    100: {
+      transform: [
+        { translateX: 0 },
+      ]
+      
+    },
+  }).duration(650);
+
+
+
 
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);
   const [showAlertDialog2, setShowAlertDialog2] = React.useState(false);
@@ -141,9 +171,9 @@ export default function LoginScreen({navigation}) {
    
 
 
-   <Animated.View entering={FadeInRight} exiting={FadeOutLeft} w={'100%'} h={'100%'}>
+   <Animated.View entering={enteringAnimation} exiting={FadeOutLeft} w={'100%'} h={'100%'}>
 
-<KeyboardAvoidingView behavior="position">
+<KeyboardAvoidingView behavior="padding">
 
 
 
@@ -174,7 +204,7 @@ alt="topimg"
 <Center marginTop={75} alignItems="center" justifyContent="center">
 
 <Box h={'auto'} w={'100%'} marginTop={-35} marginBottom={15} justifyContent="center" alignItems="center">
-<Animated.View entering={BounceIn}>
+<Animated.View>
 <Image
 size="xl"
 source={logo}
@@ -185,12 +215,12 @@ alt="logo"
 </Box>
 
 
-<Animated.View entering={StretchInX}>
+<Animated.View entering={enteringAnimation}>
 <Text color={'#A87B34'} fontSize={24} fontWeight='$extrabold' marginVertical={10}>LOGIN</Text>
 </Animated.View>
 
 
-<Animated.View entering={SlideInLeft}>
+<Animated.View entering={enteringInputAnimation}>
 <Input
 borderRadius={12}
 bg='#FFFF'
@@ -208,7 +238,7 @@ $focus-borderColor={'#A87B34'}
 </Input>
 </Animated.View>
 
-<Animated.View entering={SlideInLeft}>
+<Animated.View entering={enteringInputAnimation}>
 <Input
 marginVertical={10}
 borderRadius={12}
