@@ -13,6 +13,11 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
+    getByIdEvento: async (id) =>{
+        const [result] = await connection.query("SELECT * FROM eventos WHERE id =?", [id])
+        .catch(erro => console.log(erro));
+        return result
+    },
     registerUser: async (id,nome,sobrenome,email,senha) =>{
 
         const hashPassword = await bcrypt.hash(senha,salt);
@@ -21,6 +26,19 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result;
     },
+    registerEvent: async (id,nomeEvento,dataEvento,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento) =>{
+
+        const [result] = await connection.query("INSERT INTO eventos values(?,?,?,?,?,?,?,?,?)",[id,nomeEvento,dataEvento,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento])
+        .catch(erro => console.log(erro));
+        return result;
+    },
+    registerEventAdress: async (id,rua,bairro,numero,id_evento) =>{
+
+        const [result] = await connection.query("INSERT INTO endereco values(?,?,?,?,?)",[id,rua,bairro,numero,id_evento])
+        .catch(erro => console.log(erro));
+        return result;
+    },
+    
 
     validateLogin: async(email, senha)=> {
       
@@ -53,6 +71,8 @@ const userModel = {
       
         
     }, 
+
+   
 };
 
 module.exports = userModel;

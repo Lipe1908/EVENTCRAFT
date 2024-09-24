@@ -8,4 +8,5 @@ router.get('/api/read', clientController.listAllUsers); //Listar todos os usuár
 router.get('/api/read/:id', clientController.listByID); //Listar Usuários por ID
 router.post('/api/cadastro', clientController.createNewUser); //Cadastrar novo Usuário
 router.post('/api/validation', clientController.login); //login usuário
+router.post('/api/register/evento', clientController.createEvent); //login usuário
 module.exports = router;

@@ -35,7 +35,7 @@ import { AddIcon } from "@gluestack-ui/themed";
 import { EditIcon } from "@gluestack-ui/themed";
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { InfoIcon } from "@gluestack-ui/themed";
-import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole } from "lucide-react-native";
+import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole, MailQuestionIcon } from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -44,6 +44,8 @@ import { CheckboxIcon } from "@gluestack-ui/themed";
 import { CheckboxLabel } from "@gluestack-ui/themed";
 import { SegmentedButtons } from 'react-native-paper';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import RNFS from 'react-native-fs';
+import { SettingsContext } from "react-native-paper/lib/typescript/core/settings";
 function HomeScreen({navigation, route}) {
 
 
@@ -331,7 +333,7 @@ const randomElement = getRandomElement(array);
 
 const [showModal, setShowModal] = useState(false)
 
-const [teste, setteste] = React.useState('');
+const [dataEvento, setDataEvento] = React.useState('');
   const ref = React.useRef(null);
   const [selectedDate, setSelectedDate] = useState(new Date('2022-05-31'));
   const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -370,12 +372,14 @@ const [teste, setteste] = React.useState('');
   const [imagem, setImagem] = useState(null);
   const [nomeEvento, setNomeEvento] = useState('');
   const [descricao, setDescricao] = useState('');
-  const [dataEvento, setDataEvento] = useState('');
-  const [horaEvento, setHoraEvento] = useState('');
+  const [nConvidados, setNConvidados] = useState('');
+  const [horaEvento] = useState('');
   const [rua, setRua] = useState('');
   const [bairro, setBairro] = useState('');
   const [numero, setnumero] = useState('');
-  const [privacidade, setPrivacidade] = useState('');
+  const [value, setValue] = React.useState('');
+  const [privacidade, setPrivacidade] = React.useState('');
+
   
   const handleImageLibraryLaunch = async () => {
     const options = {
@@ -399,15 +403,37 @@ const [teste, setteste] = React.useState('');
 };
 
 const enviarEventoParaApi = async () => {
+  console.log(value)
   try {
+
+    
       // Verifica se os campos obrigatórios foram preenchidos
-      if (!nomeEvento || !dataEvento || !horaEvento || !rua || !bairro || !numero || !privacidade) {
+      if (!imagem) {
+          Alert.alert('Preencha a imagem do evento');
+          return;
+      }
+      if (!nomeEvento || !teste || !selectedDate || !value) {
           Alert.alert('Todos os campos são obrigatórios.');
           return;
       }
 
-      // Lê o arquivo da imagem como base64
       const imageData = await RNFS.readFile(imagem.uri, 'base64');
+
+    const data = {
+      idUsuario: id,
+      nomeEvento: nomeEvento,
+      descricao: descricao,
+      dataEvento: dataEvento,
+      horaEvento: selectedDate.toLocaleTimeString(),
+      privacidade: value,
+      rua: rua,
+      nConvidados: nConvidados,
+      bairro: bairro,
+      numero:numero,
+      imagemBase64: imageData
+  };
+  console.log(privacidade)
+      
 
       // Configuração da requisição Axios
       const config = {
@@ -417,24 +443,18 @@ const enviarEventoParaApi = async () => {
       };
 
       // URL da sua API para enviar os dados e a imagem
-      const apiUrl = 'http://10.0.2.2:8085/api/register/aluno';
+      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
       // Dados a serem enviados para a API
-      const data = {
-          nomeEvento: nomeEvento,
-          descricao: descricao,
-          dataEvento: dataEvento,
-          horaEvento: selectedDate.toLocaleTimeString(),
-          senha: senha,
-          imagemBase64: imageData,
-      };
-
+      
+      console.log(data)
       // Envia os dados e a imagem para a API usando Axios
       const response = await axios.post(apiUrl, data, config);
       console.log('Resposta da API:', response.data);
 
       // Limpa o formulário após o envio dos dados
-      limparFormulario();
+      
+      setShowModal(false);
 
       // Retorna para a página inicial
       navigation.navigate('LoginAP');
@@ -453,7 +473,7 @@ const enviarEventoParaApi = async () => {
 
 
 
-const [value, setValue] = React.useState('');
+
 
   return (
     
@@ -490,7 +510,7 @@ const [value, setValue] = React.useState('');
                 
                 <Box marginTop={20} marginHorizontal={5} alignItems="flex-start">
 
-                <Text marginVertical={0} fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Informações do Evento</Text>
+                <Text marginVertical={0} fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Informações do Evento:</Text>
 
 
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
@@ -509,8 +529,9 @@ const [value, setValue] = React.useState('');
                   isInvalid={false}
                   isReadOnly={false}
                   $focus-borderColor={'#A87B34'}
+                  
                   >
-                  <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+                  <InputField value={nomeEvento} onChangeText={setNomeEvento}  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
                 </Input>
 
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
@@ -530,8 +551,9 @@ const [value, setValue] = React.useState('');
                   isReadOnly={false}
                   $focus-borderColor={'#A87B34'}
                   
+                  
                   >
-                  <InputField justifyContent="flex-start" multiline $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+                  <InputField value={descricao} onChangeText={setDescricao} justifyContent="flex-start" multiline $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
                 </Input>
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
                 <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Data do evento: </Text>
@@ -539,12 +561,13 @@ const [value, setValue] = React.useState('');
                 </HStack>
                 
                   <MaskInput
-                  value={teste}
-                  onChangeText={setteste}
+                  value={dataEvento}
+                  onChangeText={setDataEvento}
                   placeholder=" ____/____/______"
                   placeholderTextColor={'#A87B34'}
                   style={{backgroundColor: 'white', borderRadius: 10, borderWidth: 0.7, borderColor: '#CECDCD', width: 'auto', color: '#A87B34', fontWeight: 'bold', fontSize: 14, textAlign: 'auto',}}
                   mask={Masks.DATE_DDMMYYYY}
+                  
                   />
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
                 <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Hora do evento: </Text>
@@ -569,6 +592,27 @@ const [value, setValue] = React.useState('');
         <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, color:"#A87B34" }}>
           {selectedDate ? selectedDate.toLocaleTimeString() : 'Horário não selecionado'}
         </Text>
+
+        <HStack marginTop={20} justifyContent="center" alignContent="center">
+                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Número de convidados: </Text>
+                <Icon as={MailQuestionIcon} color="#A87B34" w={12} h={15} />
+                </HStack>
+                <Input
+                  marginTop={0}
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'20%'}
+                  h={50}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  
+                  >
+                  <InputField keyboardType="numeric" value={nConvidados} onChangeText={setNConvidados}  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+                </Input>
             
           
 
@@ -594,7 +638,7 @@ const [value, setValue] = React.useState('');
    isReadOnly={false}
    $focus-borderColor={'#A87B34'}
    >
-   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+   <InputField value={rua} onChangeText={setRua}  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
 
  <HStack marginTop={20} justifyContent="center" alignContent="center">
@@ -615,7 +659,7 @@ const [value, setValue] = React.useState('');
    isReadOnly={false}
    $focus-borderColor={'#A87B34'}
    >
-   <InputField  $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+   <InputField value={bairro} onChangeText={setBairro} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
 
  <HStack marginTop={20} justifyContent="center" alignContent="center">
@@ -636,8 +680,9 @@ const [value, setValue] = React.useState('');
    isInvalid={false}
    isReadOnly={false}
    $focus-borderColor={'#A87B34'}
+   
    >
-   <InputField  $focus-borderColor={'#A87B34'} fontSize={14} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+   <InputField value={numero} onChangeText={setnumero} keyboardType="numeric"  $focus-borderColor={'#A87B34'} fontSize={14} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
  </Input>
 
 
@@ -653,14 +698,14 @@ const [value, setValue] = React.useState('');
         onValueChange={setValue}
         buttons={[
           {
-            value: 'privado',
+            value: 'Privado',
             label: 'Privado',
             checkedColor:'white',
             uncheckedColor:'#A87B34',
             showSelectedCheck: true,
           },
           {
-            value: 'publico',
+            value: 'Público',
             label: 'Público',
             checkedColor:'white',
             uncheckedColor:'#A87B34',
@@ -706,9 +751,9 @@ const [value, setValue] = React.useState('');
               action="positive"
               bg={'#A87B34'}
               borderWidth="$0"
-              onPress={() => {
-                setShowModal(false)
-              }}
+              onPress={enviarEventoParaApi
+                
+              }
             >
               <ButtonText>Criar Evento</ButtonText>
             </Button>

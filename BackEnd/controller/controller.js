@@ -2,6 +2,7 @@ const { json } = require("express");
 const clientController = require("../model/model");
 const bcrypt = require('bcrypt');
 const salt = 0;
+const moment = require('moment')
 const userController = {
 
     //route root
@@ -54,6 +55,33 @@ const userController = {
             else{
                 await clientController.registerUser(id,nome,sobrenome,email,senha);
                 res.status(201).json({msg:"Usuário cadastrado com sucesso"});
+            }
+        }
+        catch(error){
+            console.log(error)
+            return error
+        }
+    },
+    createEvent: async(req,res)=>{
+        const {id,nomeEvento,dataEvento,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento,rua,bairro,numero} = req.body;
+
+        const dataFormatada = moment(dataEvento, "DD/MM/YYYY").format("YYYY/MM/DD");
+    
+
+        try{
+            const sql = await clientController.getByIdEvento(id);
+
+            if(sql.length > 0){
+                res.status(401).json({msg: "O evento já esta cadastrado no Banco de Dados"})
+            }
+            else{
+                const RecoverId = await clientController.registerEvent(id,nomeEvento,dataFormatada,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento,);
+
+                
+                const id_evento = RecoverId.insertId
+
+                await clientController.registerEventAdress(id,rua,bairro,numero,id_evento);
+                res.status(201).json({msg:"evento cadastrado com sucesso"});
             }
         }
         catch(error){
