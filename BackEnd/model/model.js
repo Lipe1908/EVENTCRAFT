@@ -3,7 +3,17 @@ const bcrypt = require('bcrypt');
 const salt = 10;
 const userModel = {
     getAllUsers: async () =>{
-        const [result] = await connection.query("SELECT * FROM usuarios")
+        const [result] = await connection.query("SELECT * FROM usuarios ")
+        .catch(erro => console.log(erro));
+        return result
+    },
+    getAllEvents: async () =>{
+        const [result] = await connection.query("SELECT * FROM eventos WHERE privacidade = 'Público' ")
+        .catch(erro => console.log(erro));
+        return result
+    },
+    getAllEventsAdress: async (id_evento) =>{
+        const [result] = await connection.query("SELECT * FROM endereco WHERE id_evento = ? ", [id_evento])
         .catch(erro => console.log(erro));
         return result
     },

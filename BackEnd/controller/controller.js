@@ -16,7 +16,25 @@ const userController = {
             res.status(200).json(clients);
         }
         catch (error) {
-            res.status(500).json({ error: "Erro ao obter a lista de usuários" })
+            res.status(500).json({ error: "Erro ao obter a lista de eventos" })
+        }
+    },
+    listAllEvents: async (req, res) => {
+        try {
+            const events = await clientController.getAllEvents();
+            res.status(200).json(events);
+        }
+        catch (error) {
+            res.status(500).json({ error: "Erro ao obter a lista de eventos" })
+        }
+    },
+    listAllEventsAdress: async (req, res) => {
+        try {
+            const events = await clientController.getAllEventsAdress();
+            res.status(200).json(events);
+        }
+        catch (error) {
+            res.status(500).json({ error: "Erro ao obter a lista de eventos" })
         }
     },
 

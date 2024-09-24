@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from "react";
 import {View, Alert} from 'react-native';
-import { ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, Checkbox, CheckboxIndicator, CloseIcon, HStack, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
+import { ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, Checkbox, CheckboxIndicator, CloseIcon, HStack, Link, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
@@ -46,6 +46,12 @@ import { SegmentedButtons } from 'react-native-paper';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RNFS from 'react-native-fs';
 import { SettingsContext } from "react-native-paper/lib/typescript/core/settings";
+import { FlatList } from "react-native-gesture-handler";
+import { LinkText } from "@gluestack-ui/themed";
+import { ArrowRightIcon } from "@gluestack-ui/themed";
+import moment from "moment";
+
+
 function HomeScreen({navigation, route}) {
 
 
@@ -102,6 +108,89 @@ const randomElement = getRandomElement(array);
   const [imageSource, setImageSource] = useState('');
 
 
+  const [data, setData] = useState([]);
+  
+      useEffect(()=>{
+          axios.get(`http://10.0.2.2:8085/api/readEvents`)
+          .then(response =>{
+              //Ordenar os dados pelo id em ordem crescente
+              const sortData= response.data.sort((a,b) => a.id - b.id);
+              setData(sortData);
+  
+          })
+          .catch(error => {
+              console.log(JSON.stringify(error));
+          });
+
+      },[]);
+
+      const handleVizualizar = (id) =>{
+          navigation.navigate('Evento', {id})
+      };
+
+    
+
+      
+
+      const renderItem = ({item})=> (
+         
+        <Card p="$5" borderRadius="$lg" maxWidth={360} m="$3">
+      <Image
+        mb="$6"
+        h={240}
+        width="$full"
+        borderRadius="$md"
+        alt="imagemEvento"
+        source={{
+          uri: "https://images.unsplash.com/photo-1529693662653-9d480530a697?q=80&w=2831&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        }}
+      />
+      <Text
+        fontSize="$sm"
+        fontStyle="normal"
+        fontFamily="$heading"
+        fontWeight="$normal"
+        lineHeight="$sm"
+        mb="$2"
+        sx={{
+          color: "$textLight700",
+          _dark: {
+            color: "$textDark200",
+          },
+        }}
+      >
+     
+      </Text>
+      <Heading size="md" fontFamily="$heading" mb="$4">
+        {item.nomeEvento}
+      </Heading>
+      <Link href="https://v1.gluestack.io/" isExternal>
+        <HStack alignItems="center">
+          <LinkText
+            size="sm"
+            fontFamily="$heading"
+            fontWeight="$semibold"
+            color="$primary600"
+            $dark-color="$primary300"
+            textDecorationLine="none"
+          >
+            Read Blog
+          </LinkText>
+          <Icon
+            as={ArrowRightIcon}
+            size="sm"
+            color="$primary600"
+            mt="$0.5"
+            ml="$0.5"
+            $dark-color="$primary300"
+          />
+        </HStack>
+      </Link>
+    </Card>
+        
+      );
+
+
 
 
   return (
@@ -114,9 +203,6 @@ const randomElement = getRandomElement(array);
 
 
 <ScrollView>
-
-
-
 <Box alignItems="center" justifyContent="center">
 
 
@@ -184,16 +270,31 @@ opacity={0.5}
 
 
 
+<Text color={'#AA7E39'} fontWeight={'$bold'}>Eventos do momento:</Text>
+
+
+
+
+
 </Center>
 
-
+<FlatList
+                   data={data}
+                   renderItem={renderItem}
+                   keyExtractor={item => String(item.id)}
+                   extraData={data}
+                   scrollEnabled={false}
+                   />
 
 </Box>
-
-
-
-
 </ScrollView>
+
+
+
+
+
+
+
 
 
 
@@ -457,7 +558,7 @@ const enviarEventoParaApi = async () => {
       setShowModal(false);
 
       // Retorna para a página inicial
-      navigation.navigate('LoginAP');
+      navigation.push('Home',  { userData });
   } catch (error) {
       console.error('Erro ao enviar os dados e a imagem para a API:', error);
 
@@ -866,8 +967,9 @@ export default function Home({navigation, route}) {
             
               <AnimatedBox style={[scaleStyles]} position="absolute" >
                 
-                <Box alignItens="center" marginBottom={40} bg={'white'} rounded={"$full"}>
-                  <Ionicons name={'add-circle'} size={70} color={color}/>
+                <Box  alignSelf="center"  alignItens="center" justifyContent="center" marginBottom={40} rounded={"$full"}>
+                  <Ionicons name={'add-circle'} size={65} color={color}/>
+                  <Box position="absolute" w={70} bg={'$red'} zIndex={0}></Box>
                 </Box>
                 
                
