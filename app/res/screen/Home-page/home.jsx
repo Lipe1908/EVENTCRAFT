@@ -35,7 +35,7 @@ import { AddIcon } from "@gluestack-ui/themed";
 import { EditIcon } from "@gluestack-ui/themed";
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { InfoIcon } from "@gluestack-ui/themed";
-import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole, MailQuestionIcon } from "lucide-react-native";
+import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole, MailQuestionIcon, CirclePlus, PartyPopper } from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -116,7 +116,7 @@ const randomElement = getRandomElement(array);
               //Ordenar os dados pelo id em ordem crescente
               const sortData= response.data.sort((a,b) => a.id - b.id);
               setData(sortData);
-  
+              
           })
           .catch(error => {
               console.log(JSON.stringify(error));
@@ -124,68 +124,67 @@ const randomElement = getRandomElement(array);
 
       },[]);
 
+      
+
       const handleVizualizar = (id) =>{
           navigation.navigate('Evento', {id})
       };
 
-    
 
+     
       
 
-      const renderItem = ({item})=> (
+      const renderItem = ({item})=>
+      
+      (
+
+        
          
-        <Card p="$5" borderRadius="$lg" maxWidth={360} m="$3">
+        <Card w={350} p="$5" borderRadius="$lg" m="$3">
       <Image
         mb="$6"
         h={240}
-        width="$full"
+        w={400}
         borderRadius="$md"
         alt="imagemEvento"
         source={{
-          uri: "https://images.unsplash.com/photo-1529693662653-9d480530a697?q=80&w=2831&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          uri: `data:image/jpeg;base64,${item.imagemBase64}`
         }}
       />
-      <Text
-        fontSize="$sm"
-        fontStyle="normal"
-        fontFamily="$heading"
-        fontWeight="$normal"
-        lineHeight="$sm"
-        mb="$2"
-        sx={{
-          color: "$textLight700",
-          _dark: {
-            color: "$textDark200",
-          },
-        }}
-      >
-     
-      </Text>
-      <Heading size="md" fontFamily="$heading" mb="$4">
-        {item.nomeEvento}
+      <HStack justifyContent="center">
+      <Heading size="md" fontFamily="$heading">
+      {item.nomeEvento}
       </Heading>
-      <Link href="https://v1.gluestack.io/" isExternal>
-        <HStack alignItems="center">
-          <LinkText
-            size="sm"
-            fontFamily="$heading"
-            fontWeight="$semibold"
-            color="$primary600"
-            $dark-color="$primary300"
-            textDecorationLine="none"
-          >
-            Read Blog
-          </LinkText>
-          <Icon
-            as={ArrowRightIcon}
-            size="sm"
-            color="$primary600"
-            mt="$0.5"
-            ml="$0.5"
-            $dark-color="$primary300"
-          />
-        </HStack>
-      </Link>
+      </HStack>
+     
+
+     <HStack alignItems="center" justifyContent="center">
+     <Text
+     
+     fontSize="$sm"
+     fontStyle="normal"
+     fontFamily="$heading"
+     fontWeight="$normal"
+     lineHeight="$sm"
+     mb={10}
+     sx={{
+       color: "$textLight700",
+       _dark: {
+         color: "$textDark200",
+       },
+     }}
+   >
+     Data Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
+   </Text>
+     </HStack>
+      
+      <Text mb={10} color={'$black'} fontSize={13} >
+       {item.descricao}
+      </Text>
+      <Button bg='#AA7E39'>
+      <ButtonText>Ver informações do evento</ButtonText>
+      </Button>
+    
     </Card>
         
       );
@@ -270,7 +269,7 @@ opacity={0.5}
 
 
 
-<Text color={'#AA7E39'} fontWeight={'$bold'}>Eventos do momento:</Text>
+<Text color={'#AA7E39'} fontWeight={'$bold'}>Eventos públicos:</Text>
 
 
 
@@ -924,6 +923,8 @@ export default function Home({navigation, route}) {
   return (
     
     <Tab.Navigator
+
+    
  
    
     screenOptions={({ route }) => ({
@@ -952,7 +953,10 @@ export default function Home({navigation, route}) {
       },
       tabBarActiveTintColor: '#AA7E39',
       tabBarInactiveTintColor: '#AA7E39',
-     
+      tabBarHideOnKeyboard: true,
+      
+        
+    
       
     }
     
@@ -965,15 +969,23 @@ export default function Home({navigation, route}) {
     }, tabBarIcon: ({focused, color, size}) => {
             return (
             
-              <AnimatedBox style={[scaleStyles]} position="absolute" >
+              
+                  <AnimatedBox style={[scaleStyles]} >
                 
-                <Box  alignSelf="center"  alignItens="center" justifyContent="center" marginBottom={40} rounded={"$full"}>
-                  <Ionicons name={'add-circle'} size={65} color={color}/>
-                  <Box position="absolute" w={70} bg={'$red'} zIndex={0}></Box>
+                <Box  alignSelf="center"  alignItens="center" justifyContent="center" marginBottom={40} >
+                <KeyboardAvoidingView behavior="position">
+                <Center w={60} h={60} bg={'#AA7E39'} rounded={"$full"}>
+                <Icon as={PartyPopper} color="white" size="xl" />
+                </Center>
+                
+                </KeyboardAvoidingView>
+               
                 </Box>
                 
                
               </AnimatedBox>
+              
+              
 
               
              
@@ -982,7 +994,7 @@ export default function Home({navigation, route}) {
 
             );
           },
-          tabBarHideOnKeyboard: true,
+          
           }} name="Criar Evento"  component={CreateEventScreen} />
     <Tab.Screen initialParams={{ obj }} options={{headerShown: false}} name="Eventos" component={EventsScreen} />
 
