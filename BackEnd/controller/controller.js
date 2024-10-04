@@ -64,7 +64,7 @@ const userController = {
 
         try{
             const sql = await clientController.getByEmail(email);
-
+            
             console.log(sql);
 
             if(sql.length > 0){

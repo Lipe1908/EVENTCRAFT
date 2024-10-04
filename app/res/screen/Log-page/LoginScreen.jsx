@@ -1,6 +1,6 @@
 // Gabriel / RC
 import React, {useEffect, useState} from "react";
-import {View, Alert, StyleSheet} from 'react-native';
+import {View, Alert, StyleSheet, ActivityIndicator} from 'react-native';
 import { Center, ScrollView, StatusBar,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
@@ -17,7 +17,9 @@ import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, Keyframe, LightSp
 import { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SharedTransition, withSpring } from 'react-native-reanimated';
 
-export default function LoginScreen({navigation}) {
+
+export default function LoginScreen({navigation})  {
+  
   const AnimatedCenter = Animated.createAnimatedComponent(Center);
   const scale = useSharedValue(1);
 
@@ -89,14 +91,20 @@ export default function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
+
   const handleLogin = async () => {
 
     try {
 
+
+      setIsLoading(true);
         //verificar se os campos foram preenchidos
 
         if (!email || !senha) {
             setShowAlertDialog(true)
+            
             return;
         }
 
@@ -132,6 +140,7 @@ export default function LoginScreen({navigation}) {
                 senha: response.data.senha,
             }
             navigation.navigate('Home', {userData});
+            setIsLoading(false);
         }
         else {
           setShowAlertDialog2(true)
@@ -160,7 +169,9 @@ export default function LoginScreen({navigation}) {
       return !showState
     })};
 
-   
+  
+    
+    
 
   return (
    
@@ -181,7 +192,7 @@ export default function LoginScreen({navigation}) {
 
 
 
-<AnimatedCenter  style={[scaleStyles]} h={100} w={415} marginBottom={25}>
+<AnimatedCenter  style={[scaleStyles]} h={100} w={'100%'} marginBottom={25}>
 
 <Image
 w={'100%'}
@@ -234,7 +245,7 @@ isReadOnly={false}
 $focus-borderColor={'#A87B34'}
 
 >
-<InputField onChangeText={setEmail} value={email.toLowerCase()} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="EMAIL:" placeholderTextColor={'#A87B34'}  />
+<InputField onChangeText={setEmail} value={email} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="EMAIL:" placeholderTextColor={'#A87B34'}  />
 </Input>
 </Animated.View>
 
@@ -268,7 +279,11 @@ value={senha} type={showPassword ? "text" : "password"} fontSize={12.5} color='#
 
 
 <Button w={170} borderRadius={15} borderWidth={1.5} borderColor={'#A87B34'} marginTop={20} marginBottom={35} variant="outline" onPress={handleLogin}>
-<ButtonText color={'#A87B34'} fontWeight='$bold'>ENTRAR</ButtonText>
+{isLoading && <ButtonSpinner color={'#A87B34'}/>}
+          <Text color={'#A87B34'} fontWeight='$bold' >
+            {isLoading ? "" : "ENTRAR"}
+          </Text>
+
 </Button>
 
 
@@ -307,7 +322,9 @@ value={senha} type={showPassword ? "text" : "password"} fontSize={12.5} color='#
 <AlertDialog
 isOpen={showAlertDialog}
 onClose={() => {
-setShowAlertDialog(false)
+setShowAlertDialog(false);
+setIsLoading(false);
+
 }}
 >
 <AlertDialogBackdrop/>
@@ -332,6 +349,7 @@ setShowAlertDialog(false)
       borderColor={'#A87B34'}
       onPress={() => {
         setShowAlertDialog(false)
+        setIsLoading(false);
       }}
     >
       <ButtonText color={'#A87B34'}>OK</ButtonText>
@@ -350,6 +368,7 @@ setShowAlertDialog(false)
 isOpen={showAlertDialog2}
 onClose={() => {
 setShowAlertDialog2(false)
+setIsLoading(false);
 }}
 >
 <AlertDialogBackdrop />
@@ -374,6 +393,7 @@ setShowAlertDialog2(false)
       borderColor={'#A87B34'}
       onPress={() => {
         setShowAlertDialog2(false)
+        setIsLoading(false);
       }}
     >
       <ButtonText color={'#A87B34'}>OK</ButtonText>
@@ -390,6 +410,7 @@ setShowAlertDialog2(false)
 isOpen={showAlertDialog3}
 onClose={() => {
 setShowAlertDialog3(false)
+setIsLoading(false);
 }}
 >
 <AlertDialogBackdrop />
@@ -414,6 +435,7 @@ setShowAlertDialog3(false)
       borderColor={'#A87B34'}
       onPress={() => {
         setShowAlertDialog3(false)
+        setIsLoading(false);
       }}
     >
       <ButtonText color={'#A87B34'}>OK</ButtonText>
@@ -427,7 +449,7 @@ setShowAlertDialog3(false)
 
 </KeyboardAvoidingView>
 
-<AnimatedCenter style={[scaleStyles]} h={100} w={415} marginTop={-8}>
+<AnimatedCenter style={[scaleStyles]} h={100} w={'100%'} marginTop={-8}>
 
 <Image
 w={'100%'}

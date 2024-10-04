@@ -91,6 +91,9 @@ export default function SigninScreen({navigation}) {
 
   const handleCadastrar = async () => {
   
+
+    setIsLoading(true);
+
       if(!formData.email || !formData.nome || !formData.sobrenome || !formData.senha){
         setShowAlertDialog(true)
           return;
@@ -101,6 +104,7 @@ export default function SigninScreen({navigation}) {
           setShowAlertDialog2(true)
 
           setFormData('');
+          setIsLoading(false);
 
           
       } 
@@ -183,6 +187,9 @@ export default function SigninScreen({navigation}) {
     },
   }).duration(650);
 
+  const [isLoading, setIsLoading] = useState(false);
+
+
 
   return (
    
@@ -203,7 +210,7 @@ export default function SigninScreen({navigation}) {
 <ScrollView>
 <StatusBar hidden/>
 
-<AnimatedCenter AnimatedCenter style={[scaleStyles]} h={100} w={415} marginBottom={25}>
+<AnimatedCenter AnimatedCenter style={[scaleStyles]} h={100} w={'100%'} marginBottom={25}>
 
 
 <Image
@@ -295,7 +302,7 @@ isReadOnly={false}
 $focus-borderColor={'#A87B34'}
 
 >
-<InputField  onChangeText={(text)=> handleInputChange('email' , text.toLowerCase() )} value={formData.email} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="EMAIL:" placeholderTextColor={'#A87B34'}  />
+<InputField  onChangeText={(text)=> handleInputChange('email' , text.toLowerCase())} value={formData.email} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="EMAIL:" placeholderTextColor={'#A87B34'}  />
 </Input>
 
 <Input
@@ -325,7 +332,10 @@ $focus-borderColor={'#A87B34'}
 
 
 <Button w={170} onPress={handleCadastrar} borderRadius={15} borderWidth={1.5} borderColor={'#A87B34'} marginTop={20} marginBottom={35} variant="outline">
-<ButtonText color={'#A87B34'} fontWeight='$bold' >REGISTRAR</ButtonText>
+{isLoading && <ButtonSpinner color={'#A87B34'}/>}
+          <Text color={'#A87B34'} fontWeight='$bold' >
+            {isLoading ? "" : "REGISTRAR-SE"}
+          </Text>
 </Button>
 
 
@@ -346,7 +356,7 @@ $focus-borderColor={'#A87B34'}
 </Center>
 
 
-<AnimatedCenter style={[scaleStyles]} h={100} w={415} marginTop={-8}>
+<AnimatedCenter style={[scaleStyles]} h={100} w={'100%'} marginTop={-8}>
 
 <Image
 w={'100%'}
@@ -375,6 +385,7 @@ alt="Bottomimg"
 isOpen={showAlertDialog}
 onClose={() => {
 setShowAlertDialog(false)
+setIsLoading(false);
 }}
 >
 <AlertDialogBackdrop/>
@@ -399,6 +410,7 @@ setShowAlertDialog(false)
       borderColor={'#A87B34'}
       onPress={() => {
         setShowAlertDialog(false)
+        setIsLoading(false);
       }}
     >
       <ButtonText color={'#A87B34'}>OK</ButtonText>
@@ -417,6 +429,7 @@ setShowAlertDialog(false)
 isOpen={showAlertDialog2}
 onClose={() => {
 setShowAlertDialog2(false)
+setIsLoading(false);
 }}
 >
 <AlertDialogBackdrop />
@@ -442,6 +455,7 @@ setShowAlertDialog2(false)
       onPress={() => {
         setShowAlertDialog2(false)
         navigation.navigate('Login')
+        setIsLoading(false);
       }}
     >
       <ButtonText color={'#A87B34'}>OK</ButtonText>
@@ -458,6 +472,7 @@ setShowAlertDialog2(false)
 isOpen={showAlertDialog3}
 onClose={() => {
 setShowAlertDialog3(false)
+setIsLoading(false);
 }}
 >
 <AlertDialogBackdrop />
@@ -482,6 +497,7 @@ setShowAlertDialog3(false)
       borderColor={'#A87B34'}
       onPress={() => {
         setShowAlertDialog3(false)
+        setIsLoading(false);
       }}
     >
       <ButtonText color={'#A87B34'}>OK</ButtonText>

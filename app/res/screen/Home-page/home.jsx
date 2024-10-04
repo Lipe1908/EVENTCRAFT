@@ -50,9 +50,46 @@ import { FlatList } from "react-native-gesture-handler";
 import { LinkText } from "@gluestack-ui/themed";
 import { ArrowRightIcon } from "@gluestack-ui/themed";
 import moment from "moment";
-
+import CustomBottomTabBar from "../../props/customTabBar";
+import {  Easing, Keyframe,  } from 'react-native-reanimated';
 
 function HomeScreen({navigation, route}) {
+
+  const enteringAnimation = new Keyframe({
+    0: {
+      transform: [
+        { translateX: -200 },
+      ]
+    },
+    25: {
+      transform: [
+        { translateX: -150 },
+      ]
+    },
+ 
+    50: {
+      transform: [
+        { translateX: -100 },
+      ]
+      
+    },
+    75: {
+      transform: [
+        { translateX: -50 },
+      ],
+      
+    },
+
+    100: {
+      transform: [
+        { translateX: 0 },
+      ]
+      
+    },
+  }).duration(200);
+  
+
+ 
 
 
   const { id, nome, sobrenome, email, senha } = route.params.obj;
@@ -193,16 +230,16 @@ const randomElement = getRandomElement(array);
 
 
   return (
-    <SafeAreaView sharedTransitionTag="sharedTag"  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
+    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
     
     <StatusBar hidden/>
 
    
-    <Box w={'100%'} h={'100%'}>
+    <AnimatedBox  w={'100%'} h={'100%'}>
 
 
 <ScrollView>
-<Box alignItems="center" justifyContent="center">
+<AnimatedBox  alignItems="center" justifyContent="center">
 
 
 
@@ -285,7 +322,7 @@ opacity={0.5}
                    scrollEnabled={false}
                    />
 
-</Box>
+</AnimatedBox>
 </ScrollView>
 
 
@@ -299,7 +336,7 @@ opacity={0.5}
 
 
 
-</Box>
+</AnimatedBox>
   
 
 
@@ -918,13 +955,15 @@ export default function Home({navigation, route}) {
     transform: [{ scale: scale.value }],
   }));
 
+
+
   
  
   return (
     
     <Tab.Navigator
 
-    
+    tabBar={props => <CustomBottomTabBar {...props} />}
  
    
     screenOptions={({ route }) => ({
@@ -950,10 +989,11 @@ export default function Home({navigation, route}) {
         height: 55,
         backgroundColor: 'white',
         borderColor: '#EDE9E4',
+        
       },
       tabBarActiveTintColor: '#AA7E39',
       tabBarInactiveTintColor: '#AA7E39',
-      tabBarHideOnKeyboard: true,
+      
       
         
     
@@ -970,21 +1010,24 @@ export default function Home({navigation, route}) {
             return (
             
               
+              <KeyboardAvoidingView>
                   <AnimatedBox style={[scaleStyles]} >
                 
                 <Box  alignSelf="center"  alignItens="center" justifyContent="center" marginBottom={40} >
-                <KeyboardAvoidingView behavior="position">
+               
                 <Center w={60} h={60} bg={'#AA7E39'} rounded={"$full"}>
                 <Icon as={PartyPopper} color="white" size="xl" />
                 </Center>
                 
-                </KeyboardAvoidingView>
+                
                
                 </Box>
+                
                 
                
               </AnimatedBox>
               
+              </KeyboardAvoidingView>
               
 
               
