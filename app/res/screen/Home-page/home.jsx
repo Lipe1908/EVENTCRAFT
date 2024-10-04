@@ -898,31 +898,20 @@ const enviarEventoParaApi = async () => {
         </ModalContent>
       </Modal>
 
-
-
-      
-
-
-
       
         <Animated.View entering={FadeInDown} style={{backgroundColor: 'black', flex: 1}} alignItems="center">
           
         <AnimatedImageBackground  alignItems="center" opacity={0.5} flex={1} w={'100%'} h={750} source={{uri:randomElement}}>
-        <ScrollView>
-       <Button onPress={() => navigation.push('Home',  { userData })} alignSelf="flex-start" variant="link" w={50} h={50} position="absolute" >
+        
+        
+        <Button onPress={() => navigation.push('Home',  { userData })} alignSelf="flex-start" variant="link" w={50} h={50} position="absolute" >
        <Icon w={30} h={30} color={'white'} as={ArrowLeftIcon} />
        </Button>
-       <Animated.View  entering={StretchInX} alignItems="center" marginTop={330} position="absolute">
-       <AnimatedText  fontWeight={'$bold'} color={'#FFFF'} fontSize={20}>COMECE A PLANEJAR SEUS EVENTOS!</AnimatedText>
-       </Animated.View>
-       <Animated.View entering={StretchInX} marginTop={390} position="absolute">
-        <Button onPress={() => setShowModal(true)} variant="outline" borderWidth={1.5} borderColor={'#A87B34'} >
-        <ButtonText  fontWeight={'$bold'} color={'white'}>CRIAR EVENTO </ButtonText>
-        <ButtonIcon color={'white'} as={AddIcon} />
-        </Button>
-       </Animated.View>
        
-       </ScrollView>
+      
+      
+       
+      
         </AnimatedImageBackground>
         
        
