@@ -75,8 +75,8 @@ function HomeScreen({navigation, route}) {
     },
     75: {
       transform: [
-        { translateX: -50 },
-      ],
+        { translateX: -100 },
+      ]
       
     },
 
@@ -235,7 +235,7 @@ const randomElement = getRandomElement(array);
     <StatusBar hidden/>
 
    
-    <AnimatedBox  w={'100%'} h={'100%'}>
+    <AnimatedBox   w={'100%'} h={'100%'}>
 
 
 <ScrollView>
@@ -904,12 +904,11 @@ const enviarEventoParaApi = async () => {
 
 
 
-      <ScrollView>
-        <Animated.View entering={FadeInDown} style={{backgroundColor: 'black'}} alignItems="center">
+      
+        <Animated.View entering={FadeInDown} style={{backgroundColor: 'black', flex: 1}} alignItems="center">
           
-       <AnimatedImageBackground  alignItems="center" opacity={0.5} flex={1} w={'100%'} h={750} source={{uri:randomElement}}>
-        
-       </AnimatedImageBackground>
+        <AnimatedImageBackground  alignItems="center" opacity={0.5} flex={1} w={'100%'} h={750} source={{uri:randomElement}}>
+        <ScrollView>
        <Button onPress={() => navigation.push('Home',  { userData })} alignSelf="flex-start" variant="link" w={50} h={50} position="absolute" >
        <Icon w={30} h={30} color={'white'} as={ArrowLeftIcon} />
        </Button>
@@ -923,10 +922,12 @@ const enviarEventoParaApi = async () => {
         </Button>
        </Animated.View>
        
-
+       </ScrollView>
+        </AnimatedImageBackground>
+        
        
         </Animated.View>
-      </ScrollView>
+     
       
      
       
