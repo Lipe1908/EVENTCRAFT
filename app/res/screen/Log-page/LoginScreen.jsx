@@ -125,7 +125,8 @@ export default function LoginScreen({navigation})  {
 
         //Envio dos dados para a API
 
-        const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
+        const response = await axios.post('http://192.168.15.7:8085/api/validation', data);
+        // await axios.post('http://10.0.2.2:8085/api/cadastro', formData);
 
         //Verificar se o login foi efetuado com sucesso
 

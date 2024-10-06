@@ -30,7 +30,7 @@ app.use((req,res,next) => {
 client.query("select 1.").then(()=>{
     console.log("connection success")
     app.listen(8085, function(){
-        console.log("Servidor rodando na url:http://localhost:8085")
+        console.log("Servidor rodando na url:http://192.168.15.7:8085")
     });
 })
 .catch(erro => console.log("connection failed \n" + erro))

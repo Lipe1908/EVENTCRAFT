@@ -14,7 +14,6 @@ import topImage from '../../../src/img/image-removebg-preview.png';
 import bottomImage from '../../../src/img/image-removebg-preview2.png';
 import logo from '../../../src/img/logo2.png';
 import { NavigationContainer } from '@react-navigation/native';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Card } from '@gluestack-ui/themed';
@@ -148,7 +147,8 @@ const randomElement = getRandomElement(array);
   const [data, setData] = useState([]);
   
       useEffect(()=>{
-          axios.get(`http://10.0.2.2:8085/api/readEvents`)
+          axios.get(`http://192.168.15.7:8085/api/readEvents`)
+          // axios.get(`http://10.0.2.2:8085/api/readEvents`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescente
               const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -248,12 +248,12 @@ const randomElement = getRandomElement(array);
 <Box h={'auto'}>
 
 
-<Text color={'#AA7E39'} marginTop={70} marginHorizontal={40} fontSize={15}>Olá</Text>
+<Text color={'#AA7E39'} marginTop={70} marginHorizontal={30} fontSize={15}>Olá</Text>
 
-<Text color={'#AA7E39'} marginTop={8} marginHorizontal={40} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
+<Text color={'#AA7E39'} marginTop={8} marginHorizontal={30} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
 
 
-<Avatar marginLeft={350} marginTop={-40} bgColor="$coolGray500" size="md" borderRadius="$full">
+<Avatar alignSelf="flex-end" margin={10} marginTop={-40} bgColor="$coolGray500" size="md" borderRadius="$full">
   <AvatarFallbackText>{nome}</AvatarFallbackText>
 </Avatar>
 
@@ -306,7 +306,7 @@ opacity={0.5}
 
 
 
-<Text color={'#AA7E39'} fontWeight={'$bold'}>Eventos públicos:</Text>
+<Text marginBottom={5} color={'#AA7E39'} fontWeight={'$bold'}>Eventos públicos:</Text>
 
 
 
@@ -580,18 +580,15 @@ const enviarEventoParaApi = async () => {
       };
 
       // URL da sua API para enviar os dados e a imagem
-      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
+      const apiUrl = 'http://192.168.15.7:8085/api/register/evento';
+      // const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
       // Dados a serem enviados para a API
       
-      console.log(data)
       // Envia os dados e a imagem para a API usando Axios
       const response = await axios.post(apiUrl, data, config);
       console.log('Resposta da API:', response.data);
 
-      // Limpa o formulário após o envio dos dados
-      
-      setShowModal(false);
 
       // Retorna para a página inicial
       navigation.push('Home',  { userData });
@@ -610,31 +607,21 @@ const enviarEventoParaApi = async () => {
 
 
 
-
-
   return (
     
     <SafeAreaView flex={1} >
 
-<Modal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false)
-        }}
-        finalFocusRef={ref}
-      >
-        <ModalBackdrop/>
-        <ModalContent w={'100%'} h={'100%'}>
-          <ModalHeader >
-            <Heading marginLeft={110} alignSelf="center" color={"#A87B34"} size="lg">Criar Novo Evento</Heading>
-            <ModalCloseButton>
-              <Icon as={CloseIcon} />
-            </ModalCloseButton>
-          </ModalHeader>
-          <ModalBody>
-            <ScrollView>
+      
+        <Animated.View entering={FadeInDown} style={{backgroundColor: 'black', flex: 1}} alignItems="center">
+          
+        <Button opacity={1} onPress={() => navigation.push('Home',  { userData })} alignSelf="flex-start" variant="link" w={50} h={50} position="absolute" >
+       <Icon w={30} h={30} color={'white'} as={ArrowLeftIcon} />
+       </Button>
+       
+      
+       <ScrollView zIndex={1}  showsVerticalScrollIndicator={false}>
               <Box  marginTop={25} alignItems="center">
-                <Text marginVertical={15} fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Imagem do Evento</Text>
+                <Text marginVertical={15} fontSize={15} color={"white"} fontWeight={'$bold'}>Imagem do Evento</Text>
                 <Button onPress={handleImageLibraryLaunch} w={320} h={220} variant="link">
                 <Avatar bgColor={'$white'} borderWidth={1} borderRadius={10} w={280} h={200} borderColor="$black">
                   <AvatarImage w={'100%'} h={'100%'} borderRadius={10} alt="imgEvento" source={imagem ? { uri: imagem.uri } : require('../../../src/img/img.png')}/>
@@ -647,12 +634,12 @@ const enviarEventoParaApi = async () => {
                 
                 <Box marginTop={20} marginHorizontal={5} alignItems="flex-start">
 
-                <Text marginVertical={0} fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Informações do Evento:</Text>
+                <Text marginVertical={0} fontSize={15} color={"white"} fontWeight={'$bold'}>Informações do Evento:</Text>
 
 
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
-                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Nome do evento: </Text>
-                <Icon as={Pencil} color="#A87B34" w={12} h={15} />
+                <Text  fontSize={13} color={"white"} fontWeight={'$bold'}>Nome do evento: </Text>
+                <Icon as={Pencil} color="white" w={12} h={15} />
                 </HStack>
                 <Input
                   marginTop={0}
@@ -672,8 +659,8 @@ const enviarEventoParaApi = async () => {
                 </Input>
 
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
-                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Descrição do evento: </Text>
-                <Icon as={AlignJustify} color="#A87B34" w={12} h={15} />
+                <Text  fontSize={13} color={"white"} fontWeight={'$bold'}>Descrição do evento: </Text>
+                <Icon as={AlignJustify} color="white" w={12} h={15} />
                 </HStack>
                 <Input
                   justifyContent="flex-start"
@@ -693,8 +680,8 @@ const enviarEventoParaApi = async () => {
                   <InputField value={descricao} onChangeText={setDescricao} justifyContent="flex-start" multiline $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
                 </Input>
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
-                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Data do evento: </Text>
-                <Icon as={CalendarDaysIcon} color="#A87B34" w={15} h={20} />
+                <Text  fontSize={13} color={"white"} fontWeight={'$bold'}>Data do evento: </Text>
+                <Icon as={CalendarDaysIcon} color="white" w={15} h={20} />
                 </HStack>
                 
                   <MaskInput
@@ -707,16 +694,15 @@ const enviarEventoParaApi = async () => {
                   
                   />
                 <HStack marginTop={20} justifyContent="center" alignContent="center">
-                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Hora do evento: </Text>
-                <Icon as={ArrowBigRight} color="#A87B34" w={15} h={20} />
-                <AnimatedButton style={[scaleStyles]} w={20} h={20} alignItems="center" justifyContent="center" variant="link" onPress={showDatePicker}><ButtonIcon color="#A87B34" as={Clock} /></AnimatedButton>
+                <Text  fontSize={13} color={"white"} fontWeight={'$bold'}>Hora do evento: </Text>
+                <Icon as={ArrowBigRight} color="white" w={15} h={20} />
+                <AnimatedButton style={[scaleStyles]} w={20} h={20} alignItems="center" justifyContent="center" variant="link" onPress={showDatePicker}><ButtonIcon color="white" as={Clock} /></AnimatedButton>
                 </HStack>
                 
              
          
           
         <DateTimePickerModal
-          style={{backgroundColor:'red'}}
           date={selectedDate ? new Date(selectedDate) : undefined}
           isVisible={datePickerVisible}
           mode="time"
@@ -726,13 +712,13 @@ const enviarEventoParaApi = async () => {
           is24Hour
         />
 
-        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, color:"#A87B34" }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 20, color:"white" }}>
           {selectedDate ? selectedDate.toLocaleTimeString() : 'Horário não selecionado'}
         </Text>
 
         <HStack marginTop={20} justifyContent="center" alignContent="center">
-                <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Número de convidados: </Text>
-                <Icon as={MailQuestionIcon} color="#A87B34" w={12} h={15} />
+                <Text  fontSize={13} color={"white"} fontWeight={'$bold'}>Número de convidados: </Text>
+                <Icon as={MailQuestionIcon} color="white" w={12} h={15} />
                 </HStack>
                 <Input
                   marginTop={0}
@@ -754,11 +740,11 @@ const enviarEventoParaApi = async () => {
           
 
 
-<Text  marginTop={20}  fontSize={15} color={"#A87B34"} fontWeight={'$bold'}>Local do evento:</Text>
+<Text  marginTop={20}  fontSize={15} color={"white"} fontWeight={'$bold'}>Local do evento:</Text>
 
 <HStack marginTop={20} justifyContent="center" alignContent="center">
-  <Text fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Rua: </Text>
-  <Icon as={StretchVertical} color="#A87B34" w={12} h={15} />
+  <Text fontSize={13} color={"white"} fontWeight={'$bold'}>Rua: </Text>
+  <Icon as={StretchVertical} color="white" w={12} h={15} />
 </HStack>
 
 <Input
@@ -779,8 +765,8 @@ const enviarEventoParaApi = async () => {
  </Input>
 
  <HStack marginTop={20} justifyContent="center" alignContent="center">
-  <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Bairro: </Text>
-  <Icon as={Building2} color="#A87B34" w={12} h={15} margin={1} />
+  <Text  fontSize={13} color={"white"} fontWeight={'$bold'}>Bairro: </Text>
+  <Icon as={Building2} color="white" w={12} h={15} margin={1} />
 </HStack>
 
 <Input
@@ -800,8 +786,8 @@ const enviarEventoParaApi = async () => {
  </Input>
 
  <HStack marginTop={20} justifyContent="center" alignContent="center">
-  <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Número: </Text>
-  <Icon as={House} color="#A87B34" w={12} h={15} />
+  <Text  fontSize={13} color={"white"} fontWeight={'$bold'}>Número: </Text>
+  <Icon as={House} color="white" w={12} h={15} />
 </HStack>
 
 <Input
@@ -824,8 +810,8 @@ const enviarEventoParaApi = async () => {
 
 
  <HStack marginTop={20} justifyContent="center" alignContent="center">
-  <Text  fontSize={13} color={"#A87B34"} fontWeight={'$bold'}>Privacidade: </Text>
-  <Icon as={LockKeyhole} color="#A87B34" w={12} h={15} />
+  <Text  fontSize={13} color={"white"} fontWeight={'$bold'}>Privacidade: </Text>
+  <Icon as={LockKeyhole} color="white" w={12} h={15} />
 </HStack>
 
 <Box marginTop={10} w={200}>
@@ -838,19 +824,46 @@ const enviarEventoParaApi = async () => {
             value: 'Privado',
             label: 'Privado',
             checkedColor:'white',
-            uncheckedColor:'#A87B34',
+            uncheckedColor:'white',
             showSelectedCheck: true,
           },
           {
             value: 'Público',
             label: 'Público',
             checkedColor:'white',
-            uncheckedColor:'#A87B34',
+            uncheckedColor:'white',
             showSelectedCheck: true,
           },
         ]}
       />
 </Box>
+
+<Box w={'100%'} marginTop={20} flexDirection="row">
+<Button       
+              variant="outline"
+              size="sm"
+              action="secondary"
+              mr="$3"
+              onPress={() => navigation.push('Home',  { userData }) 
+                
+              }
+            >
+              <ButtonText color="white">Cancelar</ButtonText>
+            </Button>
+            <Button
+              alignSelf="flex-end" 
+              size="sm"
+              action="positive"
+              bg={'#A87B34'}
+              borderWidth="$0"
+              onPress={enviarEventoParaApi
+                
+              }
+            >
+              <ButtonText>Criar Evento</ButtonText>
+            </Button>
+</Box>
+
 
 
               
@@ -868,52 +881,22 @@ const enviarEventoParaApi = async () => {
                 
               
             </ScrollView>
-            
-            
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="outline"
-              size="sm"
-              action="secondary"
-              mr="$3"
-              onPress={() => {
-                setShowModal(false)
-              }}
-            >
-              <ButtonText>Cancelar</ButtonText>
-            </Button>
-            <Button
-              size="sm"
-              action="positive"
-              bg={'#A87B34'}
-              borderWidth="$0"
-              onPress={enviarEventoParaApi
-                
-              }
-            >
-              <ButtonText>Criar Evento</ButtonText>
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
 
-      
-        <Animated.View entering={FadeInDown} style={{backgroundColor: 'black', flex: 1}} alignItems="center">
-          
-        <AnimatedImageBackground  alignItems="center" opacity={0.5} flex={1} w={'100%'} h={750} source={{uri:randomElement}}>
+        <AnimatedImageBackground style={{zIndex: -1, opacity: 0.6, position: "absolute"}}  alignItems="center" flex={1} w={'100%'} h={750} source={{uri:'https://miro.medium.com/v2/resize:fit:1400/1*kU6biOtrNaTtAfvRHPMcrg.gif'}}>
         
         
-        <Button onPress={() => navigation.push('Home',  { userData })} alignSelf="flex-start" variant="link" w={50} h={50} position="absolute" >
-       <Icon w={30} h={30} color={'white'} as={ArrowLeftIcon} />
-       </Button>
-       
-      
-      
-       
       
         </AnimatedImageBackground>
+        {/* <AnimatedImageBackground style={{zIndex: -1, opacity: 0.5, position: "absolute"}}  alignItems="center" blurRadius={1} flex={1} w={'100%'} h={750} source={{uri:randomElement}}>
         
+        
+        
+       
+      
+        </AnimatedImageBackground> */}
+
+
+
        
         </Animated.View>
      
