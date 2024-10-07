@@ -54,42 +54,6 @@ import {  Easing, Keyframe,  } from 'react-native-reanimated';
 
 function HomeScreen({navigation, route}) {
 
-  const enteringAnimation = new Keyframe({
-    0: {
-      transform: [
-        { translateX: -200 },
-      ]
-    },
-    25: {
-      transform: [
-        { translateX: -150 },
-      ]
-    },
- 
-    50: {
-      transform: [
-        { translateX: -100 },
-      ]
-      
-    },
-    75: {
-      transform: [
-        { translateX: -100 },
-      ]
-      
-    },
-
-    100: {
-      transform: [
-        { translateX: 0 },
-      ]
-      
-    },
-  }).duration(200);
-  
-
- 
-
 
   const { id, nome, sobrenome, email, senha } = route.params.obj;
 
@@ -430,6 +394,8 @@ function CreateEventScreen({navigation,route}){
   const { id, nome, sobrenome, email, senha } = route.params.obj;
   const userData = route.params.obj
 
+  const imageBg = route.params.randomElement
+
 
   const AnimatedText = Animated.createAnimatedComponent(Text)
   const AnimatedImageBackground = Animated.createAnimatedComponent(ImageBackground)
@@ -448,25 +414,7 @@ function CreateEventScreen({navigation,route}){
 
   
 
-  function getRandomElement(array) {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    const randomElement = array[randomIndex];
-    return randomElement;
-}
 
-const array = [
-
-'https://cdn.firstcry.com/education/2022/12/29111202/101-Of-Planning-An-Unforgettable-Kids-Birthday-Party.jpg',
-'https://www.brides.com/thmb/o6H4hJ-Fc0qHMhI6Lf9VoZXHgqg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/marriage-definition-wedding-exit-toss-recirc-getty-images-1dc6f223ad7b4e249cf9bf3c8e317148.jpg',
-'https://www.brides.com/thmb/o6H4hJ-Fc0qHMhI6Lf9VoZXHgqg=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/marriage-definition-wedding-exit-toss-recirc-getty-images-1dc6f223ad7b4e249cf9bf3c8e317148.jpg',
-'https://aloalobahia.com/images/p/trezeromeia_aloalobahia.JPG',
-'https://blog.minhasinscricoes.com.br/wp-content/uploads/2022/02/conferencia.png',
-'https://alphaconvites.com.br/wp-content/uploads/2023/01/festa-antes-formatura-scaled-1.jpg',
-'https://www.fashionbubbles.com/wp-content/uploads/2021/12/festa-de-natal-da-empresa.jpg'
-];
-
-
-const randomElement = getRandomElement(array);
 
 const [showModal, setShowModal] = useState(false)
 
@@ -571,8 +519,6 @@ const enviarEventoParaApi = async () => {
   };
   console.log(privacidade)
       
-
-      // Configuração da requisição Axios
       const config = {
           headers: {
               'Content-Type': 'application/json',
@@ -583,9 +529,7 @@ const enviarEventoParaApi = async () => {
       const apiUrl = 'http://192.168.15.7:8085/api/register/evento';
       // const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
-      // Dados a serem enviados para a API
-      
-      // Envia os dados e a imagem para a API usando Axios
+  
       const response = await axios.post(apiUrl, data, config);
       console.log('Resposta da API:', response.data);
 
@@ -619,8 +563,8 @@ const enviarEventoParaApi = async () => {
        </Button>
        
       
-       <ScrollView zIndex={1}  showsVerticalScrollIndicator={false}>
-              <Box  marginTop={25} alignItems="center">
+       <ScrollView zIndex={1} h={1000} showsVerticalScrollIndicator={false}>
+              <Box  marginVertical={25} alignItems="center">
                 <Text marginVertical={15} fontSize={15} color={"white"} fontWeight={'$bold'}>Imagem do Evento</Text>
                 <Button onPress={handleImageLibraryLaunch} w={320} h={220} variant="link">
                 <Avatar bgColor={'$white'} borderWidth={1} borderRadius={10} w={280} h={200} borderColor="$black">
@@ -838,31 +782,7 @@ const enviarEventoParaApi = async () => {
       />
 </Box>
 
-<Box w={'100%'} marginTop={20} flexDirection="row">
-<Button       
-              variant="outline"
-              size="sm"
-              action="secondary"
-              mr="$3"
-              onPress={() => navigation.push('Home',  { userData }) 
-                
-              }
-            >
-              <ButtonText color="white">Cancelar</ButtonText>
-            </Button>
-            <Button
-              alignSelf="flex-end" 
-              size="sm"
-              action="positive"
-              bg={'#A87B34'}
-              borderWidth="$0"
-              onPress={enviarEventoParaApi
-                
-              }
-            >
-              <ButtonText>Criar Evento</ButtonText>
-            </Button>
-</Box>
+
 
 
 
@@ -882,9 +802,41 @@ const enviarEventoParaApi = async () => {
               
             </ScrollView>
 
-        <AnimatedImageBackground style={{zIndex: -1, opacity: 0.6, position: "absolute"}}  alignItems="center" flex={1} w={'100%'} h={750} source={{uri:'https://miro.medium.com/v2/resize:fit:1400/1*kU6biOtrNaTtAfvRHPMcrg.gif'}}>
+        {/* <AnimatedImageBackground style={{zIndex: -1, opacity: 0.6, position: "absolute"}}  alignItems="center" flex={1} w={'100%'} h={750} source={{uri:'https://miro.medium.com/v2/resize:fit:1400/1*kU6biOtrNaTtAfvRHPMcrg.gif'}}> */}
+
+        <Box alignSelf="flex-end"  w={'55%'} marginTop={5} flexDirection="row">
+<Button       
+              variant="outline"
+              size="sm"
+              action="secondary"
+              mr="$3"
+              onPress={() => navigation.push('Home',  { userData }) 
+                
+              }
+            >
+              <ButtonText color="white">Cancelar</ButtonText>
+            </Button>
+
+            <Button
+              
+              size="sm"
+              action="positive"
+              bg={'#A87B34'}
+              borderWidth="$0"
+              onPress={enviarEventoParaApi
+                
+              }
+            >
+              <ButtonText>Criar Evento</ButtonText>
+            </Button>
+
+</Box>
+
+           
+
+        <AnimatedImageBackground style={{zIndex: -1, opacity: 0.4, position: "absolute"}}  alignItems="center" flex={1} w={'100%'} h={750} source={{uri:imageBg}}>
         
-        
+
       
         </AnimatedImageBackground>
         {/* <AnimatedImageBackground style={{zIndex: -1, opacity: 0.5, position: "absolute"}}  alignItems="center" blurRadius={1} flex={1} w={'100%'} h={750} source={{uri:randomElement}}>
@@ -929,6 +881,23 @@ export default function Home({navigation, route}) {
   }));
 
 
+  function getRandomElement(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    const randomElement = array[randomIndex];
+    return randomElement;
+}
+
+const array = [
+
+'https://miro.medium.com/v2/resize:fit:1400/1*kU6biOtrNaTtAfvRHPMcrg.gif',
+'https://cdn0.bodas.net/article-vendor/45446/3_2/960/jpg/ec-228_1_45446-168966401847248.jpeg',
+'https://images.sbs.com.au/dims4/default/b46a380/2147483647/strip/true/crop/2090x1176+0+93/resize/1280x720!/quality/90/?url=http%3A%2F%2Fsbs-au-brightspot.s3.amazonaws.com%2Fdrupal%2Ftopics%2Fpublic%2Fgettyimages-200167864-002_martinbarraud.jpg',
+
+
+];
+
+
+const randomElement = getRandomElement(array);
 
   
  
@@ -976,7 +945,7 @@ export default function Home({navigation, route}) {
     )}
   >
     <Tab.Screen initialParams={{obj}} options={{headerShown: false}} name="Página Inicial" component={HomeScreen} />
-    <Tab.Screen initialParams={{ obj }}
+    <Tab.Screen initialParams={{ obj, randomElement }}
      options={{headerShown: false, tabBarStyle: {
       display: "none",
     }, tabBarIcon: ({focused, color, size}) => {
