@@ -425,8 +425,6 @@ function CreateEventScreen({navigation,route}){
 
 
 
-const [showModal, setShowModal] = useState(false)
-
 const [dataEvento, setDataEvento] = React.useState('');
   const ref = React.useRef(null);
   const [selectedDate, setSelectedDate] = useState(new Date('2022-05-31'));

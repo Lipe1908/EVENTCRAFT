@@ -1,9 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 
 import LoginScreen from './Log-page/LoginScreen';
 import SigninScreen from './Sign-Page/SigninScreen';

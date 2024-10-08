@@ -15,7 +15,6 @@ import logo from '../../../src/img/logo.png';
 import axios from 'axios'
 import { BounceIn, Easing, FadeIn, FadeInRight, FadeOut, FadeOutLeft, Keyframe, ReduceMotion, SlideInLeft, SlideInRight, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
-import { SharedTransition, withSpring } from 'react-native-reanimated';
 export default function SigninScreen({navigation}) {
   const AnimatedCenter = Animated.createAnimatedComponent(Center);
   const scale = useSharedValue(1);
@@ -31,37 +30,6 @@ export default function SigninScreen({navigation}) {
   const scaleStyles = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
-
-  FadeOutLeft.duration(2000).easing(Easing.ease);
-  BounceIn.duration(2000)
-  .delay(100)
-  .randomDelay()
-  .reduceMotion(ReduceMotion.Never)
-  .withInitialValues({ transform: [{ translateY: -1100 }] })
-  .withCallback((finished) => {
-    console.log(`finished without interruptions: ${finished}`);
-  });
-
-  SlideInLeft.duration(3000).easing(Easing.ease);
- 
-  SlideInLeft.springify()
-  .delay(500)
-  .damping(50)
-  .mass(10)
-  .stiffness(10)
-  .overshootClamping(false)
-  .restDisplacementThreshold(0.1)
-  .restSpeedThreshold(2);
-
-  SlideInRight.duration(2000).easing(Easing.ease);
- 
-  SlideInRight.springify()
-  .damping(30)
-  .mass(10)
-  .stiffness(10)
-  .overshootClamping(false)
-  .restDisplacementThreshold(0.1)
-  .restSpeedThreshold(1);
 
 
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);

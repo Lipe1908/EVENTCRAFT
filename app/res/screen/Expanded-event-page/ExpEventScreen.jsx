@@ -1,17 +1,12 @@
 // Gabriel / RC
 import React, {useEffect, useState} from "react";
-import {View, Alert, StyleSheet, ActivityIndicator} from 'react-native';
 import { Center, ScrollView, StatusBar,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
-import { KeyboardAvoidingView } from '@gluestack-ui/themed';
-import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
 import axios from 'axios';
 import { Heading } from "@gluestack-ui/themed";
 import { Icon } from "@gluestack-ui/themed";
 import { Box, SafeAreaView, Image, ImageBackground } from '@gluestack-ui/themed';
-import topImage from '../../../src/img/image-removebg-preview.png';
-import bottomImage from '../../../src/img/image-removebg-preview2.png';
 import logo from '../../../src/img/logo.png';
 import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, Keyframe, LightSpeedInLeft, ReduceMotion, SlideInLeft, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -36,7 +31,6 @@ export default function Evento({navigation, route})  {
   const id = route.params.id
       useEffect(()=>{
           axios.get(`http://10.0.2.2:8085/api/readEvent/${id}`)
-          axios.get(`http://10.0.2.2:8085/api/readEventAdress/${id}`)
           .then(response =>{  
             setNConvidados(response.data.nConvidados)
             setNomeEvento(response.data.nomeEvento)
