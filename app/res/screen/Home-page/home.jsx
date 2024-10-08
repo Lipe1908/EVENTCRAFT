@@ -17,7 +17,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Card } from '@gluestack-ui/themed';
-import { withTiming, withSpring, useAnimatedStyle, withRepeat, useSharedValue, BounceInLeft, StretchInX, ReduceMotion, BounceInDown, BounceInUp, FadeInUp, FadeInLeft, FadeInDown } from 'react-native-reanimated';
+import { withTiming, withSpring, useAnimatedStyle, withRepeat, useSharedValue, BounceInLeft, StretchInX, ReduceMotion, BounceInDown, BounceInUp, FadeInUp, FadeInLeft, FadeInDown, SharedTransition } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 import { AvatarFallbackText } from "@gluestack-ui/themed";
@@ -111,11 +111,13 @@ const randomElement = getRandomElement(array);
   const [data, setData] = useState([]);
   
       useEffect(()=>{
-          axios.get(`http://192.168.15.7:8085/api/readEvents`)
-          // axios.get(`http://10.0.2.2:8085/api/readEvents`)
+          // axios.get(`http://192.168.15.7:8085/api/readEvents`)
+          axios.get(`http://10.0.2.2:8085/api/readEvents`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescente
               const sortData= response.data.sort((a,b) => a.id - b.id);
+
+            
               setData(sortData);
               
           })
@@ -128,25 +130,32 @@ const randomElement = getRandomElement(array);
       
 
       const handleVizualizar = (id) =>{
-          navigation.navigate('Evento', {id})
+          navigation.push('Evento', {id})
       };
 
 
+      const customTransition = SharedTransition.custom((values) => {
+        'worklet';
+        return {
+          height: withSpring(values.targetHeight),
+          width: withSpring(values.targetWidth),
+          originX: withSpring(values.targetOriginX),
+          originY: withSpring(values.targetOriginY),
+        };
+      });
      
       
 
       const renderItem = ({item})=>
+      
       
       (
 
         
          
         <Card w={350} p="$5" borderRadius="$lg" m="$3">
-      <Image
-        mb="$6"
-        h={240}
-        w={400}
-        borderRadius="$md"
+      <Animated.Image
+      style={{marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center'}}
         alt="imagemEvento"
         source={{
           uri: `data:image/jpeg;base64,${item.imagemBase64}`
@@ -182,7 +191,7 @@ const randomElement = getRandomElement(array);
       <Text mb={10} color={'$black'} fontSize={13} >
        {item.descricao}
       </Text>
-      <Button bg='#AA7E39'>
+      <Button onPress={() => handleVizualizar(item.id)} bg='#AA7E39'>
       <ButtonText>Ver informações do evento</ButtonText>
       </Button>
     
@@ -526,8 +535,8 @@ const enviarEventoParaApi = async () => {
       };
 
       // URL da sua API para enviar os dados e a imagem
-      const apiUrl = 'http://192.168.15.7:8085/api/register/evento';
-      // const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
+      // const apiUrl = 'http://192.168.15.7:8085/api/register/evento';
+      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
   
       const response = await axios.post(apiUrl, data, config);
@@ -890,9 +899,8 @@ export default function Home({navigation, route}) {
 const array = [
 
 'https://miro.medium.com/v2/resize:fit:1400/1*kU6biOtrNaTtAfvRHPMcrg.gif',
-'https://cdn0.bodas.net/article-vendor/45446/3_2/960/jpg/ec-228_1_45446-168966401847248.jpeg',
-'https://images.sbs.com.au/dims4/default/b46a380/2147483647/strip/true/crop/2090x1176+0+93/resize/1280x720!/quality/90/?url=http%3A%2F%2Fsbs-au-brightspot.s3.amazonaws.com%2Fdrupal%2Ftopics%2Fpublic%2Fgettyimages-200167864-002_martinbarraud.jpg',
-
+'https://blog.poesie.com.br/wp-content/uploads/2014/11/02-ideia-foto-noivado-casamento.gif',
+'https://www.paperlesspost.com/blog/wp-content/uploads/01_Blog_KidsBirthdayPartyIdeas_ChildrenBlowingOutCandles.png'
 
 ];
 

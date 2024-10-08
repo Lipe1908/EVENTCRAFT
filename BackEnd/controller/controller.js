@@ -55,6 +55,33 @@ const userController = {
             return error
         }   
     },
+    listEventByID: async(req,res)=>{
+        try{
+            const sql = await clientController.getByIdEvento(req.params.id);
+
+            console.log(sql[0]);
+
+            if(sql.length > 0)
+            {
+                res.status(200).json(sql[0])
+            }
+            else{
+                res.status(401).json({msg:"Não existe registro no banco com este ID"})
+            }
+        }
+        catch(error){
+            return error
+        }   
+    },
+    listEventAdressById: async (req, res) => {
+        try {
+            const events = await clientController.getEventAdressById(req.params.id);
+            res.status(200).json(events[0]);
+        }
+        catch (error) {
+            res.status(500).json({ error: "Erro ao obter a lista de eventos" })
+        }
+    },
 
     //Criar um novo usuário
     createNewUser: async(req,res)=>{

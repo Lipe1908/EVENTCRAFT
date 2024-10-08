@@ -17,6 +17,11 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
+    getEventAdressById: async (id) =>{
+        const [result] = await connection.query("SELECT * FROM endereco WHERE id_evento = ? ", [id])
+        .catch(erro => console.log(erro));
+        return result
+    },
 
     getByEmail: async (email) =>{
         const [result] = await connection.query("SELECT * FROM usuarios WHERE email =?", [email])
