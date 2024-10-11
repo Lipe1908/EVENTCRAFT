@@ -219,7 +219,8 @@ alt="topimg"
 <Box h={'auto'} w={'100%'} marginTop={-35} marginBottom={15} justifyContent="center" alignItems="center">
 <Animated.View>
 <Image
-size="xl"
+w={130}
+h={100}
 source={logo}
 alt="logo"
 />

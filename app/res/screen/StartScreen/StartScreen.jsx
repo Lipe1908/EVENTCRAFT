@@ -104,7 +104,8 @@ alt="topimg"
 <AnimatedBox alignItems={'center'} justifyContent={'center'}
 style={[styles.box,]}>
 <Image
-size="xl"
+w={130}
+h={100}
 source={logo}
 alt="logo"
 />

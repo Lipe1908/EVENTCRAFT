@@ -39,8 +39,6 @@ export default function Evento({navigation, route})  {
             setDataEvento(response.data.dataEvento)
             setHoraEvento(response.data.horaEvento)
               //Ordenar os dados pelo id em ordem crescente
-              const sortData= response.data.sort((a,b) => a.id - b.id);
-              setData(sortData);
               
           })
           .catch(error => {
@@ -56,11 +54,7 @@ export default function Evento({navigation, route})  {
             setRua(response.data.rua)
             setBairro(response.data.bairro)
             setNumero(response.data.numero)
-            
-              //Ordenar os dados pelo id em ordem crescente
-              const sortData= response.data.sort((a,b) => a.id - b.id);
-              setData(sortData);
-              
+                         
           })
           .catch(error => {
               console.log(JSON.stringify(error));
@@ -87,7 +81,7 @@ export default function Evento({navigation, route})  {
           opacity: 1
           
         },
-      }).duration(1000);
+      }).duration(900);
 
       const enteringImageAnimation = new Keyframe({
         0: {
@@ -128,7 +122,7 @@ export default function Evento({navigation, route})  {
           ]
           
         },
-      }).duration(700);
+      }).duration(600).delay(200);
 
       const enteringTextAnimation = new Keyframe({
         0: {
