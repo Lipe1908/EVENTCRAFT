@@ -1,42 +1,46 @@
 [
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable-mdpi_icon.png.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable-mdpi\\icon.png"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-hdpi/ic_launcher_round.png"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable-hdpi_icon.png.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable-hdpi\\icon.png"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable-xxhdpi_background_splash.xml.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable-xxhdpi\\background_splash.xml"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-xhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable_icon.png.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable\\icon.png"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-xxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable_background_splash.xml.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable\\background_splash.xml"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable-ldpi_icon.png.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable-ldpi\\icon.png"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable_rn_edit_text_material.xml.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable\\rn_edit_text_material.xml"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable-xhdpi_icon.png.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable-xhdpi\\icon.png"
+        "merged": "com.reactnativeapp-merged_res-34:/drawable_rn_edit_text_material.xml.flat",
+        "source": "com.reactnativeapp-main-36:/drawable/rn_edit_text_material.xml"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable-xxxhdpi_icon.png.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable-xxxhdpi\\icon.png"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-xxxhdpi/ic_launcher_round.png"
     },
     {
-        "merged": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-merged_res-34:\\drawable-xxhdpi_icon.png.flat",
-        "source": "C:\\Users\\Aluno\\.gradle\\daemon\\8.0.1\\com.reactnativeapp-main-36:\\drawable-xxhdpi\\icon.png"
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.reactnativeapp-merged_res-34:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.reactnativeapp-main-36:/mipmap-hdpi/ic_launcher.png"
     }
 ]
