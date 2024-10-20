@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from "react";
 import {View, Alert} from 'react-native';
-import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, Checkbox, CheckboxIndicator, CloseIcon, HStack, Link, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
+import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, Checkbox, CheckboxIndicator, CloseIcon, HStack, Link, Modal, ModalBody, ScrollView, StatusBar, VStack,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
@@ -115,7 +115,7 @@ const randomElement = getRandomElement(array);
   const [data, setData] = useState([]);
   
       useEffect(()=>{
-          axios.get(`http://192.168.15.11:8085/api/readEvents`)
+          axios.get(`http://192.168.15.12:8085/api/readEvents`)
           // axios.get(`http://10.0.2.2:8085/api/readEvents`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescente
@@ -360,7 +360,7 @@ function EventsScreen({route}) {
   const [data2, setData2] = useState([]);
   // const [dayy, setDayy] = useState('')
       useEffect(()=>{
-          axios.get(`http://192.168.15.11:8085/api/readEvents/dates/${id_usuario}`)
+          axios.get(`http://192.168.15.12:8085/api/readEvents/dates/${id_usuario}`)
            // axios.get(`http://10.0.2.2:8085/api/readEventsDates`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescent
@@ -374,13 +374,39 @@ function EventsScreen({route}) {
 
       },[]);
 
+      const [showModal, setShowModal] = useState(false)
 
+      const editInfo = async (info) => {
+        
+        try {
+          const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
+      
+          //Ordenar os dados pelo id em ordem crescente
+          const sortData = response.data.sort((a, b) => a.id - b.id);
+          
+    
+          if (response.data == '') {
+            setData2(['Nenhum evento encontrado']);
+          }
+          else {
+            setShowActionsheet(true)
+            setData2(sortData);
+          }
+          
+      
+          
+        } catch (error) {
+          console.log(JSON.stringify(error));
+        }
+    
+        
+      };
 
       const renderItem = ({item})=>
       
       
         (
-    
+          
           <Actionsheet h="$150" isOpen={showActionsheet} onClose={handleClose} zIndex={999}>
           <ActionsheetBackdrop />
           <ActionsheetContent h={150} zIndex={999}>
@@ -388,31 +414,117 @@ function EventsScreen({route}) {
               <ActionsheetDragIndicator  />
             </ActionsheetDragIndicatorWrapper>
             <ScrollView>
-            <ActionsheetItem w={'100$'} alignSelf="center">
+         
+            <View w={'100$'} alignSelf="center">
               <Text fontSize={19} fontWeight="bold" color="#AA7E39">Informações do evento</Text>
-            </ActionsheetItem>
+            </View>
             <ActionsheetItem w={'100$'} alignSelf="center">
               <Text fontSize={13} fontWeight="light" color="#AA7E39">Clique nas informações para edita-la</Text>
             </ActionsheetItem>
-            <ActionsheetItem w={'50$'} alignSelf="center">
-              <Text color="#AA7E39" fontWeight="bold" fontSize={19}>Nome do evento: </Text>
-              <Text color="#AA7E39" fontSize={18}>{item.nomeEvento}</Text>
-              
-            </ActionsheetItem>
 
+            <ActionsheetItem w={'auto'} alignSelf="center">
             <Animated.Image
-                style={{marginBottom: 15, height: 240, width: 315, borderRadius: 0, alignSelf: 'center'}}
+                style={{marginBottom: 15, height: 240, width: 315, borderRadius: 10, alignSelf: 'center'}}
                 alt="imagemEvento"
                 source={{
                  uri: `data:image/jpeg;base64,${item.imagemBase64}`
                   }}
                 />
+            </ActionsheetItem>
+            
+
+            <ActionsheetItem w={'50$'} alignSelf="center">
+              <VStack w={'100%'} space="xs">
+                  <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Nome do evento:</Text>
+                  <Input
+          borderRadius={12}
+          bg='#FFFF'
+          w={'100%'}
+          h={50}
+          variant="outline"
+          size="md"
+          isDisabled={false}
+          isInvalid={false}
+          isReadOnly={false}
+          $focus-borderColor={'#A87B34'}
+
+          >
+          <InputField onChangeText={''} value={''} $focus-borderColor={'#A87B34'} fontSize={12} color='#A87B34' fontWeight='$bold' placeholder={item.nomeEvento} placeholderTextColor={'black'}  />
+        </Input>
+              </VStack>
+             
+            </ActionsheetItem>
+
+            <ActionsheetItem w={'50$'} alignSelf="center">
+              <VStack w={'100%'} space="xs">
+                  <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Descrição do evento:</Text>
+                  <Input
+          borderRadius={12}
+          bg='#FFFF'
+          w={'100%'}
+          h={'auto'}
+          variant="outline"
+          size="md"
+          isDisabled={false}
+          isInvalid={false}
+          isReadOnly={false}
+          $focus-borderColor={'#A87B34'}
+          justifyContent="flex-start"
+          >
+          <InputField multiline onChangeText={''} value={''} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={item.descricao} placeholderTextColor={'black'}  />
+        </Input>
+              </VStack>
+             
+            </ActionsheetItem>
+            <ActionsheetItem w={'50$'} alignSelf="center">
+              <VStack w={'100%'} space="xs">
+                  <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Data do evento:</Text>
+                  <Input
+          borderRadius={12}
+          bg='#FFFF'
+          w={'100%'}
+          h={50}
+          variant="outline"
+          size="md"
+          isDisabled={false}
+          isInvalid={false}
+          isReadOnly={false}
+          $focus-borderColor={'#A87B34'}
+
+          >
+          <InputField onChangeText={''} value={''} $focus-borderColor={'#A87B34'} fontSize={12} color='#A87B34' fontWeight='$bold' placeholder={moment(item.dataEvento).format('DD/MM/YYYY')} placeholderTextColor={'black'}  />
+        </Input>
+              </VStack>
+             
+            </ActionsheetItem>
 
 
-          <Text color="#AA7E39" fontWeight="bold" alignSelf="center" fontSize={19}>Descrição do evento: </Text>
-              <Text color="#AA7E39" alignSelf="center" fontSize={15}>{item.descricao}</Text>      
-          <Text marginTop={10} color="#AA7E39" fontWeight="bold" alignSelf="center" fontSize={19}>Data do evento: </Text>
-              <Text color="#AA7E39" alignSelf="center" fontSize={20}>{moment(item.dataEvento).format('DD/MM/YYYY')}</Text> 
+            <ActionsheetItem w={'50$'} alignSelf="center">
+              <VStack w={'100%'} space="xs">
+                  <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Hora do evento:</Text>
+                  <Input
+          borderRadius={12}
+          bg='#FFFF'
+          w={'100%'}
+          h={50}
+          variant="outline"
+          size="md"
+          isDisabled={false}
+          isInvalid={false}
+          isReadOnly={false}
+          $focus-borderColor={'#A87B34'}
+
+          >
+          <InputField onChangeText={''} value={''} $focus-borderColor={'#A87B34'} fontSize={12} color='#A87B34' fontWeight='$bold' placeholder={item.horaEvento} placeholderTextColor={'black'}  />
+        </Input>
+              </VStack>
+             
+            </ActionsheetItem>
+
+  
+         
+
+
      
             </ScrollView>
       
@@ -438,7 +550,7 @@ function EventsScreen({route}) {
   const handleEvento = async (dayy) => {
     
     try {
-      const response = await axios.get(`http://192.168.15.11:8085/api/readEventsByDate/${dayy}`);
+      const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
   
       //Ordenar os dados pelo id em ordem crescente
       const sortData = response.data.sort((a, b) => a.id - b.id);
@@ -460,8 +572,6 @@ function EventsScreen({route}) {
 
     
   };
-
-  console.log(data2)
 
   const [showActionsheet, setShowActionsheet] = React.useState(false)
   const handleClose = () => setShowActionsheet(!showActionsheet)
@@ -668,7 +778,7 @@ const enviarEventoParaApi = async () => {
 
       // URL da sua API para enviar os dados e a imagem
       // const apiUrl = 'http://192.168.15.7:8085/api/register/evento';
-      const apiUrl = 'http://192.168.15.11:8085/api/register/evento';
+      const apiUrl = 'http://192.168.15.12:8085/api/register/evento';
 
   
       const response = await axios.post(apiUrl, data, config);
