@@ -1,4 +1,4 @@
-// Gabriel / RC
+
 import React, {useEffect, useState} from "react";
 import {View, Alert, StyleSheet, ActivityIndicator} from 'react-native';
 import { Center, ScrollView, StatusBar,} from '@gluestack-ui/themed';
@@ -125,8 +125,8 @@ export default function LoginScreen({navigation})  {
 
         //Envio dos dados para a API
 
-        const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
-        // const response = await axios.post('http://192.168.15.7:8085/api/validation', data);
+        // const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
+        const response = await axios.post('http://192.168.15.11:8085/api/validation', data);
         
 
         //Verificar se o login foi efetuado com sucesso

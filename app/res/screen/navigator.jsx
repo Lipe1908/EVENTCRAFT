@@ -9,7 +9,6 @@ import HomeScreen from './Home-page/home';
 import StartScreen from './StartScreen/StartScreen';
 import Evento from './Expanded-event-page/ExpEventScreen';
 
-
 export default function StartNavigator() {
     return (
         <NavigationContainer>
@@ -23,3 +22,4 @@ export default function StartNavigator() {
         </NavigationContainer>
     );
 }
+    

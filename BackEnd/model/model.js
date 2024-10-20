@@ -1,5 +1,6 @@
 const connection= require("../config/db");
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 const salt = 10;
 const userModel = {
     getAllUsers: async () =>{
@@ -12,6 +13,26 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
+    getEventsByDates: async (dayy) =>{
+        const [result] = await connection.query("SELECT * FROM eventos WHERE dataEvento = ? ", [dayy])
+        .catch(erro => console.log(erro));
+        
+        return result
+    },
+    getAllEventsDates: async (id_usuario) =>{
+        const [result] = await connection.query("SELECT dataEvento FROM eventos WHERE id_usuario = ?", [id_usuario])
+        const dates = []
+        result.forEach(function(result) {
+           
+           
+            dates.push(moment(result.dataEvento).format('YYYY-MM-DD'))
+        }
+        )
+        console.log(dates)
+
+        return dates;
+    },
+
     getAllEventsAdress: async (id_evento) =>{
         const [result] = await connection.query("SELECT * FROM endereco WHERE id_evento = ? ", [id_evento])
         .catch(erro => console.log(erro));

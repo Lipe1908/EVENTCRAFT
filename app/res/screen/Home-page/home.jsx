@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from "react";
 import {View, Alert} from 'react-native';
-import { ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, Checkbox, CheckboxIndicator, CloseIcon, HStack, Link, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
+import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, Checkbox, CheckboxIndicator, CloseIcon, HStack, Link, Modal, ModalBody, ScrollView, StatusBar,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
@@ -12,7 +12,7 @@ import { Heading } from "@gluestack-ui/themed";
 import { Box, SafeAreaView, Image, ImageBackground } from '@gluestack-ui/themed';
 import topImage from '../../../src/img/image-removebg-preview.png';
 import bottomImage from '../../../src/img/image-removebg-preview2.png';
-import logo from '../../../src/img/logo2.png';
+import logo from '../../../src/img/logo.png';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -51,6 +51,10 @@ import { ArrowRightIcon } from "@gluestack-ui/themed";
 import moment from "moment";
 import CustomBottomTabBar from "../../props/customTabBar";
 import {  Easing, Keyframe,  } from 'react-native-reanimated';
+import { Actionsheet } from "@gluestack-ui/themed";
+import { ActionsheetDragIndicatorWrapper } from "@gluestack-ui/themed";
+import { ActionsheetItem } from "@gluestack-ui/themed";
+import { ActionsheetItemText } from "@gluestack-ui/themed";
 
 function HomeScreen({navigation, route}) {
 
@@ -111,8 +115,8 @@ const randomElement = getRandomElement(array);
   const [data, setData] = useState([]);
   
       useEffect(()=>{
-          // axios.get(`http://192.168.15.7:8085/api/readEvents`)
-          axios.get(`http://10.0.2.2:8085/api/readEvents`)
+          axios.get(`http://192.168.15.11:8085/api/readEvents`)
+          // axios.get(`http://10.0.2.2:8085/api/readEvents`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescente
               const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -144,16 +148,19 @@ const randomElement = getRandomElement(array);
         };
       });
      
+
+      const [showActionsheet, setShowActionsheet] = React.useState(false)
+      const handleClose = () => setShowActionsheet(!showActionsheet)
       
 
       const renderItem = ({item})=>
       
       
       (
-
-        
+  
          
         <Card w={350} p="$5" borderRadius="$lg" m="$3">
+          
       <Animated.Image
       style={{marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center'}}
         alt="imagemEvento"
@@ -192,10 +199,13 @@ const randomElement = getRandomElement(array);
        {item.descricao}
       </Text>
       <Button onPress={() => handleVizualizar(item.id)} bg='#AA7E39'>
+      {/* <Button onPress={handleClose} bg='#AA7E39'> */}
       <ButtonText>Ver informações do evento</ButtonText>
       </Button>
     
     </Card>
+
+    
         
       );
 
@@ -319,7 +329,7 @@ opacity={0.5}
 }
 
 
-function EventsScreen() {
+function EventsScreen({route}) {
   LocaleConfig.locales['br'] = {
     monthNames: [
       'JANEIRO',
@@ -343,8 +353,120 @@ function EventsScreen() {
   
   LocaleConfig.defaultLocale = 'br';
   const [selected, setSelected] = useState('');
+
+  const [dataEvento, setDataEvento] = useState([]);
+  const id_usuario = route.params.obj.id
+  const [data, setData] = useState([]);
+  const [data2, setData2] = useState([]);
+  // const [dayy, setDayy] = useState('')
+      useEffect(()=>{
+          axios.get(`http://192.168.15.11:8085/api/readEvents/dates/${id_usuario}`)
+           // axios.get(`http://10.0.2.2:8085/api/readEventsDates`)
+          .then(response =>{
+              //Ordenar os dados pelo id em ordem crescent
+            
+              setData(response.data);
+              
+          })
+          .catch(error => {
+              console.log(JSON.stringify(error));
+          });
+
+      },[]);
+
+
+
+      const renderItem = ({item})=>
+      
+      
+        (
+    
+          <Actionsheet h="$150" isOpen={showActionsheet} onClose={handleClose} zIndex={999}>
+          <ActionsheetBackdrop />
+          <ActionsheetContent h={150} zIndex={999}>
+            <ActionsheetDragIndicatorWrapper w={'100%'}>
+              <ActionsheetDragIndicator  />
+            </ActionsheetDragIndicatorWrapper>
+            <ScrollView>
+            <ActionsheetItem w={'100$'} alignSelf="center">
+              <Text fontSize={19} fontWeight="bold" color="#AA7E39">Informações do evento</Text>
+            </ActionsheetItem>
+            <ActionsheetItem w={'100$'} alignSelf="center">
+              <Text fontSize={13} fontWeight="light" color="#AA7E39">Clique nas informações para edita-la</Text>
+            </ActionsheetItem>
+            <ActionsheetItem w={'50$'} alignSelf="center">
+              <Text color="#AA7E39" fontWeight="bold" fontSize={19}>Nome do evento: </Text>
+              <Text color="#AA7E39" fontSize={18}>{item.nomeEvento}</Text>
+              
+            </ActionsheetItem>
+
+            <Animated.Image
+                style={{marginBottom: 15, height: 240, width: 315, borderRadius: 0, alignSelf: 'center'}}
+                alt="imagemEvento"
+                source={{
+                 uri: `data:image/jpeg;base64,${item.imagemBase64}`
+                  }}
+                />
+
+
+          <Text color="#AA7E39" fontWeight="bold" alignSelf="center" fontSize={19}>Descrição do evento: </Text>
+              <Text color="#AA7E39" alignSelf="center" fontSize={15}>{item.descricao}</Text>      
+          <Text marginTop={10} color="#AA7E39" fontWeight="bold" alignSelf="center" fontSize={19}>Data do evento: </Text>
+              <Text color="#AA7E39" alignSelf="center" fontSize={20}>{moment(item.dataEvento).format('DD/MM/YYYY')}</Text> 
+     
+            </ScrollView>
+      
+          </ActionsheetContent>
+        </Actionsheet>
+         
+  
+      
+          
+        );
+
+  const nextDate = data;
+  
+  let mark = {};
+  
+  nextDate.forEach(day => {
+    mark[day] = {
+     marked: true
+      
+    };
+  });
+
+  const handleEvento = async (dayy) => {
+    
+    try {
+      const response = await axios.get(`http://192.168.15.11:8085/api/readEventsByDate/${dayy}`);
+  
+      //Ordenar os dados pelo id em ordem crescente
+      const sortData = response.data.sort((a, b) => a.id - b.id);
+      
+
+      if (response.data == '') {
+        setData2(['Nenhum evento encontrado']);
+      }
+      else {
+        setShowActionsheet(true)
+        setData2(sortData);
+      }
+      
+  
+      
+    } catch (error) {
+      console.log(JSON.stringify(error));
+    }
+
+    
+  };
+
+  console.log(data2)
+
+  const [showActionsheet, setShowActionsheet] = React.useState(false)
+  const handleClose = () => setShowActionsheet(!showActionsheet)
   return (
-    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='#EDE9E4'>
+    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
 
       <Center h={'100%'} marginTop={-290}>
         <Box h={'auto'} w={'100%'} marginTop={-130} marginBottom={10} alignItems="center">
@@ -356,39 +478,52 @@ function EventsScreen() {
             />
         </Box>
 
-        <Text color={'#9B8A6F'} fontSize={24} fontWeight='$light' marginVertical={0}>MEUS EVENTOS</Text>
+        <Text color={'#AA7E39'} fontSize={24} fontWeight='$bold' marginVertical={0}>MEUS EVENTOS</Text>
       </Center>
 
+     
+      
+
       <Center alignItems="center" justifyContent="center" marginTop={-290}>
+      <FlatList
+                   data={data2}
+                   renderItem={renderItem}
+                   keyExtractor={item => String(item.id)}
+                   extraData={data2}
+                   scrollEnabled={false}
+                   />
       <Calendar 
       theme={{
-        backgroundColor: '#EDE9E4',
-        calendarBackground: '#EDE9E4',
+        backgroundColor: 'white',
+        calendarBackground: '#white',
         textSectionTitleColor: '#AA7E39',
         selectedDayBackgroundColor: '#AA7E39',
         selectedDayTextColor: '#ffffff',
         todayTextColor: 'black',
+        dotColor: '#AA7E39',
         dayTextColor: 'black',
         textDisabledColor: 'gray',
         monthTextColor: '#AA7E39',
         textMonthFontWeight: 'bold',
         arrowColor: "#AA7E39",
         
+        
       }}
       style={{
-      backgroundColor: '#EDE9E4',
+      borderWidth: 2,
+      borderColor: '#AA7E39',
+      backgroundColor: 'white',
       width: 340,
-      height: 350
+      height: 355
   }}
       onDayPress={day => {
-        setSelected(day.dateString);
+        handleEvento(day.dateString)
+        // setShowActionsheet(true)
+        
       }}
-      markedDates={{
-        [selected]: {selected: true, disableTouchEvent: true, selectedDotColor: 'orange'},
-        '2024-03-01': {selected: true, marked: true, selectedColor: ''},
-        '2024-03-02': {marked: true},
-        '2024-03-03': {selected: true, marked: true, selectedColor: ''}
-      }}
+      markedDates={
+      mark
+      }
     />
       </Center>
 
@@ -524,7 +659,6 @@ const enviarEventoParaApi = async () => {
       numero:numero,
       imagemBase64: imageData
   };
-  console.log(privacidade)
       
       const config = {
           headers: {
@@ -534,7 +668,7 @@ const enviarEventoParaApi = async () => {
 
       // URL da sua API para enviar os dados e a imagem
       // const apiUrl = 'http://192.168.15.7:8085/api/register/evento';
-      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
+      const apiUrl = 'http://192.168.15.11:8085/api/register/evento';
 
   
       const response = await axios.post(apiUrl, data, config);
@@ -830,9 +964,7 @@ const enviarEventoParaApi = async () => {
               action="positive"
               bg={'#A87B34'}
               borderWidth="$0"
-              onPress={enviarEventoParaApi
-                
-              }
+              onPress={enviarEventoParaApi}
             >
               <ButtonText>Criar Evento</ButtonText>
             </Button>

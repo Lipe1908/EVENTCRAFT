@@ -1,6 +1,6 @@
-// Gabriel / RC
+
 import React, {useEffect, useState} from "react";
-import { Center, ScrollView, StatusBar,} from '@gluestack-ui/themed';
+import { Center, ScrollView, Spinner, StatusBar, VStack,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
 import axios from 'axios';
@@ -16,6 +16,27 @@ import { Building2, Calendar, Clock, LockKeyhole } from "lucide-react-native";
 
 
 export default function Evento({navigation, route})  {
+
+  const enteringScreenAnimation = new Keyframe({
+    0: {
+      opacity: 0
+    },
+    25: {
+      opacity: 0.25
+    },
+    
+    50: {
+      opacity: 0.50
+    },
+    75: {
+      opacity: 0.75
+    },
+  
+    100: {
+      opacity: 1
+      
+    },
+  }).duration(550).delay(100);
  
   const [nomeEvento, setNomeEvento] = useState('');
   const [nConvidados, setNConvidados] = useState('');
@@ -27,10 +48,14 @@ export default function Evento({navigation, route})  {
   const [bairro, setBairro] = useState('');
   const [numero, setNumero] = useState('');
     
+ 
+
   const AnimatedBox = Animated.createAnimatedComponent(Box);
+  const AnimatedText = Animated.createAnimatedComponent(Text);
   const id = route.params.id
       useEffect(()=>{
-          axios.get(`http://10.0.2.2:8085/api/readEvent/${id}`)
+          // axios.get(`http://10.0.2.2:8085/api/readEvent/${id}`)
+          axios.get(`http://192.168.15.11:8085/api/readEvent/${id}`)
           .then(response =>{  
             setNConvidados(response.data.nConvidados)
             setNomeEvento(response.data.nomeEvento)
@@ -47,7 +72,8 @@ export default function Evento({navigation, route})  {
           
       },[]);
       useEffect(()=>{
-          axios.get(`http://10.0.2.2:8085/api/readEventAdress/${id}`)
+          // axios.get(`http://10.0.2.2:8085/api/readEventAdress/${id}`)
+          axios.get(`http://192.168.15.11:8085/api/readEventAdress/${id}`)
          
           .then(response =>{  
             
@@ -62,145 +88,67 @@ export default function Evento({navigation, route})  {
           
       },[]);
 
-      const enteringScreenAnimation = new Keyframe({
-        0: {
-         opacity: 0
-        },
-        25: {
-          opacity: 0.25
-        },
-        
-        50: {
-          opacity: 0.5
-        },
-        75: {
-          opacity: 0.75
-        },
-      
-        100: {
-          opacity: 1
-          
-        },
-      }).duration(900);
 
-      const enteringImageAnimation = new Keyframe({
-        0: {
-          transform: [
-            { translateY: 350 },
-            {scaleX:0},
-            {scaleY:0},
-          ]
-        },
-        25: {
-          transform: [
-            { translateY: 250 },
-            {scaleX:0.25},
-            {scaleY:0.25},
-          ]
-        },
-        
-        50: {
-          transform: [
-            { translateY: 200 },
-            {scaleX:0.50},
-            {scaleY:0.50},
-          ]
-        },
-        75: {
-          transform: [
-            { translateY: 100 },
-            {scaleX:0.75},
-            {scaleY:0.75},
-          ]
-        },
-      
-        100: {
-          transform: [
-            { translateY: 0 },
-            {scaleX:1},
-            {scaleY:1},
-          ]
-          
-        },
-      }).duration(600).delay(200);
 
-      const enteringTextAnimation = new Keyframe({
-        0: {
-          transform: [
-            { translateY: 350 },
-            {scaleX:0},
-            {scaleY:0},
-          ]
-        },
-        25: {
-          transform: [
-            { translateY: 250 },
-            {scaleX:0.25},
-            {scaleY:0.25},
-          ]
-        },
-        
-        50: {
-          transform: [
-            { translateY: 200 },
-            {scaleX:0.50},
-            {scaleY:0.50},
-          ]
-        },
-        75: {
-          transform: [
-            { translateY: 100 },
-            {scaleX:0.75},
-            {scaleY:0.75},
-          ]
-        },
-      
-        100: {
-          transform: [
-            { translateY: 0 },
-            {scaleX:1},
-            {scaleY:1},
-          ]
-          
-        },
-      }).duration(600).delay(500);
+      const [isLoading, setIsLoading] = useState(true);
       return (
     
    
     <SafeAreaView bg='#EDE9E4' h={'100%'} >
-    
+     
     <StatusBar hidden/>
 
     <ScrollView showsVerticalScrollIndicator={false}>
-      <AnimatedBox entering={enteringScreenAnimation} bg='#EDE9E4' flex={1}>
-      <Box>
-          <Animated.Image
-          entering={enteringImageAnimation}
 
-          style={{top: 0, width: '100%', height: 350}}
+    {isLoading &&
+      <Box justifyContent="center"  h={'100%'} alignSelf="center">
+        
+        
+
+        <Image alignSelf="center" marginTop={-65} marginBottom={15} alt="logo" w={150} h={110} source={logo}/>
+
+        
+        <Spinner alignSelf="center" color={'#AA7E39'} size={"large"} />
+        
+    
+        
+        {/* <Text color={'#AA7E39'} fontSize={20} fontWeight="$semibold" size="md">
+          Carregando...
+        </Text> */}
+        </Box>
+      }
+      <AnimatedBox entering={enteringScreenAnimation}  bg='#EDE9E4' flex={1}>
+     
+      <Box w={'100%'} h={250}>
+      
+          <Animated.Image
+  
+          onLoadEnd={()=>setIsLoading(false)}
+
+          style={{top: 0, width: '100%', height: 250}}
           alt="ahghksa"
           source={{
                     uri: `data:image/jpeg;base64,${imagemBase64}`
                   }} />
      </Box>
 
-<AnimatedBox marginBottom={15} entering={enteringTextAnimation}>
-          <Text color={'#AA7E39'}  alignSelf="center" fontWeight={'$bold'} margin={25} fontSize={35}>{nomeEvento}</Text>
-          <Text color={'black'}  w={'90%'} alignSelf="center" fontWeight={'$light'} margin={0} fontSize={15}>{descricao}</Text>
+<AnimatedBox  marginBottom={15}>
+          <AnimatedText color={'#AA7E39'}  alignSelf="center" fontWeight={'$bold'} margin={25} fontSize={35}>{nomeEvento}</AnimatedText>
+          <AnimatedText color={'black'}  w={'90%'} alignSelf="center" fontWeight={'$light'} margin={0} fontSize={15}>{descricao}</AnimatedText>
 
           <Box marginTop={20} marginLeft={25} alignItems="center" flexDirection="row">
-          <Text color={'#AA7E39'}  alignSelf="flex-start" fontWeight={'$bold'}  fontSize={20}>Data </Text>
+          <AnimatedText color={'#AA7E39'}  alignSelf="flex-start" fontWeight={'$bold'} fontSize={20}>Data</AnimatedText>
           <Icon as={Calendar} color="#AA7E39" w={12} h={15} />
           </Box>
         
-          <Text color={'black'}  alignSelf="flex-start" fontWeight={'$light'} marginLeft={25} fontSize={17}>{moment(dataEvento).format('DD/MM/YYYY')}</Text>
+          <AnimatedText color={'black'}  alignSelf="flex-start" fontWeight={'$light'} marginLeft={25} fontSize={17}>{moment(dataEvento).format('DD/MM/YYYY')}</AnimatedText>
 
 
           <Box marginTop={20} marginLeft={25} alignItems="center" flexDirection="row">
-          <Text color={'#AA7E39'}  alignSelf="flex-start" fontWeight={'$bold'}  fontSize={20}>Horário </Text>
+          <AnimatedText color={'#AA7E39'}  alignSelf="flex-start" fontWeight={'$bold'}  fontSize={20}>Horário </AnimatedText>
           <Icon as={Clock} color="#AA7E39" w={12} h={12} />
           </Box>
-          <Text color={'black'}  alignSelf="flex-start" fontWeight={'$light'} marginLeft={25} fontSize={17}>{horaEvento}</Text>
+          <AnimatedText color={'black'}  alignSelf="flex-start" fontWeight={'$light'} marginLeft={25} fontSize={17}>{horaEvento}</AnimatedText>
 
           <Box marginTop={20} alignSelf='center' alignItems="center" flexDirection="row">
           <Text color={'#AA7E39'}  alignSelf="flex-start" fontWeight={'$bold'}  fontSize={20}>Endereço </Text>

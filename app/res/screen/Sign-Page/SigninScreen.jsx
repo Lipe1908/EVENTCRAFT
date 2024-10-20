@@ -68,8 +68,8 @@ export default function SigninScreen({navigation}) {
       }
       //envio de informações para a API cadastrar no banco de dados
       try {
-          await axios.post('http://192.168.15.7:8085/api/cadastro', formData);
           // await axios.post('http://10.0.2.2:8085/api/cadastro', formData);
+          await axios.post('http://192.168.15.11:8085/api/cadastro', formData);
           setShowAlertDialog2(true)
 
           setFormData('');
