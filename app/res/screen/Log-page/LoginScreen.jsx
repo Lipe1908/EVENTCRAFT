@@ -16,7 +16,7 @@ import logo from '../../../src/img/logo.png';
 import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, Keyframe, LightSpeedInLeft, ReduceMotion, SlideInLeft, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SharedTransition, withSpring } from 'react-native-reanimated';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen({navigation})  {
   
@@ -125,8 +125,10 @@ export default function LoginScreen({navigation})  {
 
         //Envio dos dados para a API
 
-        // const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
-        const response = await axios.post('http://192.168.15.12:8085/api/validation', data);
+        const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
+        // const response = await axios.post('http://192.168.15.12:8085/api/validation', data);
+        
+
         
 
         //Verificar se o login foi efetuado com sucesso
@@ -141,7 +143,19 @@ export default function LoginScreen({navigation})  {
                 email: response.data.email,
                 senha: response.data.senha,
             }
-            navigation.navigate('Home', {userData});
+
+            const dataId = {
+              id: response.data.id.toString(),
+        
+            } 
+            await AsyncStorage.setItem("id", dataId.id)
+            const teste = await AsyncStorage.getItem("id")
+
+            console.log(teste)
+
+
+            
+            navigation.push('Home', {userData});
             setIsLoading(false);
         }
         else {

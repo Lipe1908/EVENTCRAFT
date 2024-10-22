@@ -13,5 +13,6 @@ router.get('/api/readEvent/:id', clientController.listEventByID); //Listar Usuá
 router.get('/api/readEventAdress/:id', clientController.listEventAdressById); //Listar Usuários por ID
 router.post('/api/cadastro', clientController.createNewUser); //Cadastrar novo Usuário
 router.post('/api/validation', clientController.login); //login usuário
+router.post('/api/validationID/:id', clientController.loginId); //login usuário
 router.post('/api/register/evento', clientController.createEvent); //login usuário
 module.exports = router;

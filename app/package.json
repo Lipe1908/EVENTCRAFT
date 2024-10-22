@@ -15,6 +15,7 @@
     "@gluestack-ui/config": "latest",
     "@gluestack-ui/themed": "^1.1.44",
     "@legendapp/motion": "latest",
+    "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-vector-icons/ionicons": "^7.4.0-alpha.27",
     "@react-navigation/bottom-tabs": "^6.6.1",

@@ -178,7 +178,32 @@ const userController = {
                 res.status(500).json(error);
             }
         }
-    }
+    },
+    loginId: async(req,res) => {
+        
+        
+
+        try{
+            const sql = await clientController.validateLoginId(req.params.id);
+            
+            console.log(sql)
+
+            if(sql.length > 0) {
+                res.status(200).json(sql[0]);
+              
+            }
+
+            else{
+                res.status(401).json({msg:"Id incorreto"});
+            }
+        }
+        catch(error) {
+            if(error) {
+                console.log(error)
+                res.status(500).json(error);
+            }
+        }
+    },
 };
 
 module.exports = userController;

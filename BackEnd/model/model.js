@@ -107,6 +107,12 @@ const userModel = {
       
         
     }, 
+    
+    validateLoginId: async (id) => {
+        const [result] = await connection.query("SELECT * FROM usuarios WHERE id=?", [id])
+            .catch(erro => console.log(erro));
+        return result
+    },
 
    
 };

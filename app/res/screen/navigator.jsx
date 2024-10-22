@@ -8,11 +8,13 @@ import SigninScreen from './Sign-Page/SigninScreen';
 import HomeScreen from './Home-page/home';
 import StartScreen from './StartScreen/StartScreen';
 import Evento from './Expanded-event-page/ExpEventScreen';
+import LoadingScreen from './LoadingScreen/LoadingScreen';
 
 export default function StartNavigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Start'>
+            <Stack.Navigator initialRouteName='Loading'>
+                <Stack.Screen options={{headerShown: false}} name="Loading" component={LoadingScreen} />
                 <Stack.Screen options={{headerShown: false}} name="Start" component={StartScreen} />
                 <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
                 <Stack.Screen options={{headerShown: false}} name="SignIn" component={SigninScreen} />

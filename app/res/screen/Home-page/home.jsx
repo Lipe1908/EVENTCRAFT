@@ -55,6 +55,8 @@ import { Actionsheet } from "@gluestack-ui/themed";
 import { ActionsheetDragIndicatorWrapper } from "@gluestack-ui/themed";
 import { ActionsheetItem } from "@gluestack-ui/themed";
 import { ActionsheetItemText } from "@gluestack-ui/themed";
+import { TouchableOpacity } from "react-native/Libraries/Components/Touchable/TouchableOpacity";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function HomeScreen({navigation, route}) {
 
@@ -115,8 +117,8 @@ const randomElement = getRandomElement(array);
   const [data, setData] = useState([]);
   
       useEffect(()=>{
-          axios.get(`http://192.168.15.12:8085/api/readEvents`)
-          // axios.get(`http://10.0.2.2:8085/api/readEvents`)
+          // axios.get(`http://192.168.15.12:8085/api/readEvents`)
+          axios.get(`http://10.0.2.2:8085/api/readEvents`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescente
               const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -235,17 +237,27 @@ const randomElement = getRandomElement(array);
 
 <Text color={'#AA7E39'} marginTop={8} marginHorizontal={30} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
 
+<VStack>
+  <Avatar alignSelf="flex-end" marginRight={10} marginTop={-40} bgColor="$coolGray500" size="md" borderRadius="$full">
+    <AvatarFallbackText>{nome}</AvatarFallbackText>
+  </Avatar>
+  <Button variant="link" onPress={async() => {
+    await AsyncStorage.removeItem("id");
+    navigation.navigate('Start')
+  }
+  } alignSelf="flex-end" marginRight={15}>
+  <Text fontWeight={'$bold'} fontSize={10} color="red" >Log-Out</Text>
+  </Button>
+  
+</VStack>
 
-<Avatar alignSelf="flex-end" margin={10} marginTop={-40} bgColor="$coolGray500" size="md" borderRadius="$full">
-  <AvatarFallbackText>{nome}</AvatarFallbackText>
-</Avatar>
 
 
 
 </Box>
 
 
-<Input h={50} alignSelf="center" marginVertical={30} $focus-borderColor={'#A87B34'} w={'80%'} bg={'white'} borderRadius={10} >
+<Input h={50} alignSelf="center" marginVertical={5} $focus-borderColor={'#A87B34'} w={'80%'} bg={'white'} borderRadius={10} >
   <InputSlot pl="$3">
   <Ionicons name={'search'} size={20} color={'#9B8A6F'} />
   </InputSlot>
@@ -360,12 +372,13 @@ function EventsScreen({route}) {
   const [data2, setData2] = useState([]);
   // const [dayy, setDayy] = useState('')
       useEffect(()=>{
-          axios.get(`http://192.168.15.12:8085/api/readEvents/dates/${id_usuario}`)
-           // axios.get(`http://10.0.2.2:8085/api/readEventsDates`)
+          // axios.get(`http://192.168.15.12:8085/api/readEvents/dates/${id_usuario}`)
+           axios.get(`http://10.0.2.2:8085/api/readEvents/dates/${id_usuario}`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescent
             
               setData(response.data);
+              console.log(data)
               
           })
           .catch(error => {
@@ -379,7 +392,8 @@ function EventsScreen({route}) {
       const editInfo = async (info) => {
         
         try {
-          const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
+          // const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
+          const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}`);
       
           //Ordenar os dados pelo id em ordem crescente
           const sortData = response.data.sort((a, b) => a.id - b.id);
@@ -550,7 +564,8 @@ function EventsScreen({route}) {
   const handleEvento = async (dayy) => {
     
     try {
-      const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
+      // const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
+      const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}`);
   
       //Ordenar os dados pelo id em ordem crescente
       const sortData = response.data.sort((a, b) => a.id - b.id);
@@ -560,6 +575,7 @@ function EventsScreen({route}) {
         setData2(['Nenhum evento encontrado']);
       }
       else {
+        console.log('testee  ' + response.data)
         setShowActionsheet(true)
         setData2(sortData);
       }
@@ -629,7 +645,6 @@ function EventsScreen({route}) {
       onDayPress={day => {
         handleEvento(day.dateString)
         // setShowActionsheet(true)
-        
       }}
       markedDates={
       mark
@@ -777,8 +792,9 @@ const enviarEventoParaApi = async () => {
       };
 
       // URL da sua API para enviar os dados e a imagem
-      // const apiUrl = 'http://192.168.15.7:8085/api/register/evento';
-      const apiUrl = 'http://192.168.15.12:8085/api/register/evento';
+      
+      // const apiUrl = 'http://192.168.15.12:8085/api/register/evento';
+      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
   
       const response = await axios.post(apiUrl, data, config);
