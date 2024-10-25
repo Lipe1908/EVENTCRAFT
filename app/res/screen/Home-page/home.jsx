@@ -213,6 +213,7 @@ const randomElement = getRandomElement(array);
 
 
 
+      const [isLogged, setIsLogged] = useState(false)
 
   return (
     <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
@@ -245,7 +246,7 @@ const randomElement = getRandomElement(array);
     await AsyncStorage.removeItem("id");
     navigation.navigate('Start')
   }
-  } alignSelf="flex-end" marginRight={15}>
+  } alignSelf="flex-end" marginRight={15} marginTop={-10}>
   <Text fontWeight={'$bold'} fontSize={10} color="red" >Log-Out</Text>
   </Button>
   
@@ -370,6 +371,7 @@ function EventsScreen({route}) {
   const id_usuario = route.params.obj.id
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
+  const [idEvento, setIdEvento] = useState('');
   // const [dayy, setDayy] = useState('')
       useEffect(()=>{
           // axios.get(`http://192.168.15.12:8085/api/readEvents/dates/${id_usuario}`)
@@ -378,7 +380,6 @@ function EventsScreen({route}) {
               //Ordenar os dados pelo id em ordem crescent
             
               setData(response.data);
-              console.log(data)
               
           })
           .catch(error => {
@@ -416,6 +417,163 @@ function EventsScreen({route}) {
         
       };
 
+      const [formData, setFormData] = useState({
+        id: '',
+        nomeEvento: '',
+        dataEvento: '',
+        descricao: '',
+        nConvidados: '',
+        id_usuario: '',
+        privacidade: '',
+        imagemBase64: '',
+        horaEvento: '00:00:00'
+        
+    });
+
+    const handleEvento = async (dayy) => {
+
+      try {
+        // const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
+        const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
+    
+        //Ordenar os dados pelo id em ordem crescente
+        const sortData = response.data.sort((a, b) => a.id - b.id);
+        
+    
+        if (response.data == '') {
+          setData2(['Nenhum evento encontrado']);
+          
+        }
+        else {
+          setData2(sortData);
+          setFormData({
+            id: response.data[0].id,
+            nomeEvento: response.data[0].nomeEvento,
+            descricao: response.data[0].descricao,
+            dataEvento: moment(response.data[0].dataEvento).format('YYYY-MM-DD'),
+            id_usuario: response.data[0].id_usuario,
+            imagemBase64: response.data[0].imagemBase64,
+            privacidade: response.data[0].privacidade,
+            horaEvento: response.data[0].horaEvento,
+          })
+          setShowActionsheet(true)
+    
+    
+        }
+        
+    
+        
+      } catch (error) {
+        console.log(JSON.stringify(error));
+      }
+    
+      
+    };
+      
+  const [value, setValue] = React.useState(formData.privacidade);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [imagem, setImagem] = useState(formData.imagemBase64);
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const handleConfirm = (date) => {
+    setSelectedDate(date);
+    setFormData({
+      horaEvento: date
+    });
+    hideDatePicker();
+  };
+
+  const [showActionsheet, setShowActionsheet] = React.useState(false)
+  const handleClose = () => setShowActionsheet(!showActionsheet)
+
+
+
+  const handleImageLibraryLaunch = async () => {
+    const options = {
+        mediaType: 'photo',
+    };
+
+    try {
+        const response = await launchImageLibrary(options);
+        console.log('pickedFile', response);
+
+        // Verifica se a imagem foi selecionada com sucesso
+        if (response.assets && response.assets.length > 0) {
+            const image = response.assets[0];
+            setImagem(image);
+            
+        } else {
+            console.log('Nenhuma imagem selecionada.');
+        }
+    } catch (error) {
+        console.error('Erro ao selecionar a imagem:', error);
+    }
+};
+  
+
+const handleInputChange = (name, value) => {
+  setFormData({...formData, [name]:value});
+};
+
+const enviarEventoParaApi = async () => {
+  try {
+
+    if(imagem.uri == formData.imagemBase64) {
+      console.log("teste")
+      // const imageData = await RNFS.readFile(imagem.uri, 'base64');
+    }
+    
+    
+
+    const dataaa = {
+      id: '',
+      nomeEvento: formData.nomeEvento,
+      descricao: formData.descricao,
+      dataEvento:formData.dataEvento,
+      id_usuario: formData.id_usuario,
+      imagemBase64: imageDa,
+      privacidade: formData.privacidade,
+      horaEvento: formData.horaEvento,
+  };
+
+  console.log(dataaa.imagemBase64)
+      
+      const config = {
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      };
+
+      // URL da sua API para enviar os dados e a imagem
+      
+      // const apiUrl = 'http://192.168.15.12:8085/api/register/evento';
+      // const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
+
+  
+      // const response = await axios.post(apiUrl, data, config);
+      // console.log('Resposta da API:', response.data);
+
+
+      // // Retorna para a página inicial
+      // navigation.push('Home',  { userData });
+  } catch (error) {
+
+      // if (error.response.status === 401) {
+      //     Alert.alert('E-mail já cadastrado na base de dados. Tente com um e-mail diferente.');
+      // } else {
+      //     // Caso contrário, exibe uma mensagem genérica de erro
+      //     Alert.alert('Erro ao enviar os dados. Por favor, tente novamente mais tarde.');
+      // }
+  }
+};
+
       const renderItem = ({item})=>
       
       
@@ -427,22 +585,20 @@ function EventsScreen({route}) {
             <ActionsheetDragIndicatorWrapper w={'100%'}>
               <ActionsheetDragIndicator  />
             </ActionsheetDragIndicatorWrapper>
-            <ScrollView>
+            <ScrollView marginBottom={30} showsVerticalScrollIndicator={false}>
          
             <View w={'100$'} alignSelf="center">
               <Text fontSize={19} fontWeight="bold" color="#AA7E39">Informações do evento</Text>
             </View>
             <ActionsheetItem w={'100$'} alignSelf="center">
-              <Text fontSize={13} fontWeight="light" color="#AA7E39">Clique nas informações para edita-la</Text>
+              <Text fontSize={13} fontWeight="light" color="#AA7E39">Clique nas informações para edita-las</Text>
             </ActionsheetItem>
 
-            <ActionsheetItem w={'auto'} alignSelf="center">
+            <ActionsheetItem w={'auto'} alignSelf="center" onPress={handleImageLibraryLaunch}>
             <Animated.Image
                 style={{marginBottom: 15, height: 240, width: 315, borderRadius: 10, alignSelf: 'center'}}
                 alt="imagemEvento"
-                source={{
-                 uri: `data:image/jpeg;base64,${item.imagemBase64}`
-                  }}
+                source={imagem ? { uri: imagem.uri } : {uri: `data:image/jpeg;base64,${item.imagemBase64}`}}
                 />
             </ActionsheetItem>
             
@@ -463,7 +619,7 @@ function EventsScreen({route}) {
           $focus-borderColor={'#A87B34'}
 
           >
-          <InputField onChangeText={''} value={''} $focus-borderColor={'#A87B34'} fontSize={12} color='#A87B34' fontWeight='$bold' placeholder={item.nomeEvento} placeholderTextColor={'black'}  />
+          <InputField onChangeText={(text)=> handleInputChange('nomeEvento' , text)} value={formData.nomeEvento} $focus-borderColor={'#A87B34'} fontSize={12} color='#A87B34' fontWeight='$bold' placeholder={item.nomeEvento} placeholderTextColor={'black'}  />
         </Input>
               </VStack>
              
@@ -485,7 +641,7 @@ function EventsScreen({route}) {
           $focus-borderColor={'#A87B34'}
           justifyContent="flex-start"
           >
-          <InputField multiline onChangeText={''} value={''} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={item.descricao} placeholderTextColor={'black'}  />
+          <InputField multiline onChangeText={(text)=> handleInputChange('descricao' , text)} value={formData.descricao} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={item.descricao} placeholderTextColor={'black'}  />
         </Input>
               </VStack>
              
@@ -493,21 +649,15 @@ function EventsScreen({route}) {
             <ActionsheetItem w={'50$'} alignSelf="center">
               <VStack w={'100%'} space="xs">
                   <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Data do evento:</Text>
-                  <Input
-          borderRadius={12}
-          bg='#FFFF'
-          w={'100%'}
-          h={50}
-          variant="outline"
-          size="md"
-          isDisabled={false}
-          isInvalid={false}
-          isReadOnly={false}
-          $focus-borderColor={'#A87B34'}
-
-          >
-          <InputField onChangeText={''} value={''} $focus-borderColor={'#A87B34'} fontSize={12} color='#A87B34' fontWeight='$bold' placeholder={moment(item.dataEvento).format('DD/MM/YYYY')} placeholderTextColor={'black'}  />
-        </Input>
+                  <MaskInput
+                  value={formData.dataEvento}
+                  onChangeText={(text)=> handleInputChange('dataEvento' , text)}
+                  placeholder={moment(item.dataEvento).format('DD/MM/YYYY')}
+                  placeholderTextColor={'black'}
+                  style={{backgroundColor: 'white', borderRadius: 10, borderWidth: 0.7, borderColor: '#CECDCD', width: 'auto', color: '#A87B34', fontWeight: 'bold', fontSize: 12, textAlign: 'auto',}}
+                  mask={Masks.DATE_DDMMYYYY}
+                  
+                  />
               </VStack>
              
             </ActionsheetItem>
@@ -516,31 +666,85 @@ function EventsScreen({route}) {
             <ActionsheetItem w={'50$'} alignSelf="center">
               <VStack w={'100%'} space="xs">
                   <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Hora do evento:</Text>
-                  <Input
-          borderRadius={12}
-          bg='#FFFF'
-          w={'100%'}
-          h={50}
-          variant="outline"
-          size="md"
-          isDisabled={false}
-          isInvalid={false}
-          isReadOnly={false}
-          $focus-borderColor={'#A87B34'}
+                  <DateTimePickerModal
+          date={selectedDate ? new Date(selectedDate) : undefined}
+          isVisible={datePickerVisible}
+          mode="time"
+          locale=""
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          is24Hour
+        />
 
-          >
-          <InputField onChangeText={''} value={''} $focus-borderColor={'#A87B34'} fontSize={12} color='#A87B34' fontWeight='$bold' placeholder={item.horaEvento} placeholderTextColor={'black'}  />
-        </Input>
+        <HStack>
+        <Text style={{ fontSize: 17, fontWeight: 'bold', marginBottom: 20, color:"#A87B34" }}>
+          {selectedDate ? moment(selectedDate).format('h:mm:ss') : item.horaEvento}
+        </Text>
+        <Button w={20} h={25} alignItems="center" justifyContent="center" variant="link" onPress={showDatePicker}><ButtonIcon color="#A87B34" as={Clock} /></Button>
+        </HStack>
+        
               </VStack>
              
             </ActionsheetItem>
 
-  
-         
+            <ActionsheetItem w={'50$'} alignSelf="center">
+              <VStack w={'100%'} space="xs">
+                  <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Privacidade do evento:</Text>
+                  <SegmentedButtons
+        value={formData.privacidade}
+        theme={{ colors: { secondaryContainer: '#A87B34' } }}
+        onValueChange={(value)=> handleInputChange('privacidade' , value)}
+        buttons={[
+          {
+            value: 'Privado',
+            label: 'Privado',
+            checkedColor:'white',
+            uncheckedColor:'#A87B34',
+            showSelectedCheck: true,
+          },
+          {
+            value: 'Público',
+            label: 'Público',
+            checkedColor:'white',
+            uncheckedColor:'#A87B34',
+            showSelectedCheck: true,
+          },
+        ]}
+      />
+              </VStack>
+             
+            </ActionsheetItem>
 
-
-     
             </ScrollView>
+
+            <Box w={'100%'} backgroundColor={'$white'} position="absolute" bottom={0}>
+            <Box alignSelf="flex-end"  w={'55%'}  flexDirection="row">
+              <Button       
+              variant="outline"
+              size="sm"
+              action="secondary"
+              mr="$3"
+              onPress={() => setShowActionsheet(false) 
+                
+              }
+            >
+              <ButtonText color="black">Cancelar</ButtonText>
+            </Button>
+
+            <Button
+              
+              size="sm"
+              action="positive"
+              bg={'#A87B34'}
+              borderWidth="$0"
+              onPress={enviarEventoParaApi}
+            >
+              <ButtonText>Criar Evento</ButtonText>
+            </Button>
+
+        </Box>
+            </Box>
+                      
       
           </ActionsheetContent>
         </Actionsheet>
@@ -549,7 +753,7 @@ function EventsScreen({route}) {
       
           
         );
-
+  
   const nextDate = data;
   
   let mark = {};
@@ -561,36 +765,11 @@ function EventsScreen({route}) {
     };
   });
 
-  const handleEvento = async (dayy) => {
-    
-    try {
-      // const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
-      const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}`);
+ 
   
-      //Ordenar os dados pelo id em ordem crescente
-      const sortData = response.data.sort((a, b) => a.id - b.id);
-      
-
-      if (response.data == '') {
-        setData2(['Nenhum evento encontrado']);
-      }
-      else {
-        console.log('testee  ' + response.data)
-        setShowActionsheet(true)
-        setData2(sortData);
-      }
-      
   
-      
-    } catch (error) {
-      console.log(JSON.stringify(error));
-    }
 
-    
-  };
 
-  const [showActionsheet, setShowActionsheet] = React.useState(false)
-  const handleClose = () => setShowActionsheet(!showActionsheet)
   return (
     <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
 
@@ -644,7 +823,7 @@ function EventsScreen({route}) {
   }}
       onDayPress={day => {
         handleEvento(day.dateString)
-        // setShowActionsheet(true)
+        console.log(day.dateString)
       }}
       markedDates={
       mark
@@ -755,7 +934,6 @@ const [dataEvento, setDataEvento] = React.useState('');
 };
 
 const enviarEventoParaApi = async () => {
-  console.log(value)
   try {
 
     

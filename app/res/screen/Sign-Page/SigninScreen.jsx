@@ -48,7 +48,6 @@ export default function SigninScreen({navigation}) {
       nome: '',
       sobrenome: '',
       senha: '',
-      token:'',
       
   });
 

@@ -40,7 +40,7 @@ const userController = {
 
     listEventsByDates: async (req, res) => {
         try {
-            const events = await clientController.getEventsByDates(req.params.dayy);
+            const events = await clientController.getEventsByDates(req.params.dayy, req.params.id_usuario);
             res.status(200).json(events);
             console.log(events)
         }

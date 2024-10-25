@@ -8,7 +8,7 @@ router.get('/api/read', clientController.listAllUsers); //Listar todos os usuár
 router.get('/api/read/:id', clientController.listByID); //Listar todos os usuários
 router.get('/api/readEvents', clientController.listAllEvents); //Listar todos os usuários
 router.get('/api/readEvents/dates/:id_usuario', clientController.listAllEventsDates); //Listar todos os usuários
-router.get('/api/readEventsByDate/:dayy', clientController.listEventsByDates); //Listar todos os usuários
+router.get('/api/readEventsByDate/:dayy/:id_usuario', clientController.listEventsByDates); //Listar todos os usuários
 router.get('/api/readEvent/:id', clientController.listEventByID); //Listar Usuários por ID
 router.get('/api/readEventAdress/:id', clientController.listEventAdressById); //Listar Usuários por ID
 router.post('/api/cadastro', clientController.createNewUser); //Cadastrar novo Usuário

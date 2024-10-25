@@ -13,8 +13,8 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
-    getEventsByDates: async (dayy) =>{
-        const [result] = await connection.query("SELECT * FROM eventos WHERE dataEvento = ? ", [dayy])
+    getEventsByDates: async (dayy, id_usuario) =>{
+        const [result] = await connection.query("SELECT * FROM eventos WHERE dataEvento = ? AND id_usuario = ?", [dayy , id_usuario])
         .catch(erro => console.log(erro));
         
         return result
