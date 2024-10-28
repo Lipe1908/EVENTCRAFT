@@ -54,8 +54,8 @@ export default function Evento({navigation, route})  {
   const AnimatedText = Animated.createAnimatedComponent(Text);
   const id = route.params.id
       useEffect(()=>{
-          axios.get(`http://10.0.2.2:8085/api/readEvent/${id}`)
-          // axios.get(`http://192.168.15.12:8085/api/readEvent/${id}`)
+          // axios.get(`http://10.0.2.2:8085/api/readEvent/${id}`)
+          axios.get(`http://192.168.15.12:8085/api/readEvent/${id}`)
           .then(response =>{  
             setNConvidados(response.data.nConvidados)
             setNomeEvento(response.data.nomeEvento)

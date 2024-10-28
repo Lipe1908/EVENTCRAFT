@@ -452,13 +452,16 @@ function EventsScreen({navigation, route}) {
             id: response.data[0].id,
             nomeEvento: response.data[0].nomeEvento,
             descricao: response.data[0].descricao,
+            nConvidados: response.data[0].nConvidados,
             dataEvento: moment(response.data[0].dataEvento).format('DD/MM/YYYY'),
             id_usuario: response.data[0].id_usuario,
             imagemBase64: response.data[0].imagemBase64,
             privacidade: response.data[0].privacidade,
             horaEvento: response.data[0].horaEvento,
+
           })
           setShowActionsheet(true)
+          
     
     
         }
@@ -474,7 +477,7 @@ function EventsScreen({navigation, route}) {
       
  const userData = route.params.obj
   const [value, setValue] = React.useState(formData.privacidade);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [imagem, setImagem] = useState(null);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const hideDatePicker = () => {
@@ -486,13 +489,23 @@ function EventsScreen({navigation, route}) {
   };
 
   const handleConfirm = (date) => {
+    setSelectedDate(null);
     setSelectedDate(date);
     setFormData({
-      horaEvento: date
+      id: formData.id,
+      nomeEvento: formData.nomeEvento,
+      descricao: formData.descricao,
+      nConvidados: formData.nConvidados,
+      dataEvento: formData.dataEvento,
+      id_usuario: formData.id_usuario,
+      imagemBase64: formData.imagemBase64,
+      privacidade: formData.privacidade,
+      horaEvento: moment(date).format('hh:mm:ss'),
     });
+    
     hideDatePicker();
   };
-
+  console.log(formData.horaEvento)
   const [showActionsheet, setShowActionsheet] = React.useState(false)
   const handleClose = () => setShowActionsheet(!showActionsheet)
 
@@ -535,6 +548,7 @@ const enviarEventoParaApi = async () => {
     const dataaa = {
       nomeEvento: formData.nomeEvento,
       descricao: formData.descricao,
+      nConvidados: formData.nConvidados,
       dataEvento:formData.dataEvento,
       id_usuario: formData.id_usuario,
       imagemBase64: imageeData,
@@ -664,6 +678,27 @@ const enviarEventoParaApi = async () => {
               </VStack>
              
             </ActionsheetItem>
+            <ActionsheetItem w={'50$'} alignSelf="center">
+              <VStack w={'100%'} space="xs">
+                  <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Número de convidados:</Text>
+                  <Input
+          borderRadius={12}
+          bg='#FFFF'
+          w={'100%'}
+          h={'auto'}
+          variant="outline"
+          size="md"
+          isDisabled={false}
+          isInvalid={false}
+          isReadOnly={false}
+          $focus-borderColor={'#A87B34'}
+          justifyContent="flex-start"
+          >
+          <InputField keyboardType="numeric" onChangeText={(text)=> handleInputChange('nConvidados' , text)} value={formData.nConvidados.toString()} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={item.nConvidados.toString()} placeholderTextColor={'black'}  />
+        </Input>
+              </VStack>
+             
+            </ActionsheetItem>
 
 
             <ActionsheetItem w={'50$'} alignSelf="center">
@@ -673,7 +708,7 @@ const enviarEventoParaApi = async () => {
           date={selectedDate ? new Date(selectedDate) : undefined}
           isVisible={datePickerVisible}
           mode="time"
-          locale=""
+          locale="br"
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
           is24Hour
@@ -681,7 +716,7 @@ const enviarEventoParaApi = async () => {
 
         <HStack>
         <Text style={{ fontSize: 17, fontWeight: 'bold', marginBottom: 20, color:"#A87B34" }}>
-          {selectedDate ? moment(selectedDate).format('h:mm:ss') : item.horaEvento}
+          {selectedDate ? selectedDate : item.horaEvento}
         </Text>
         <Button w={20} h={25} alignItems="center" justifyContent="center" variant="link" onPress={showDatePicker}><ButtonIcon color="#A87B34" as={Clock} /></Button>
         </HStack>
@@ -742,7 +777,7 @@ const enviarEventoParaApi = async () => {
               borderWidth="$0"
               onPress={enviarEventoParaApi}
             >
-              <ButtonText>Criar Evento</ButtonText>
+              <ButtonText>Editar Evento</ButtonText>
             </Button>
 
         </Box>
@@ -1017,8 +1052,8 @@ const enviarEventoParaApi = async () => {
 
       // URL da sua API para enviar os dados e a imagem
       
-      // const apiUrl = 'http://192.168.15.12:8085/api/register/evento';
-      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
+      const apiUrl = 'http://192.168.15.12:8085/api/register/evento';
+      // const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
   
       const response = await axios.post(apiUrl, data, config);
