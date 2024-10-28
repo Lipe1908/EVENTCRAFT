@@ -117,8 +117,8 @@ const randomElement = getRandomElement(array);
   const [data, setData] = useState([]);
   
       useEffect(()=>{
-          // axios.get(`http://192.168.15.12:8085/api/readEvents`)
-          axios.get(`http://10.0.2.2:8085/api/readEvents`)
+          axios.get(`http://192.168.15.12:8085/api/readEvents`)
+          // axios.get(`http://10.0.2.2:8085/api/readEvents`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescente
               const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -342,7 +342,7 @@ opacity={0.5}
 }
 
 
-function EventsScreen({route}) {
+function EventsScreen({navigation, route}) {
   LocaleConfig.locales['br'] = {
     monthNames: [
       'JANEIRO',
@@ -374,8 +374,8 @@ function EventsScreen({route}) {
   const [idEvento, setIdEvento] = useState('');
   // const [dayy, setDayy] = useState('')
       useEffect(()=>{
-          // axios.get(`http://192.168.15.12:8085/api/readEvents/dates/${id_usuario}`)
-           axios.get(`http://10.0.2.2:8085/api/readEvents/dates/${id_usuario}`)
+          axios.get(`http://192.168.15.12:8085/api/readEvents/dates/${id_usuario}`)
+          //  axios.get(`http://10.0.2.2:8085/api/readEvents/dates/${id_usuario}`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescent
             
@@ -393,8 +393,8 @@ function EventsScreen({route}) {
       const editInfo = async (info) => {
         
         try {
-          // const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
-          const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}`);
+          const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
+          // const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}`);
       
           //Ordenar os dados pelo id em ordem crescente
           const sortData = response.data.sort((a, b) => a.id - b.id);
@@ -433,8 +433,9 @@ function EventsScreen({route}) {
     const handleEvento = async (dayy) => {
 
       try {
-        // const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}`);
-        const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
+        
+        // const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
+        const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
     
         //Ordenar os dados pelo id em ordem crescente
         const sortData = response.data.sort((a, b) => a.id - b.id);
@@ -445,12 +446,13 @@ function EventsScreen({route}) {
           
         }
         else {
+          setImagem(null)
           setData2(sortData);
           setFormData({
             id: response.data[0].id,
             nomeEvento: response.data[0].nomeEvento,
             descricao: response.data[0].descricao,
-            dataEvento: moment(response.data[0].dataEvento).format('YYYY-MM-DD'),
+            dataEvento: moment(response.data[0].dataEvento).format('DD/MM/YYYY'),
             id_usuario: response.data[0].id_usuario,
             imagemBase64: response.data[0].imagemBase64,
             privacidade: response.data[0].privacidade,
@@ -470,9 +472,10 @@ function EventsScreen({route}) {
       
     };
       
+ const userData = route.params.obj
   const [value, setValue] = React.useState(formData.privacidade);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [imagem, setImagem] = useState(formData.imagemBase64);
+  const [imagem, setImagem] = useState(null);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const hideDatePicker = () => {
     setDatePickerVisible(false);
@@ -523,27 +526,26 @@ const handleInputChange = (name, value) => {
 };
 
 const enviarEventoParaApi = async () => {
+  
+  
   try {
-
-    if(imagem.uri == formData.imagemBase64) {
-      console.log("teste")
-      // const imageData = await RNFS.readFile(imagem.uri, 'base64');
-    }
-    
-    
-
+  const imageeData = imagem ? await RNFS.readFile(imagem.uri, 'base64') : formData.imagemBase64;
+   
+   
     const dataaa = {
-      id: '',
       nomeEvento: formData.nomeEvento,
       descricao: formData.descricao,
       dataEvento:formData.dataEvento,
       id_usuario: formData.id_usuario,
-      imagemBase64: imageDa,
+      imagemBase64: imageeData,
       privacidade: formData.privacidade,
       horaEvento: formData.horaEvento,
-  };
+      id: formData.id,
+    };
 
-  console.log(dataaa.imagemBase64)
+
+
+  
       
       const config = {
           headers: {
@@ -551,18 +553,19 @@ const enviarEventoParaApi = async () => {
           },
       };
 
-      // URL da sua API para enviar os dados e a imagem
+      //URL da sua API para enviar os dados e a imagem
       
-      // const apiUrl = 'http://192.168.15.12:8085/api/register/evento';
+      const apiUrl = 'http://192.168.15.12:8085/api/edit/evento';
       // const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
   
-      // const response = await axios.post(apiUrl, data, config);
-      // console.log('Resposta da API:', response.data);
+      const response = await axios.put(apiUrl, dataaa, config);
+      console.log('Resposta da API:', response.data);
 
 
       // // Retorna para a página inicial
-      // navigation.push('Home',  { userData });
+      setShowActionsheet(false) 
+      navigation.push('Home',  { userData });
   } catch (error) {
 
       // if (error.response.status === 401) {
@@ -768,10 +771,53 @@ const enviarEventoParaApi = async () => {
  
   
   
-
+  const [showAlertDialog, setShowAlertDialog] = React.useState(false);
 
   return (
     <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
+
+
+<>
+<AlertDialog
+isOpen={showAlertDialog}
+onClose={() => {
+setShowAlertDialog(false);
+
+
+}}
+>
+<AlertDialogBackdrop/>
+<AlertDialogContent bg='#EDE9E4'>
+<AlertDialogHeader>
+  <Heading color='#A87B34' size="lg">Insira um email e uma senha!</Heading>
+  <AlertDialogCloseButton>
+   
+  </AlertDialogCloseButton>
+</AlertDialogHeader>
+<AlertDialogBody>
+  <Text  size="sm">
+   Os campos para login estão vazios, para continuar você deve inserir um email e uma senha válidos!
+  </Text>
+</AlertDialogBody>
+<AlertDialogFooter>
+  <Center space="lg">
+   
+    <Button
+      
+      variant="outline"
+      borderColor={'#A87B34'}
+      onPress={() => {
+        
+      }}
+    >
+      <ButtonText color={'#A87B34'}>OK</ButtonText>
+    </Button>
+  </Center>
+</AlertDialogFooter>
+</AlertDialogContent>
+</AlertDialog>
+
+</>
 
       <Center h={'100%'} marginTop={-290}>
         <Box h={'auto'} w={'100%'} marginTop={-130} marginBottom={10} alignItems="center">

@@ -179,6 +179,27 @@ const userController = {
             }
         }
     },
+    EditEvent: async(req,res)=>{
+        const {nomeEvento,dataEvento,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento, id} = req.body;
+
+        const dataFormatada = moment(dataEvento, "DD/MM/YYYY").format("YYYY-MM-DD");
+    
+        console.log(dataFormatada)
+        try{
+
+                const response = await clientController.EditEvent(nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id);
+
+
+                res.status(201).json({msg:"evento cadastrado com sucesso"});
+                return response;
+            }
+        
+        catch(error){
+            console.log(error)
+            return error
+        }
+    },
+
     loginId: async(req,res) => {
         
         

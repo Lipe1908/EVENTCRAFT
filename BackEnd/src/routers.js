@@ -15,4 +15,5 @@ router.post('/api/cadastro', clientController.createNewUser); //Cadastrar novo U
 router.post('/api/validation', clientController.login); //login usuário
 router.post('/api/validationID/:id', clientController.loginId); //login usuário
 router.post('/api/register/evento', clientController.createEvent); //login usuário
+router.put('/api/edit/evento', clientController.EditEvent); //Editar evento
 module.exports = router;

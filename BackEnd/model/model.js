@@ -68,6 +68,12 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result;
     },
+    EditEvent: async (nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id) =>{
+
+        const [result] = await connection.query("UPDATE `eventos` SET `nomeEvento`= ?,`dataEvento`= ?,`descricao`= ?,`nConvidados`= ?,`id_usuario`= ?,`privacidade`= ?,`imagemBase64`= ?,`horaEvento`= ? WHERE id = ?" ,[nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id])
+        .catch(erro => console.log(erro));
+        return result;
+    },
     registerEventAdress: async (id,rua,bairro,numero,id_evento) =>{
 
         const [result] = await connection.query("INSERT INTO endereco values(?,?,?,?,?)",[id,rua,bairro,numero,id_evento])
