@@ -199,6 +199,30 @@ const userController = {
             return error
         }
     },
+    // DeleteEvent: async(req,res)=>{
+
+    //     try{
+    //         const sql = await clientController.getByIdEvento(req.params.id);
+
+    //         if(sql.length > 0){
+    //             const RecoverId = await clientController.DeleteEvent(req.params.id);
+
+                
+    //             const id_evento = RecoverId.insertId
+
+    //             await clientController.registerEventAdress(req.params.id);
+    //             res.status(201).json({msg:"evento cadastrado com sucesso"});
+    //         }
+    //         else{
+                
+    //         }
+    //     }
+        
+    //     catch(error){
+    //         console.log(error)
+    //         return error
+    //     }
+    // },
 
     loginId: async(req,res) => {
         

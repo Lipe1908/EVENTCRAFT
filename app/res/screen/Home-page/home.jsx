@@ -238,15 +238,15 @@ const randomElement = getRandomElement(array);
 
 <Text color={'#AA7E39'} marginTop={8} marginHorizontal={30} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
 
-<VStack>
-  <Avatar alignSelf="flex-end" marginRight={10} marginTop={-40} bgColor="$coolGray500" size="md" borderRadius="$full">
+<VStack marginHorizontal={5} alignSelf="flex-end">
+  <Avatar marginTop={-40} bgColor="$coolGray500" size="md" borderRadius="$full">
     <AvatarFallbackText>{nome}</AvatarFallbackText>
   </Avatar>
   <Button variant="link" onPress={async() => {
     await AsyncStorage.removeItem("id");
-    navigation.navigate('Start')
+    navigation.push('Start')
   }
-  } alignSelf="flex-end" marginRight={15} marginTop={-10}>
+  } alignSelf="center" marginTop={-10}>
   <Text fontWeight={'$bold'} fontSize={10} color="red" >Log-Out</Text>
   </Button>
   
@@ -366,7 +366,7 @@ function EventsScreen({navigation, route}) {
   
   LocaleConfig.defaultLocale = 'br';
   const [selected, setSelected] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false);
   const [dataEvento, setDataEvento] = useState([]);
   const id_usuario = route.params.obj.id
   const [data, setData] = useState([]);
@@ -416,6 +416,26 @@ function EventsScreen({navigation, route}) {
     
         
       };
+      const DeleteEvent = async (id) => {
+        
+        try {
+          const response = await axios.get(`http://192.168.15.12:8085/api/deleteEvent/${id}`);
+          // const response = await axios.get(`http://10.0.2.2:8085/api/deleteEvent/${id}`);
+      
+          //Ordenar os dados pelo id em ordem crescente
+          if(response.status) {
+            console.log(response.status)
+          }
+          navigation.push('Home', {userData})
+          
+      
+          
+        } catch (error) {
+          console.log(JSON.stringify(error));
+        }
+    
+        
+      };
 
       const [formData, setFormData] = useState({
         id: '',
@@ -442,7 +462,7 @@ function EventsScreen({navigation, route}) {
         
     
         if (response.data == '') {
-          setData2(['Nenhum evento encontrado']);
+          console.log('nada aqui bb');
           
         }
         else {
@@ -500,7 +520,7 @@ function EventsScreen({navigation, route}) {
       id_usuario: formData.id_usuario,
       imagemBase64: formData.imagemBase64,
       privacidade: formData.privacidade,
-      horaEvento: moment(date).format('hh:mm:ss'),
+      horaEvento: date.toLocaleTimeString(),
     });
     
     hideDatePicker();
@@ -541,7 +561,9 @@ const handleInputChange = (name, value) => {
 const enviarEventoParaApi = async () => {
   
   
+  
   try {
+    setIsLoading(true)
   const imageeData = imagem ? await RNFS.readFile(imagem.uri, 'base64') : formData.imagemBase64;
    
    
@@ -610,7 +632,7 @@ const enviarEventoParaApi = async () => {
             <ActionsheetItem w={'100$'} alignSelf="center">
               <Text fontSize={13} fontWeight="light" color="#AA7E39">Clique nas informações para edita-las</Text>
             </ActionsheetItem>
-
+            
             <ActionsheetItem w={'auto'} alignSelf="center" onPress={handleImageLibraryLaunch}>
             <Animated.Image
                 style={{marginBottom: 15, height: 240, width: 315, borderRadius: 10, alignSelf: 'center'}}
@@ -716,7 +738,7 @@ const enviarEventoParaApi = async () => {
 
         <HStack>
         <Text style={{ fontSize: 17, fontWeight: 'bold', marginBottom: 20, color:"#A87B34" }}>
-          {selectedDate ? selectedDate : item.horaEvento}
+          {selectedDate ? formData.horaEvento : item.horaEvento}
         </Text>
         <Button w={20} h={25} alignItems="center" justifyContent="center" variant="link" onPress={showDatePicker}><ButtonIcon color="#A87B34" as={Clock} /></Button>
         </HStack>
@@ -753,9 +775,16 @@ const enviarEventoParaApi = async () => {
              
             </ActionsheetItem>
 
+            <Box alignSelf="center" w={'100%'}>
+            <Button onPress={() => DeleteEvent(item.id)}  marginVertical={10} borderColor="red" borderWidth={0.7} bg="white">
+              <Text fontSize={15} fontWeight="bold" color="red">Deletar Evento</Text>
+            </Button>
+            </Box>
+            
+
             </ScrollView>
 
-            <Box w={'100%'} backgroundColor={'$white'} position="absolute" bottom={0}>
+            <Box h={37} w={'100%'} backgroundColor={'$white'} position="absolute" bottom={0}>
             <Box alignSelf="flex-end"  w={'55%'}  flexDirection="row">
               <Button       
               variant="outline"
@@ -770,14 +799,15 @@ const enviarEventoParaApi = async () => {
             </Button>
 
             <Button
-              
+              w={107}
               size="sm"
               action="positive"
               bg={'#A87B34'}
               borderWidth="$0"
               onPress={enviarEventoParaApi}
             >
-              <ButtonText>Editar Evento</ButtonText>
+              {isLoading && <ButtonSpinner color={'white'}/>}
+              <ButtonText>{isLoading ? "" : "Editar Evento"}</ButtonText>
             </Button>
 
         </Box>
@@ -897,6 +927,7 @@ setShowAlertDialog(false);
       }}
       style={{
       borderWidth: 2,
+      borderRadius: 10,
       borderColor: '#AA7E39',
       backgroundColor: 'white',
       width: 340,
@@ -906,6 +937,8 @@ setShowAlertDialog(false);
         handleEvento(day.dateString)
         console.log(day.dateString)
       }}
+
+      
       markedDates={
       mark
       }

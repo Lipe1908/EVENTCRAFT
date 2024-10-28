@@ -74,6 +74,16 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result;
     },
+    DeleteEvent: async (id) =>{
+        const [result] = await connection.query("DELETE FROM `eventos` WHERE id = ?" ,[id])
+        .catch(erro => console.log(erro));
+        return result;
+    },
+    DeleteEventAdress: async (id) =>{
+        const [result] = await connection.query("DELETE FROM `endereco` WHERE id_evento = ?" ,[id])
+        .catch(erro => console.log(erro));
+        return result;
+    },
     registerEventAdress: async (id,rua,bairro,numero,id_evento) =>{
 
         const [result] = await connection.query("INSERT INTO endereco values(?,?,?,?,?)",[id,rua,bairro,numero,id_evento])
