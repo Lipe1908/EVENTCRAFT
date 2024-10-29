@@ -28,6 +28,15 @@ const userController = {
             res.status(500).json({ error: "Erro ao obter a lista de eventos" })
         }
     },
+    listAllEventsPriv: async (req, res) => {
+        try {
+            const events = await clientController.getEventosPriv();
+            res.status(200).json(events);
+        }
+        catch (error) {
+            res.status(500).json({ error: "Erro ao obter a lista de eventos" })
+        }
+    },
     listAllEventsDates: async (req, res) => {
         try {
             const eventsDates = await clientController.getAllEventsDates(req.params.id_usuario);
@@ -199,30 +208,28 @@ const userController = {
             return error
         }
     },
-    // DeleteEvent: async(req,res)=>{
+    DeleteEvent: async(req,res)=>{
 
-    //     try{
-    //         const sql = await clientController.getByIdEvento(req.params.id);
+        try{
+            const sql = await clientController.getByIdEvento(req.params.id);
 
-    //         if(sql.length > 0){
-    //             const RecoverId = await clientController.DeleteEvent(req.params.id);
+            if(sql.length > 0){
+             await clientController.DeleteEvent(req.params.id);
 
-                
-    //             const id_evento = RecoverId.insertId
-
-    //             await clientController.registerEventAdress(req.params.id);
-    //             res.status(201).json({msg:"evento cadastrado com sucesso"});
-    //         }
-    //         else{
-                
-    //         }
-    //     }
         
-    //     catch(error){
-    //         console.log(error)
-    //         return error
-    //     }
-    // },
+                res.status(200).json({msg:"evento deletado com sucesso"});
+               
+            }
+            else{
+                
+            }
+        }
+        
+        catch(error){
+            console.log(error)
+            return error
+        }
+    },
 
     loginId: async(req,res) => {
         

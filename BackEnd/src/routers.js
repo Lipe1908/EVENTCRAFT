@@ -7,6 +7,7 @@ router.get('/', clientController.getRoot); //Rota Raiz
 router.get('/api/read', clientController.listAllUsers); //Listar todos os usuários
 router.get('/api/read/:id', clientController.listByID); //Listar todos os usuários
 router.get('/api/readEvents', clientController.listAllEvents); //Listar todos os usuários
+router.get('/api/readEventsPriv', clientController.listAllEventsPriv); //Listar todos os usuários
 router.get('/api/readEvents/dates/:id_usuario', clientController.listAllEventsDates); //Listar todos os usuários
 router.get('/api/readEventsByDate/:dayy/:id_usuario', clientController.listEventsByDates); //Listar todos os usuários
 router.get('/api/readEvent/:id', clientController.listEventByID); //Listar Usuários por ID

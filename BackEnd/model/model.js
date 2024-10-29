@@ -13,6 +13,11 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
+    getEventosPriv: async () =>{
+        const [result] = await connection.query("SELECT * FROM eventos WHERE privacidade ='Privado' ")
+        .catch(erro => console.log(erro));
+        return result
+    },
     getEventsByDates: async (dayy, id_usuario) =>{
         const [result] = await connection.query("SELECT * FROM eventos WHERE dataEvento = ? AND id_usuario = ?", [dayy , id_usuario])
         .catch(erro => console.log(erro));
@@ -54,6 +59,7 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
+    
     registerUser: async (id,nome,sobrenome,email,senha) =>{
 
         const hashPassword = await bcrypt.hash(senha,salt);
