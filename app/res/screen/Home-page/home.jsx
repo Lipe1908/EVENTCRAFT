@@ -147,23 +147,14 @@ const randomElement = getRandomElement(array);
       };
 
 
-      const customTransition = SharedTransition.custom((values) => {
-        'worklet';
-        return {
-          height: withSpring(values.targetHeight),
-          width: withSpring(values.targetWidth),
-          originX: withSpring(values.targetOriginX),
-          originY: withSpring(values.targetOriginY),
-        };
-      });
+
      
 
       const [showActionsheet, setShowActionsheet] = React.useState(false)
       const handleClose = () => setShowActionsheet(!showActionsheet)
-      
+      const [showAlertDialog, setShowAlertDialog] = React.useState(false)
 
       const renderItem = ({item})=>
-      
       
       (
   
@@ -171,7 +162,49 @@ const randomElement = getRandomElement(array);
         <Card w={350} p="$5" borderRadius="$lg" m="$3">
 
         
-          
+<>
+<AlertDialog
+isOpen={showAlertDialog}
+onClose={() => {
+setShowAlertDialog(false);
+setIsLoading(false);
+
+}}
+>
+<AlertDialogBackdrop/>
+<AlertDialogContent bg='#EDE9E4'>
+<AlertDialogHeader>
+  <Heading color='#A87B34' size="lg">Você não tem acesso a esse evento!</Heading>
+  <AlertDialogCloseButton>
+   
+  </AlertDialogCloseButton>
+</AlertDialogHeader>
+<AlertDialogBody>
+  <Text  size="sm">
+   Esse evento foi colocado como privado e você não tem acesso a essas informações!
+  </Text>
+</AlertDialogBody>
+<AlertDialogFooter>
+  <Center space="lg">
+   
+    <Button
+      
+      variant="outline"
+      borderColor={'#A87B34'}
+      onPress={() => {
+        setShowAlertDialog(false)
+        setIsLoading(false);
+      }}
+    >
+      <ButtonText color={'#A87B34'}>OK</ButtonText>
+    </Button>
+  </Center>
+</AlertDialogFooter>
+</AlertDialogContent>
+</AlertDialog>
+
+</>
+
       <Animated.Image
       style={{marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center'}}
         alt="imagemEvento"
@@ -184,6 +217,8 @@ const randomElement = getRandomElement(array);
       {item.nomeEvento}
       </Heading>
       </HStack>
+     
+    
      
 
      <HStack alignItems="center" justifyContent="center">
@@ -209,25 +244,38 @@ const randomElement = getRandomElement(array);
       <Text mb={10} color={'$black'} fontSize={13} >
        {item.descricao}
       </Text>
-
       {isPriv 
         ? 
         <>
-        <Button onPress={() => handleVizualizar(item.id)} bg='white' borderColor={'#AA7E39'} borderWidth={0.8}>
+        {item.id_usuario == id ? 
+      <>
+    
+        <Button onPress={() => handleVizualizar(item.id)} bg='#AA7E39'>
+        <ButtonText>Ver informações do evento</ButtonText>
+       </Button>
+      
+      </>
+       :
+      <>
+      <Button onPress={()=> setShowAlertDialog(true)} bg='white' borderColor={'#AA7E39'} borderWidth={0.8}>
         <HStack>
         <ButtonText color="gray">Evento Privado</ButtonText>
         <Icon marginHorizontal={5} as={LockKeyhole} color="gray" w={13} h={15} />
         </HStack>
         
        </Button>
+      </>
+     }
+        
         
         </>
          : 
-        <>
-        <Button onPress={() => handleVizualizar(item.id)} bg='#AA7E39'>
+         <>
+          <Button onPress={() => handleVizualizar(item.id)} bg='#AA7E39'>
         <ButtonText>Ver informações do evento</ButtonText>
        </Button>
-        </>}
+         </>
+       }
       
     
     </Card>
@@ -243,10 +291,9 @@ const randomElement = getRandomElement(array);
       const [isLogged, setIsLogged] = useState(false)
      const [isLoading, setIsLoading] = useState(true)
      const [isPriv, setIsPriv] = useState(false)
+     const [t, setT] = useState([]);
 
 
-
-   
 
 const [value, setValue] = useState('Público');
 
@@ -264,6 +311,7 @@ useEffect(()=>{
          setIsLoading(true)
        }
        else{
+
          setData(sortData);
          setIsLoading(false)
          setIsPriv(false)
@@ -272,29 +320,57 @@ useEffect(()=>{
          
      })
      .catch(error => {
-         console.log(JSON.stringify(error));
+        //  console.log(JSON.stringify(error));
      });
   }
   else if(value === 'Privado') {
     setIsLoading(true)
+    setIsPriv(true)
     axios.get(`http://10.0.2.2:8085/api/readEventsPriv`)
     .then(response =>{
+
+      setT(response.data)
         //Ordenar os dados pelo id em ordem crescente
         const sortData= response.data.sort((a,b) => a.id - b.id);
+
+        // console.log("hereeeeeee");
+        // array.forEach(function(t) {
+        //   console.log(t[0].id_usuario)
+        // });
+        // const t = response.data.map((res,index)=>{
+        //   console.log(res[index]);
+        // });
 
       if(response.data == '') {
         setIsLoading(true)
       }
+      
       else{
-        setData(sortData);
-        setIsLoading(false)
-        setIsPriv(true)
-      }
+      
+
+       
+          setData(sortData);
+          setIsLoading(false)    
         
+       
+        
+
+        // console.log(userID);
+
+        // if(userID === id){
+        //   console.log("aquiiiiiiiiiii")
+        // }
+        
+        
+
+      
+
+      }
+    
         
     })
     .catch(error => {
-        console.log(JSON.stringify(error));
+        console.log(error);
     });
   }
   else if(value === 'Meus') {
@@ -307,8 +383,9 @@ useEffect(()=>{
 
 
 
-
   return (
+
+    
     <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
     
     <StatusBar hidden/>
@@ -464,6 +541,135 @@ opacity={0.5}
 
 
 </AnimatedBox>
+  
+    </SafeAreaView>
+  );
+}
+function SearchScreen({navigation, route}) {
+
+
+  const { id, nome, sobrenome, email, senha } = route.params.obj;
+
+
+
+  const [data, setData] = useState([]);
+  
+
+      const handleVizualizar = (id) =>{
+          navigation.push('Evento', {id})
+      };
+
+
+      const [showActionsheet, setShowActionsheet] = React.useState(false)
+      const handleClose = () => setShowActionsheet(!showActionsheet)
+      
+
+      const renderItem = ({item})=>
+      
+      
+      (
+  
+    
+        <Card w={350} p="$5" borderRadius="$lg" m="$3">
+
+        
+          
+      <Animated.Image
+      style={{marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center'}}
+        alt="imagemEvento"
+        source={{
+          uri: `data:image/jpeg;base64,${item.imagemBase64}`
+        }}
+      />
+      <HStack justifyContent="center">
+      <Heading size="md" fontFamily="$heading">
+      {item.nomeEvento}
+      </Heading>
+      </HStack>
+     
+
+     <HStack alignItems="center" justifyContent="center">
+     <Text
+     
+     fontSize="$sm"
+     fontStyle="normal"
+     fontFamily="$heading"
+     fontWeight="$normal"
+     lineHeight="$sm"
+     mb={10}
+     sx={{
+       color: "$textLight700",
+       _dark: {
+         color: "$textDark200",
+       },
+     }}
+   >
+     Data Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
+   </Text>
+     </HStack>
+      
+      <Text mb={10} color={'$black'} fontSize={13} >
+       {item.descricao}
+      </Text>
+
+      {isPriv 
+        ? 
+        <>
+        <Button onPress={() => handleVizualizar(item.id)} bg='white' borderColor={'#AA7E39'} borderWidth={0.8}>
+        <HStack>
+        <ButtonText color="gray">Evento Privado</ButtonText>
+        <Icon marginHorizontal={5} as={LockKeyhole} color="gray" w={13} h={15} />
+        </HStack>
+        
+       </Button>
+        
+        </>
+         : 
+        <>
+        <Button onPress={() => handleVizualizar(item.id)} bg='#AA7E39'>
+        <ButtonText>Ver informações do evento</ButtonText>
+       </Button>
+        </>}
+      
+    
+    </Card>
+
+    
+        
+      );
+
+
+
+      
+
+      const [isLogged, setIsLogged] = useState(false)
+     const [isLoading, setIsLoading] = useState(true)
+     const [isPriv, setIsPriv] = useState(false)
+
+
+
+   
+
+const [value, setValue] = useState('Público');
+
+
+
+
+  return (
+    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
+    
+    <StatusBar hidden/>
+
+   
+    <Box   w={'100%'} h={'100%'}>
+
+
+
+
+
+
+
+</Box>
   
 
 
@@ -1607,6 +1813,16 @@ const randomElement = getRandomElement(array);
            ? 'calendar'
            : 'calendar-outline';
         }
+         else if (route.name === 'Search-Page') {
+          iconName = focused
+           ? 'search'
+           : 'search-outline';
+        }
+         else if (route.name === 'Profile') {
+          iconName = focused
+           ? 'person'
+           : 'person-outline';
+        }
          
 
         // You can return any component that you like here!
@@ -1631,6 +1847,7 @@ const randomElement = getRandomElement(array);
     )}
   >
     <Tab.Screen initialParams={{obj}} options={{headerShown: false}} name="Página Inicial" component={HomeScreen} />
+    <Tab.Screen initialParams={{obj}} options={{headerShown: false}} name="Search-Page" component={SearchScreen} />
     <Tab.Screen initialParams={{ obj, randomElement }}
      options={{headerShown: false, tabBarStyle: {
       display: "none",
@@ -1668,6 +1885,7 @@ const randomElement = getRandomElement(array);
           
           }} name="Criar Evento"  component={CreateEventScreen} />
     <Tab.Screen initialParams={{ obj }} options={{headerShown: false}} name="Eventos" component={EventsScreen} />
+          <Tab.Screen initialParams={{obj}} options={{headerShown: false}} name="Profile" component={SearchScreen} />
 
   </Tab.Navigator>
 
