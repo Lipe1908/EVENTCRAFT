@@ -1,21 +1,16 @@
 
 import React, {useEffect, useState} from "react";
 import {View, Alert} from 'react-native';
-import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, CalendarDaysIcon, Center, Checkbox, CheckboxIndicator, CloseIcon, HStack, Link, Modal, ModalBody, ScrollView, set, StatusBar, VStack,} from '@gluestack-ui/themed';
+import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, HStack,  ScrollView, set, StatusBar, VStack,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
-import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
+import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
 import axios from 'axios';
 import { Icon } from "@gluestack-ui/themed";
 import { Heading } from "@gluestack-ui/themed";
 import { Box, SafeAreaView, Image, ImageBackground } from '@gluestack-ui/themed';
-import topImage from '../../../src/img/image-removebg-preview.png';
-import bottomImage from '../../../src/img/image-removebg-preview2.png';
-import logo from '../../../src/img/logo.png';
-import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 import { Card } from '@gluestack-ui/themed';
 import { withTiming, withSpring, useAnimatedStyle, withRepeat, useSharedValue, BounceInLeft, StretchInX, ReduceMotion, BounceInDown, BounceInUp, FadeInUp, FadeInLeft, FadeInDown, SharedTransition } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
@@ -34,7 +29,7 @@ import { AddIcon } from "@gluestack-ui/themed";
 import { EditIcon } from "@gluestack-ui/themed";
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { InfoIcon } from "@gluestack-ui/themed";
-import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole, MailQuestionIcon, CirclePlus, PartyPopper } from "lucide-react-native";
+import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole, MailQuestionIcon, CirclePlus, PartyPopper, GlobeIcon, CircleAlert, SearchIcon } from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -58,7 +53,10 @@ import { ActionsheetItemText } from "@gluestack-ui/themed";
 import { TouchableOpacity } from "react-native/Libraries/Components/Touchable/TouchableOpacity";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Spinner } from "@gluestack-ui/themed";
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import logo from '../../../src/img/logo.png'
+import { InputSlot } from "@gluestack-ui/themed";
+import { InputIcon } from "@gluestack-ui/themed";
+
 function HomeScreen({navigation, route}) {
 
 
@@ -117,29 +115,6 @@ const randomElement = getRandomElement(array);
 
   const [data, setData] = useState([]);
   
-      // useEffect(()=>{
-      //     // axios.get(`http://192.168.15.12:8085/api/readEvents`)
-      //     axios.get(`http://10.0.2.2:8085/api/readEvents`)
-      //     .then(response =>{
-      //         //Ordenar os dados pelo id em ordem crescente
-      //         const sortData= response.data.sort((a,b) => a.id - b.id);
-
-      //       if(response.data == '') {
-      //         setIsLoading(true)
-      //       }
-      //       else{
-      //         setData(sortData);
-      //         setIsLoading(false)
-      //       }
-              
-              
-      //     })
-      //     .catch(error => {
-      //         console.log(JSON.stringify(error));
-      //     });
-
-      // },[]);
-
       
 
       const handleVizualizar = (id) =>{
@@ -216,9 +191,25 @@ setIsLoading(false);
       <Heading size="md" fontFamily="$heading">
       {item.nomeEvento}
       </Heading>
-      </HStack>
+      </HStack> 
      
-    
+
+    <Center>
+    {item.id_usuario == id ? 
+      <>
+      <Badge size="md" variant="solid" borderRadius="$none" action="success">
+      <BadgeIcon as={CircleAlert} marginHorizontal="$1" />
+  <BadgeText fontWeight="bold">Seu Evento</BadgeText>
+  
+</Badge>
+</> 
+
+: 
+<>
+
+</> 
+}
+    </Center>
      
 
      <HStack alignItems="center" justifyContent="center">
@@ -301,8 +292,8 @@ useEffect(()=>{
   
   if(value === 'Público') {
     setIsLoading(true)
-     // axios.get(`http://192.168.15.12:8085/api/readEvents`)
-     axios.get(`http://10.0.2.2:8085/api/readEvents`)
+     axios.get(`http://192.168.15.10:8085/api/readEvents`)
+    //  axios.get(`http://10.0.2.2:8085/api/readEvents`)
      .then(response =>{
          //Ordenar os dados pelo id em ordem crescente
          const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -326,7 +317,8 @@ useEffect(()=>{
   else if(value === 'Privado') {
     setIsLoading(true)
     setIsPriv(true)
-    axios.get(`http://10.0.2.2:8085/api/readEventsPriv`)
+    // axios.get(`http://10.0.2.2:8085/api/readEventsPriv`)
+    axios.get(`http://192.168.15.10:8085/api/readEventsPriv`)
     .then(response =>{
 
       setT(response.data)
@@ -351,18 +343,6 @@ useEffect(()=>{
        
           setData(sortData);
           setIsLoading(false)    
-        
-       
-        
-
-        // console.log(userID);
-
-        // if(userID === id){
-        //   console.log("aquiiiiiiiiiii")
-        // }
-        
-        
-
       
 
       }
@@ -550,121 +530,172 @@ function SearchScreen({navigation, route}) {
 
   const { id, nome, sobrenome, email, senha } = route.params.obj;
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [allEvents, setAllEvents] = useState([]);
 
+  const fetchAllEvents = async () => {
+    try {
+      const response = await axios.get('http://192.168.15.10:8085/api/readEvents');
+      setAllEvents(response.data);
+      setResults(response.data[0]); 
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  const [data, setData] = useState([]);
-  
+  useEffect(() => {
+    fetchAllEvents();
+  }, []);
 
-      const handleVizualizar = (id) =>{
-          navigation.push('Evento', {id})
-      };
-
-
-      const [showActionsheet, setShowActionsheet] = React.useState(false)
-      const handleClose = () => setShowActionsheet(!showActionsheet)
-      
-
-      const renderItem = ({item})=>
-      
-      
-      (
-  
-    
-        <Card w={350} p="$5" borderRadius="$lg" m="$3">
-
-        
-          
-      <Animated.Image
-      style={{marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center'}}
-        alt="imagemEvento"
-        source={{
-          uri: `data:image/jpeg;base64,${item.imagemBase64}`
-        }}
-      />
-      <HStack justifyContent="center">
-      <Heading size="md" fontFamily="$heading">
-      {item.nomeEvento}
-      </Heading>
-      </HStack>
-     
-
-     <HStack alignItems="center" justifyContent="center">
-     <Text
-     
-     fontSize="$sm"
-     fontStyle="normal"
-     fontFamily="$heading"
-     fontWeight="$normal"
-     lineHeight="$sm"
-     mb={10}
-     sx={{
-       color: "$textLight700",
-       _dark: {
-         color: "$textDark200",
-       },
-     }}
-   >
-     Data Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
-   </Text>
-     </HStack>
-      
-      <Text mb={10} color={'$black'} fontSize={13} >
-       {item.descricao}
-      </Text>
-
-      {isPriv 
-        ? 
-        <>
-        <Button onPress={() => handleVizualizar(item.id)} bg='white' borderColor={'#AA7E39'} borderWidth={0.8}>
-        <HStack>
-        <ButtonText color="gray">Evento Privado</ButtonText>
-        <Icon marginHorizontal={5} as={LockKeyhole} color="gray" w={13} h={15} />
-        </HStack>
-        
-       </Button>
-        
-        </>
-         : 
-        <>
-        <Button onPress={() => handleVizualizar(item.id)} bg='#AA7E39'>
-        <ButtonText>Ver informações do evento</ButtonText>
-       </Button>
-        </>}
-      
-    
-    </Card>
-
-    
-        
+  useEffect(() => {
+    if (searchQuery) {
+      const filteredResults = allEvents.filter(event => 
+        event.nomeEvento.toLowerCase().includes(searchQuery.toLowerCase())
       );
+      setResults(filteredResults);
+    } else {
+      setResults(allEvents); 
+    }
+  }, [searchQuery, allEvents]); 
 
+  const renderItem = ({ item }) => (
+    <Card flexDirection="row" w={'95%'} borderRadius="$lg" m="$3">
 
+    
+          <Animated.Image
+          style={{marginBottom: 15, height: 150, width: 170, borderRadius: 5, alignSelf: 'center'}}
+            alt="imagemEvento"
+            source={{
+              uri: `data:image/jpeg;base64,${item.imagemBase64}`
+            }}
+          />
+          <VStack justifyContent="center" w={'50%'} alignSelf="">
 
+         
+
+          <Center  w={'95%'}>
+            
+           <Text fontSize={15} fontWeight="bold"> {item.nomeEvento}
+          </Text>
+        {item.id_usuario == id ? 
+          <>
+          <Badge size="md" variant="solid" borderRadius="$none" action="success">
+          <BadgeIcon as={CircleAlert} marginHorizontal="$1" />
+      <BadgeText fontWeight="bold">Seu Evento</BadgeText>
       
+    </Badge>
+    </> 
+    
+    : 
+    <>
+    
+    </> 
+    }
 
-      const [isLogged, setIsLogged] = useState(false)
-     const [isLoading, setIsLoading] = useState(true)
-     const [isPriv, setIsPriv] = useState(false)
-
-
-
-   
-
-const [value, setValue] = useState('Público');
-
-
-
+<HStack alignItems="center" justifyContent="center">
+         <Text
+         
+         fontSize="$sm"
+         fontStyle="normal"
+         fontFamily="$heading"
+         fontWeight="$normal"
+         lineHeight="$sm"
+         mb={5}
+         sx={{
+           color: "$textLight700",
+           _dark: {
+             color: "$textDark200",
+           },
+         }}
+       >
+         Data Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
+       </Text>
+         </HStack>
+<HStack alignItems="center" justifyContent="center">
+         <Text
+         
+         fontSize="$sm"
+         fontStyle="normal"
+         fontFamily="$heading"
+         fontWeight="$normal"
+         lineHeight="$sm"
+         mb={10}
+         sx={{
+           color: "$textLight700",
+           _dark: {
+             color: "$textDark200",
+           },
+         }}
+       >
+         N° Convidados: {item.nConvidados}
+       </Text>
+         </HStack>
+        </Center>
+         
+    
+ 
+          
+      
+          </VStack> 
+         
+    
+        
+        
+        </Card>
+  );
 
   return (
-    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
+    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='#EDE9E4'>
     
-    <StatusBar hidden/>
+  
 
    
-    <Box   w={'100%'} h={'100%'}>
+    <Box w={'100%'} h={'100%'}>
 
 
+<ScrollView>
+<Center marginBottom={0} bgColor="white" h={'auto'} justifyContent="center">
+<Text marginTop={20} fontSize={20} fontWeight="bold" color="#A87B34">PESQUISAR EVENTOS
+</Text>
+<Input
 
+          borderRadius={19}
+          alignSelf="center"
+          width={'90%'}
+          height={50}
+          marginTop={25}
+          marginBottom={20}
+          variant="outline"
+          size="md"
+          isDisabled={false}
+          isInvalid={false}
+          isReadOnly={false}
+          $focus-borderColor={'#A87B34'}
+          borderColor="#757272"
+        >
+      <InputSlot marginHorizontal={'$2'}>
+      <InputIcon color="#A87B34" as={SearchIcon} />
+    </InputSlot>
+  <InputField placeholderTextColor={"#A87B34"} placeholder="Pesquisar.." value={searchQuery} onChangeText={setSearchQuery}/>
+</Input>
+</Center>
+
+    
+   
+
+  
+
+<Box alignSelf="center" marginTop={-8}>
+<FlatList
+        data={results}
+        renderItem={renderItem}
+        keyExtractor={item => String(item.id)}
+        scrollEnabled={false}
+      />
+</Box>
+
+      </ScrollView>
 
 
 
@@ -712,8 +743,8 @@ function EventsScreen({navigation, route}) {
   const [idEvento, setIdEvento] = useState('');
   // const [dayy, setDayy] = useState('')
       useEffect(()=>{
-          // axios.get(`http://192.168.15.12:8085/api/readEvents/dates/${id_usuario}`)
-           axios.get(`http://10.0.2.2:8085/api/readEvents/dates/${id_usuario}`)
+          axios.get(`http://192.168.15.10:8085/api/readEvents/dates/${id_usuario}`)
+          //  axios.get(`http://10.0.2.2:8085/api/readEvents/dates/${id_usuario}`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescent
             
@@ -732,12 +763,12 @@ function EventsScreen({navigation, route}) {
         
         try {
           setIsLoadingDelete(true)
-          // const response = await axios.get(`http://192.168.15.12:8085/api/deleteEvent/${id}`);
-          const response = await axios.delete(`http://10.0.2.2:8085/api/deleteEvent/${id}`);
+          const response = await axios.delete(`http://192.168.15.10:8085/api/deleteEvent/${id}`);
+          // const response = await axios.delete(`http://10.0.2.2:8085/api/deleteEvent/${id}`);
       
           //Ordenar os dados pelo id em ordem crescente
           if(response.status) {
-            console.log(response.status)
+            console.log("Evento deletado")
           }
           setShowActionsheet(false)
           navigation.push('Home', {userData})
@@ -745,7 +776,7 @@ function EventsScreen({navigation, route}) {
       
           
         } catch (error) {
-          console.log(JSON.stringify(error));
+          console.log(error);
         }
     
         
@@ -768,8 +799,8 @@ function EventsScreen({navigation, route}) {
 
       try {
         
-        const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
-        // const response = await axios.get(`http://192.168.15.12:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
+        // const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
+        const response = await axios.get(`http://192.168.15.10:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
     
         //Ordenar os dados pelo id em ordem crescente
         const sortData = response.data.sort((a, b) => a.id - b.id);
@@ -906,8 +937,8 @@ const enviarEventoParaApi = async () => {
 
       //URL da sua API para enviar os dados e a imagem
       
-      // const apiUrl = 'http://192.168.15.12:8085/api/edit/evento';
-      const apiUrl = 'http://10.0.2.2:8085/api/edit/evento';
+      const apiUrl = 'http://192.168.15.10:8085/api/edit/evento';
+      // const apiUrl = 'http://10.0.2.2:8085/api/edit/evento';
 
   
       const response = await axios.put(apiUrl, dataaa, config);
@@ -1148,6 +1179,9 @@ const [isLoadingDelete, setIsLoadingDelete] = useState(false)
      marked: true
       
     };
+    mark[moment(new Date()).format("YYYY-MM-DD")] = {
+      selected: true
+    }
   });
 
  
@@ -1269,10 +1303,7 @@ setShowAlertDialog(false);
         console.log(day.dateString)
       }}
 
-      
-      markedDates={
-      mark
-      }
+      markedDates={mark}
     />
       </Center>
 
@@ -1419,8 +1450,8 @@ const enviarEventoParaApi = async () => {
 
       // URL da sua API para enviar os dados e a imagem
       
-      // const apiUrl = 'http://192.168.15.12:8085/api/register/evento';
-      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
+      const apiUrl = 'http://192.168.15.10:8085/api/register/evento';
+      // const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
   
       const response = await axios.post(apiUrl, data, config);
@@ -1697,8 +1728,6 @@ const[isLoading, setIsLoading]=useState(false)
               
             </ScrollView>
 
-        {/* <AnimatedImageBackground style={{zIndex: -1, opacity: 0.6, position: "absolute"}}  alignItems="center" flex={1} w={'100%'} h={750} source={{uri:'https://miro.medium.com/v2/resize:fit:1400/1*kU6biOtrNaTtAfvRHPMcrg.gif'}}> */}
-
         <Box alignSelf="flex-end"  w={'55%'} marginTop={5} flexDirection="row">
 <Button       
               variant="outline"
@@ -1733,13 +1762,6 @@ const[isLoading, setIsLoading]=useState(false)
 
       
         </AnimatedImageBackground>
-        {/* <AnimatedImageBackground style={{zIndex: -1, opacity: 0.5, position: "absolute"}}  alignItems="center" blurRadius={1} flex={1} w={'100%'} h={750} source={{uri:randomElement}}>
-        
-        
-        
-       
-      
-        </AnimatedImageBackground> */}
 
 
 

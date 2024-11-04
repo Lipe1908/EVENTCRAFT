@@ -54,8 +54,8 @@ export default function Evento({navigation, route})  {
   const AnimatedText = Animated.createAnimatedComponent(Text);
   const id = route.params.id
       useEffect(()=>{
-          axios.get(`http://10.0.2.2:8085/api/readEvent/${id}`)
-          // axios.get(`http://192.168.15.12:8085/api/readEvent/${id}`)
+          // axios.get(`http://10.0.2.2:8085/api/readEvent/${id}`)
+          axios.get(`http://192.168.15.10:8085/api/readEvent/${id}`)
           .then(response =>{  
             setNConvidados(response.data.nConvidados)
             setNomeEvento(response.data.nomeEvento)
@@ -73,7 +73,7 @@ export default function Evento({navigation, route})  {
       },[]);
       useEffect(()=>{
           // axios.get(`http://10.0.2.2:8085/api/readEventAdress/${id}`)
-          axios.get(`http://192.168.15.12:8085/api/readEventAdress/${id}`)
+          axios.get(`http://192.168.15.10:8085/api/readEventAdress/${id}`)
          
           .then(response =>{  
             
@@ -110,11 +110,6 @@ export default function Evento({navigation, route})  {
         
         <Spinner alignSelf="center" color={'#AA7E39'} size={"large"} />
         
-    
-        
-        {/* <Text color={'#AA7E39'} fontSize={20} fontWeight="$semibold" size="md">
-          Carregando...
-        </Text> */}
         </Box>
       }
       <AnimatedBox entering={enteringScreenAnimation}  bg='#EDE9E4' flex={1}>

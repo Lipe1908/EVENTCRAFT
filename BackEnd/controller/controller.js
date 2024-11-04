@@ -227,7 +227,7 @@ const userController = {
              await clientController.DeleteEvent(req.params.id);
 
         
-                res.status(200).json({msg:"evento deletado com sucesso"});
+                res.status(201).json({msg:"evento deletado com sucesso"});
                
             }
             else{

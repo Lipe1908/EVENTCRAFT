@@ -117,7 +117,7 @@ export default function LoginScreen({navigation})  {
 
         //Objetivo para enviar para a API
         const data = {
-            email: email,
+            email: email.toLowerCase(),
             senha: senha
         }
 
@@ -125,8 +125,8 @@ export default function LoginScreen({navigation})  {
 
         //Envio dos dados para a API
 
-        const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
-        // const response = await axios.post('http://192.168.15.12:8085/api/validation', data);
+        // const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
+        const response = await axios.post('http://192.168.15.10:8085/api/validation', data);
         
 
         
