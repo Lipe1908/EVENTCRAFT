@@ -14,10 +14,7 @@ import topImage from '../../../src/img/image-removebg-preview.png';
 import bottomImage from '../../../src/img/image-removebg-preview2.png';
 import logo from '../../../src/img/logo.png';
 import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, Keyframe, LightSpeedInLeft, ReduceMotion, SlideInLeft, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
-import { FadeIn, FadeOut } from 'react-native-reanimated';
-import { SharedTransition, withSpring } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 export default function LoginScreen({navigation})  {
   
   const AnimatedCenter = Animated.createAnimatedComponent(Center);
@@ -81,58 +78,29 @@ export default function LoginScreen({navigation})  {
       
     },
   }).duration(650);
-
-
-
-
   const [showAlertDialog, setShowAlertDialog] = React.useState(false);
   const [showAlertDialog2, setShowAlertDialog2] = React.useState(false);
   const [showAlertDialog3, setShowAlertDialog3] = React.useState(false);
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-
   const [isLoading, setIsLoading] = useState(false);
-
-
   const handleLogin = async () => {
-
     try {
-
-
       setIsLoading(true);
-        //verificar se os campos foram preenchidos
-
         if (!email || !senha) {
             setShowAlertDialog(true)
-            
             return;
         }
-
-
         if (!email.includes('@')) {
             setShowAlertDialog3(true)
             return;
         }
-
-
-        //Objetivo para enviar para a API
         const data = {
             email: email.toLowerCase(),
             senha: senha
         }
-
         console.log(data)
-
-        //Envio dos dados para a API
-
-        // const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
-        const response = await axios.post('http://192.168.15.10:8085/api/validation', data);
-        
-
-        
-
-        //Verificar se o login foi efetuado com sucesso
-
+        const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
         if (response.status === 200) {
             setEmail('');
             setSenha('');
@@ -142,8 +110,8 @@ export default function LoginScreen({navigation})  {
                 sobrenome: response.data.sobrenome,
                 email: response.data.email,
                 senha: response.data.senha,
+                imagemBase64: response.data.imagemBase64
             }
-
             const dataId = {
               id: response.data.id.toString(),
         

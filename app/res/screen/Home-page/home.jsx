@@ -1,8 +1,8 @@
 
 import React, {useEffect, useState} from "react";
-import {View, Alert} from 'react-native';
-import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, HStack,  ScrollView, set, StatusBar, VStack,} from '@gluestack-ui/themed';
-import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
+import {View, Alert, TouchableOpacity} from 'react-native';
+import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, HStack,  ScrollView, StatusBar, VStack,} from '@gluestack-ui/themed';
+import {Button,ButtonText,ButtonIcon,ButtonSpinner,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
@@ -12,45 +12,27 @@ import { Heading } from "@gluestack-ui/themed";
 import { Box, SafeAreaView, Image, ImageBackground } from '@gluestack-ui/themed';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Card } from '@gluestack-ui/themed';
-import { withTiming, withSpring, useAnimatedStyle, withRepeat, useSharedValue, BounceInLeft, StretchInX, ReduceMotion, BounceInDown, BounceInUp, FadeInUp, FadeInLeft, FadeInDown, SharedTransition } from 'react-native-reanimated';
+import { withTiming, useAnimatedStyle, withRepeat, useSharedValue, BounceInLeft, ReduceMotion,  FadeInDown, } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
 import {Calendar, CalendarList, Agenda, LocaleConfig} from 'react-native-calendars';
 import { AvatarFallbackText } from "@gluestack-ui/themed";
-import { Dimensions, } from "react-native";
 import teste from '../../../src/img/evento1.png'
-import teste2 from '../../../src/img/evento2.jpg'
-import { ModalBackdrop } from "@gluestack-ui/themed";
-import { ModalContent } from "@gluestack-ui/themed";
-import { ModalHeader } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
-import { ModalCloseButton } from "@gluestack-ui/themed";
-import { ModalFooter } from "@gluestack-ui/themed";
-import { AddIcon } from "@gluestack-ui/themed";
-import { EditIcon } from "@gluestack-ui/themed";
 import MaskInput, { Masks } from 'react-native-mask-input';
-import { InfoIcon } from "@gluestack-ui/themed";
-import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole, MailQuestionIcon, CirclePlus, PartyPopper, GlobeIcon, CircleAlert, SearchIcon, SlidersHorizontal } from "lucide-react-native";
+import {  AlignJustify,  Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon,  PartyPopper, GlobeIcon, CircleAlert, SearchIcon,} from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { CheckboxIcon } from "@gluestack-ui/themed";
-import { CheckboxLabel } from "@gluestack-ui/themed";
 import { ActivityIndicator, SegmentedButtons } from 'react-native-paper';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RNFS from 'react-native-fs';
-import { SettingsContext } from "react-native-paper/lib/typescript/core/settings";
 import { FlatList } from "react-native-gesture-handler";
-import { LinkText } from "@gluestack-ui/themed";
-import { ArrowRightIcon } from "@gluestack-ui/themed";
 import moment from "moment";
 import CustomBottomTabBar from "../../props/customTabBar";
-import {  Easing, Keyframe,  } from 'react-native-reanimated';
 import { Actionsheet } from "@gluestack-ui/themed";
 import { ActionsheetDragIndicatorWrapper } from "@gluestack-ui/themed";
 import { ActionsheetItem } from "@gluestack-ui/themed";
-import { ActionsheetItemText } from "@gluestack-ui/themed";
-import { TouchableOpacity } from "react-native/Libraries/Components/Touchable/TouchableOpacity";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Spinner } from "@gluestack-ui/themed";
 import logo from '../../../src/img/logo.png'
@@ -292,8 +274,8 @@ useEffect(()=>{
   
   if(value === 'Público') {
     setIsLoading(true)
-     axios.get(`http://192.168.15.10:8085/api/readEvents`)
-    //  axios.get(`http://10.0.2.2:8085/api/readEvents`)
+    //  axios.get(`http://192.168.15.10:8085/api/readEvents`)
+     axios.get(`http://10.0.2.2:8085/api/readEvents`)
      .then(response =>{
          //Ordenar os dados pelo id em ordem crescente
          const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -311,28 +293,19 @@ useEffect(()=>{
          
      })
      .catch(error => {
-        //  console.log(JSON.stringify(error));
+      
      });
   }
   else if(value === 'Privado') {
     setIsLoading(true)
     setIsPriv(true)
-    // axios.get(`http://10.0.2.2:8085/api/readEventsPriv`)
-    axios.get(`http://192.168.15.10:8085/api/readEventsPriv`)
+    axios.get(`http://10.0.2.2:8085/api/readEventsPriv`)
+    // axios.get(`http://192.168.15.10:8085/api/readEventsPriv`)
     .then(response =>{
 
       setT(response.data)
-        //Ordenar os dados pelo id em ordem crescente
+
         const sortData= response.data.sort((a,b) => a.id - b.id);
-
-        // console.log("hereeeeeee");
-        // array.forEach(function(t) {
-        //   console.log(t[0].id_usuario)
-        // });
-        // const t = response.data.map((res,index)=>{
-        //   console.log(res[index]);
-        // });
-
       if(response.data == '') {
         setIsLoading(true)
       }
@@ -355,8 +328,8 @@ useEffect(()=>{
   }
   else if(value === 'Meus') {
     setIsLoading(true)
-     axios.get(`http://192.168.15.10:8085/api/readEventsUser/${id}`)
-    //  axios.get(`http://10.0.2.2:8085/api/readEvents`)
+    //  axios.get(`http://192.168.15.10:8085/api/readEventsUser/${id}`)
+     axios.get(`http://10.0.2.2:8085/api/readEventsUser/${id}`)
      .then(response =>{
          //Ordenar os dados pelo id em ordem crescente
          const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -365,7 +338,6 @@ useEffect(()=>{
          setIsLoading(true)
        }
        else{
-
          setData(sortData);
          setIsLoading(false)
          setIsPriv(false)
@@ -374,7 +346,7 @@ useEffect(()=>{
          
      })
      .catch(error => {
-        //  console.log(JSON.stringify(error));
+
      });
   }
 
@@ -556,7 +528,8 @@ function SearchScreen({navigation, route}) {
 const [isLoading, setIsLoading] = useState(true);
   const fetchAllEvents = async () => {
     try {
-      const response = await axios.get('http://192.168.15.10:8085/api/readEvents');
+      // const response = await axios.get('http://192.168.15.10:8085/api/readEvents');
+      const response = await axios.get('http://10.0.2.2:8085/api/readEvents');
       setAllEvents(response.data);
       setResults(response.data[0]); 
     } catch (error) {
@@ -783,8 +756,8 @@ function EventsScreen({navigation, route}) {
   const [idEvento, setIdEvento] = useState('');
   // const [dayy, setDayy] = useState('')
       useEffect(()=>{
-          axios.get(`http://192.168.15.10:8085/api/readEvents/dates/${id_usuario}`)
-          //  axios.get(`http://10.0.2.2:8085/api/readEvents/dates/${id_usuario}`)
+          // axios.get(`http://192.168.15.10:8085/api/readEvents/dates/${id_usuario}`)
+           axios.get(`http://10.0.2.2:8085/api/readEvents/dates/${id_usuario}`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescent
             
@@ -800,20 +773,16 @@ function EventsScreen({navigation, route}) {
       const [showModal, setShowModal] = useState(false)
 
       const DeleteEvent = async (id) => {
-        
         try {
           setIsLoadingDelete(true)
-          const response = await axios.delete(`http://192.168.15.10:8085/api/deleteEvent/${id}`);
-          // const response = await axios.delete(`http://10.0.2.2:8085/api/deleteEvent/${id}`);
-      
-          //Ordenar os dados pelo id em ordem crescente
+          // const response = await axios.delete(`http://192.168.15.10:8085/api/deleteEvent/${id}`);
+          const response = await axios.delete(`http://10.0.2.2:8085/api/deleteEvent/${id}`);
           if(response.status) {
             console.log("Evento deletado")
           }
           setShowActionsheet(false)
           navigation.push('Home', {userData})
           setIsLoadingDelete(false)
-      
           
         } catch (error) {
           console.log(error);
@@ -839,8 +808,8 @@ function EventsScreen({navigation, route}) {
 
       try {
         
-        // const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
-        const response = await axios.get(`http://192.168.15.10:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
+        const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
+        // const response = await axios.get(`http://192.168.15.10:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
     
         //Ordenar os dados pelo id em ordem crescente
         const sortData = response.data.sort((a, b) => a.id - b.id);
@@ -911,12 +880,8 @@ function EventsScreen({navigation, route}) {
     
     hideDatePicker();
   };
-  console.log(formData.horaEvento)
   const [showActionsheet, setShowActionsheet] = React.useState(false)
   const handleClose = () => setShowActionsheet(!showActionsheet)
-
-
-
   const handleImageLibraryLaunch = async () => {
     const options = {
         mediaType: 'photo',
@@ -938,21 +903,13 @@ function EventsScreen({navigation, route}) {
         console.error('Erro ao selecionar a imagem:', error);
     }
 };
-  
-
 const handleInputChange = (name, value) => {
   setFormData({...formData, [name]:value});
 };
-
 const enviarEventoParaApi = async () => {
-  
-  
-  
   try {
     setIsLoading(true)
   const imageeData = imagem ? await RNFS.readFile(imagem.uri, 'base64') : formData.imagemBase64;
-   
-   
     const dataaa = {
       nomeEvento: formData.nomeEvento,
       descricao: formData.descricao,
@@ -964,28 +921,15 @@ const enviarEventoParaApi = async () => {
       horaEvento: formData.horaEvento,
       id: formData.id,
     };
-
-
-
-  
       
       const config = {
           headers: {
               'Content-Type': 'application/json',
           },
       };
-
-      //URL da sua API para enviar os dados e a imagem
-      
-      const apiUrl = 'http://192.168.15.10:8085/api/edit/evento';
-      // const apiUrl = 'http://10.0.2.2:8085/api/edit/evento';
-
-  
+      const apiUrl = 'http://10.0.2.2:8085/api/edit/evento';
       const response = await axios.put(apiUrl, dataaa, config);
       console.log('Resposta da API:', response.data);
-
-
-      // // Retorna para a página inicial
       setShowActionsheet(false) 
       navigation.push('Home',  { userData });
   } catch (error) {
@@ -1274,7 +1218,6 @@ setShowAlertDialog(false);
       variant="outline"
       borderColor={'#A87B34'}
       onPress={() => {
-        console.log(clickedDate)
         navigation.navigate('Criar Evento', {clickedDate})
         setShowAlertDialog(false)
       }}
@@ -1340,7 +1283,6 @@ setShowAlertDialog(false);
       onDayPress={day => {
         handleEvento(day.dateString)
         setclickedDate(moment(day.dateString).format('DD/MM/YYYY'))
-        console.log(day.dateString)
       }}
 
       markedDates={mark}
@@ -1350,6 +1292,175 @@ setShowAlertDialog(false);
   </SafeAreaView>
   );
 }
+
+function ProfileScreen({navigation, route}) {
+const { id, nome, sobrenome, email, senha, imagemBase64 } = route.params.obj; 
+const obj = route.params.obj; 
+const userData = route.params.obj; 
+const [isLoading, setIsLoading] = useState(true);
+let [img, setImg] = useState('');
+const [dataUser, setDataUser] = useState({})
+useEffect(()=>{
+  setIsLoading(true)
+    //  axios.get(`http://192.168.15.10:8085/api/readEvents`)
+     axios.get(`http://10.0.2.2:8085/api/read/${id}`)
+     .then(responseUser =>{
+
+         setDataUser(responseUser.data[0]);
+      
+         setIsLoading(false)
+     })
+     .catch(error => {
+      
+     });
+
+
+},[img]);
+
+
+const handleCameraLaunch = async () => {
+  const options = {
+      mediaType: 'photo',
+  };
+
+  try {
+      const response = await launchCamera(options);
+      console.log('pickedFile', response);
+
+      // Verifica se a imagem foi capturada com sucesso
+      if (response.assets && response.assets.length > 0) {
+          const image = response.assets[0];
+          setImg(image)
+          const imageData = await RNFS.readFile(image.uri, 'base64');
+          const dataa = {
+            imagemBase64: imageData, 
+            id: id
+          }
+          const config = {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    };
+                    const apiUrl = 'http://10.0.2.2:8085/api/edit/Perfil-pic';
+                    const Send = await axios.put(apiUrl, dataa, config);
+            
+                    console.log('Resposta da API:', Send.data);
+      } else {
+          console.log('Nenhuma imagem capturada.');
+      }
+  } catch (error) {
+      console.error('Erro ao capturar a imagem:', error);
+  }
+};
+
+  return (
+    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg="#EDE9E4" >
+    <Box w={'100%'} h={'100%'}>
+<ScrollView>
+
+  <Text alignSelf="center" fontWeight="bold" color="#A87B34" marginVertical={10} fontSize={35}>MEU PERFIL</Text>
+<Box>
+  {isLoading ? 
+  <>
+  <Box justifyContent="center" alignSelf="center" w={250} h={250}  bg={'white'} rounded={'$full'} alignItems="center" marginVertical={40}>
+  <Spinner color={'#A87B34'} size={"large"}/>
+  </Box>
+  </>
+   : <>
+  <TouchableOpacity onPress={handleCameraLaunch} style={{alignItems: 'center', marginVertical: 20}}>
+
+<Avatar bg={'$coolGray500'} w={250} h={250}>
+      <AvatarFallbackText fontSize={65}>{dataUser.nome}</AvatarFallbackText>
+      {dataUser.imagemBase64 || img ?
+       <>
+        <AvatarImage
+      alt="Profile-Picture"
+        source={ 
+         img ? {uri: img.uri} : 
+         { uri: `data:image/jpeg;base64,${dataUser.imagemBase64}` }
+      }
+      />
+      </>
+       :
+      <>
+
+      </>}
+      
+    </Avatar>
+</TouchableOpacity>
+</>
+}
+
+<Box borderRadius={20} alignItens="center" bg={'white'}>
+ <Text mt={10} alignSelf="center" color='#A87B34' fontWeight={'bold'}>Informações do usuário:</Text> 
+<Input
+alignSelf="center"
+borderRadius={12}
+bg='#FFFF'
+w={'80%'}
+h={50}
+variant="outline"
+size="md"
+isDisabled={false}
+isInvalid={false}
+isReadOnly={true}
+$focus-borderColor={'#A87B34'}
+marginTop={10}
+>
+<InputSlot flexDirection="row" marginHorizontal={10}>
+<Text fontSize={12.5} color='#A87B34' fontWeight='$bold'>NOME: </Text>
+<Text fontSize={12.5} fontWeight='$bold'>{dataUser.nome}</Text>
+</InputSlot>  
+<InputField $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholderTextColor={'#A87B34'}  />
+</Input>
+<Input
+alignSelf="center"
+borderRadius={12}
+bg='#FFFF'
+w={'80%'}
+h={50}
+variant="outline"
+size="md"
+isDisabled={false}
+isInvalid={false}
+isReadOnly={true}
+$focus-borderColor={'#A87B34'}
+marginTop={10}
+>
+<InputSlot flexDirection="row" marginHorizontal={10}>
+<Text fontSize={12.5} color='#A87B34' fontWeight='$bold'>SOBRENOME: </Text>
+<Text fontSize={12.5}  fontWeight='$bold'>{dataUser.sobrenome}</Text>
+</InputSlot>  
+<InputField $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+</Input>
+<Input
+alignSelf="center"
+borderRadius={12}
+bg='#FFFF'
+w={'80%'}
+h={50}
+variant="outline"
+size="md"
+isDisabled={false}
+isInvalid={false}
+isReadOnly={true}
+$focus-borderColor={'#A87B34'}
+marginTop={10}
+>
+<InputSlot flexDirection="row" marginHorizontal={10}>
+<Text fontSize={12.5} color='#A87B34' fontWeight='$bold'>EMAIL: </Text>
+<Text fontSize={12.5} fontWeight='$bold'>{dataUser.email}</Text>
+</InputSlot>  
+<InputField $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
+</Input>
+</Box>
+</Box>
+      </ScrollView>
+</Box>  
+    </SafeAreaView>
+  );
+}
+
 
 function CreateEventScreen({navigation,route}){
 
@@ -1363,23 +1474,6 @@ function CreateEventScreen({navigation,route}){
 
   const AnimatedText = Animated.createAnimatedComponent(Text)
   const AnimatedImageBackground = Animated.createAnimatedComponent(ImageBackground)
-
-
-  React.useEffect(() => {
-    BounceInLeft.duration(100)
-    .delay(900)
-    .randomDelay()
-    .reduceMotion(ReduceMotion.Never)
-    .withCallback((finished) => {
-      console.log(`finished without interruptions: ${finished}`);
-    });
-  }, []);
-  
-
-  
-
-
-
 const [dataEvento, setDataEvento] = React.useState('');
   const ref = React.useRef(null);
   const [selectedDate, setSelectedDate] = useState(new Date('2022-05-31'));
@@ -1480,7 +1574,6 @@ const enviarEventoParaApi = async () => {
       numero:numero,
       imagemBase64: imageData
   };
-  console.log(data.horaEvento)
       
       const config = {
           headers: {
@@ -1490,8 +1583,8 @@ const enviarEventoParaApi = async () => {
 
       // URL da sua API para enviar os dados e a imagem
       
-      const apiUrl = 'http://192.168.15.10:8085/api/register/evento';
-      // const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
+      // const apiUrl = 'http://192.168.15.10:8085/api/register/evento';
+      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
 
   
       const response = await axios.post(apiUrl, data, config);
@@ -1814,8 +1907,6 @@ const[isLoading, setIsLoading]=useState(false)
     </SafeAreaView>
   )
 }
-
-
 const Tab = createBottomTabNavigator();
 export default function Home({navigation, route}) {
   const isFocused = useIsFocused();
@@ -1830,42 +1921,26 @@ export default function Home({navigation, route}) {
       true
     );
   }, []);
-
   const scaleStyles = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
-
-
   function getRandomElement(array) {
     const randomIndex = Math.floor(Math.random() * array.length);
     const randomElement = array[randomIndex];
     return randomElement;
 }
-
 const array = [
-
 'https://miro.medium.com/v2/resize:fit:1400/1*kU6biOtrNaTtAfvRHPMcrg.gif',
 'https://blog.poesie.com.br/wp-content/uploads/2014/11/02-ideia-foto-noivado-casamento.gif',
 'https://www.paperlesspost.com/blog/wp-content/uploads/01_Blog_KidsBirthdayPartyIdeas_ChildrenBlowingOutCandles.png'
-
 ];
-
-
 const randomElement = getRandomElement(array);
-
-  
- 
-  return (
-    
+  return (    
     <Tab.Navigator
-
     tabBar={props => <CustomBottomTabBar {...props} />}
- 
-   
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-
         if (route.name === 'Página Inicial') {
           iconName = focused
             ? 'home'
@@ -1880,29 +1955,20 @@ const randomElement = getRandomElement(array);
            ? 'search'
            : 'search-outline';
         }
-         else if (route.name === 'Profile') {
+         else if (route.name === 'Perfil') {
           iconName = focused
            ? 'person'
            : 'person-outline';
-        }
-         
-
-        // You can return any component that you like here!
+        } 
         return <Ionicons name={iconName} size={20} color={color} />;
       },
-
       tabBarStyle: {
         height: 55,
         backgroundColor: 'white',
         borderColor: '#EDE9E4',
-        
       },
       tabBarActiveTintColor: '#AA7E39',
       tabBarInactiveTintColor: '#AA7E39',
-      
-      
-        
-    
       
     }
     
@@ -1914,45 +1980,23 @@ const randomElement = getRandomElement(array);
      options={{headerShown: false, tabBarStyle: {
       display: "none",
     }, tabBarIcon: ({focused, color, size}) => {
-            return (
-            
-              
+            return (     
               <KeyboardAvoidingView>
                   <AnimatedBox style={[scaleStyles]} >
-                
                 <Box  alignSelf="center"  alignItens="center" justifyContent="center" marginBottom={40} >
                
                 <Center w={60} h={60} bg={'#AA7E39'} rounded={"$full"}>
                 <Icon as={PartyPopper} color="white" size="xl" />
                 </Center>
-                
-                
-               
                 </Box>
-                
-                
-               
               </AnimatedBox>
-              
               </KeyboardAvoidingView>
-              
-
-              
-             
-             
-
-
             );
           },
-          
           }} name="Criar Evento"  component={CreateEventScreen} />
     <Tab.Screen initialParams={{ obj }} options={{headerShown: false}} name="Eventos" component={EventsScreen} />
-          <Tab.Screen initialParams={{obj}} options={{headerShown: false}} name="Profile" component={SearchScreen} />
-
+          <Tab.Screen initialParams={{obj}} options={{headerShown: false}} name="Perfil" component={ProfileScreen} />
   </Tab.Navigator>
-
-
-    
   )
 }
 

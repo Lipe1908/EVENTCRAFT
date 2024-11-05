@@ -24,8 +24,8 @@ import axios from "axios";
                 console.log(id)
                 if (id) { 
                     try{
-                        const response = await axios.post(`http://192.168.15.10:8085/api/validationID/${id}`,
-                        // const response = await axios.post(`http://10.0.2.2:8085/api/validationID/${id}`,
+                        // const response = await axios.post(`http://192.168.15.10:8085/api/validationID/${id}`,
+                        const response = await axios.post(`http://10.0.2.2:8085/api/validationID/${id}`,
                         {Headers: {
                             Authorization: `Bearer ${id}`
                         }
