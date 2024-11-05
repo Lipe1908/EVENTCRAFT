@@ -13,6 +13,11 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
+    getAllEventsUser: async (id_usuario) =>{
+        const [result] = await connection.query("SELECT * FROM eventos WHERE id_usuario = ? ", [id_usuario])
+        .catch(erro => console.log(erro));
+        return result
+    },
     getAllEventsUserPriv: async (id_usuario) =>{
         const [result] = await connection.query("SELECT * FROM eventos WHERE privacidade = 'Privado' AND id_usuario = ? ", [id_usuario])
         .catch(erro => console.log(erro));

@@ -29,14 +29,14 @@ import { AddIcon } from "@gluestack-ui/themed";
 import { EditIcon } from "@gluestack-ui/themed";
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { InfoIcon } from "@gluestack-ui/themed";
-import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole, MailQuestionIcon, CirclePlus, PartyPopper, GlobeIcon, CircleAlert, SearchIcon } from "lucide-react-native";
+import { PersonStanding, AlignJustify, ImageDown, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, CheckIcon, LockKeyhole, MailQuestionIcon, CirclePlus, PartyPopper, GlobeIcon, CircleAlert, SearchIcon, SlidersHorizontal } from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { CheckboxIcon } from "@gluestack-ui/themed";
 import { CheckboxLabel } from "@gluestack-ui/themed";
-import { SegmentedButtons } from 'react-native-paper';
+import { ActivityIndicator, SegmentedButtons } from 'react-native-paper';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RNFS from 'react-native-fs';
 import { SettingsContext } from "react-native-paper/lib/typescript/core/settings";
@@ -354,8 +354,28 @@ useEffect(()=>{
     });
   }
   else if(value === 'Meus') {
-    console.log('teste3')
     setIsLoading(true)
+     axios.get(`http://192.168.15.10:8085/api/readEventsUser/${id}`)
+    //  axios.get(`http://10.0.2.2:8085/api/readEvents`)
+     .then(response =>{
+         //Ordenar os dados pelo id em ordem crescente
+         const sortData= response.data.sort((a,b) => a.id - b.id);
+
+       if(response.data == '') {
+         setIsLoading(true)
+       }
+       else{
+
+         setData(sortData);
+         setIsLoading(false)
+         setIsPriv(false)
+       }
+         
+         
+     })
+     .catch(error => {
+        //  console.log(JSON.stringify(error));
+     });
   }
 
 
@@ -533,7 +553,7 @@ function SearchScreen({navigation, route}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
-
+const [isLoading, setIsLoading] = useState(true);
   const fetchAllEvents = async () => {
     try {
       const response = await axios.get('http://192.168.15.10:8085/api/readEvents');
@@ -546,6 +566,7 @@ function SearchScreen({navigation, route}) {
 
   useEffect(() => {
     fetchAllEvents();
+    setIsLoading(false)
   }, []);
 
   useEffect(() => {
@@ -559,94 +580,110 @@ function SearchScreen({navigation, route}) {
     }
   }, [searchQuery, allEvents]); 
 
+
+
   const renderItem = ({ item }) => (
-    <Card flexDirection="row" w={'95%'} borderRadius="$lg" m="$3">
-
     
-          <Animated.Image
-          style={{marginBottom: 15, height: 150, width: 170, borderRadius: 5, alignSelf: 'center'}}
-            alt="imagemEvento"
-            source={{
-              uri: `data:image/jpeg;base64,${item.imagemBase64}`
-            }}
-          />
-          <VStack justifyContent="center" w={'50%'} alignSelf="">
-
-         
-
-          <Center  w={'95%'}>
-            
-           <Text fontSize={15} fontWeight="bold"> {item.nomeEvento}
-          </Text>
-        {item.id_usuario == id ? 
-          <>
-          <Badge size="md" variant="solid" borderRadius="$none" action="success">
-          <BadgeIcon as={CircleAlert} marginHorizontal="$1" />
-      <BadgeText fontWeight="bold">Seu Evento</BadgeText>
-      
-    </Badge>
-    </> 
+<Card flexDirection="row" w={'95%'} borderRadius="$lg" m="$3">
     
-    : 
-    <>
-    
-    </> 
-    }
+<Animated.Image
+style={{marginBottom: 15, height: 150, width: 170, borderRadius: 5, alignSelf: 'center'}}
+  alt="imagemEvento"
+  source={{
+    uri: `data:image/jpeg;base64,${item.imagemBase64}`
+  }}
+/>
+<VStack justifyContent="center" w={'50%'} alignSelf="">
+
+
+
+<Center  w={'100%'}>
+  
+ <Text fontSize={15} fontWeight="bold"> {item.nomeEvento}
+</Text>
+{item.id_usuario == id ? 
+<>
+<Badge size="md" variant="solid" borderRadius="$none" action="success">
+<BadgeIcon as={CircleAlert} marginHorizontal="$1" />
+<BadgeText fontWeight="bold">Seu Evento</BadgeText>
+
+</Badge>
+</> 
+
+: 
+<>
+
+</> 
+}
 
 <HStack alignItems="center" justifyContent="center">
-         <Text
-         
-         fontSize="$sm"
-         fontStyle="normal"
-         fontFamily="$heading"
-         fontWeight="$normal"
-         lineHeight="$sm"
-         mb={5}
-         sx={{
-           color: "$textLight700",
-           _dark: {
-             color: "$textDark200",
-           },
-         }}
-       >
-         Data Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
-       </Text>
-         </HStack>
+<Text
+
+fontSize="$sm"
+fontStyle="normal"
+fontFamily="$heading"
+fontWeight="$normal"
+lineHeight="$sm"
+mb={5}
+sx={{
+ color: "$textLight700",
+ _dark: {
+   color: "$textDark200",
+ },
+}}
+>
+Data Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
+</Text>
+</HStack>
 <HStack alignItems="center" justifyContent="center">
-         <Text
-         
-         fontSize="$sm"
-         fontStyle="normal"
-         fontFamily="$heading"
-         fontWeight="$normal"
-         lineHeight="$sm"
-         mb={10}
-         sx={{
-           color: "$textLight700",
-           _dark: {
-             color: "$textDark200",
-           },
-         }}
-       >
-         N° Convidados: {item.nConvidados}
-       </Text>
-         </HStack>
-        </Center>
-         
+<Text
+
+fontSize="$sm"
+fontStyle="normal"
+fontFamily="$heading"
+fontWeight="$normal"
+lineHeight="$sm"
+mb={10}
+sx={{
+ color: "$textLight700",
+ _dark: {
+   color: "$textDark200",
+ },
+}}
+>
+N° Convidados: {item.nConvidados}
+</Text>
+</HStack>
+
+<Button onPress={() => handleVizualizar(item.id)} bg="#A87B34">
+
+  <ButtonText>
+    Vizualizar
+  </ButtonText>
+</Button>
+</Center>
+
+
+
+
+</VStack> 
+
+
+</Card>
+   
     
- 
-          
-      
-          </VStack> 
-         
-    
-        
-        
-        </Card>
   );
 
+  const handleVizualizar = (id) =>{
+    navigation.push('Evento', {id})
+};
+
+  const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+
+
+
   return (
-    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='#EDE9E4'>
+    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg="white" >
     
   
 
@@ -655,24 +692,27 @@ function SearchScreen({navigation, route}) {
 
 
 <ScrollView>
-<Center marginBottom={0} bgColor="white" h={'auto'} justifyContent="center">
-<Text marginTop={20} fontSize={20} fontWeight="bold" color="#A87B34">PESQUISAR EVENTOS
+<Center bg='#EDE9E4' marginBottom={0} h={'auto'} justifyContent="center">
+<Text alignSelf="flex-start" marginHorizontal={30} marginTop={30} fontSize={20} fontWeight="bold" color="#A87B34">PESQUISAR EVENTOS...
+</Text>
+<Text alignSelf="flex-start" marginHorizontal={30} marginTop={10} marginBottom={30} fontSize={15} fontWeight="light" color="#A87B34">Encontre o evento que quiser na Eventcraft
 </Text>
 <Input
 
           borderRadius={19}
-          alignSelf="center"
-          width={'90%'}
+          alignSelf="flex-Start"
+          width={'85%'}
           height={50}
-          marginTop={25}
-          marginBottom={20}
+          marginTop={0}
+          marginBottom={40}
           variant="outline"
           size="md"
           isDisabled={false}
           isInvalid={false}
           isReadOnly={false}
           $focus-borderColor={'#A87B34'}
-          borderColor="#757272"
+          borderWidth={0}
+          bg="white"
         >
       <InputSlot marginHorizontal={'$2'}>
       <InputIcon color="#A87B34" as={SearchIcon} />
@@ -681,19 +721,19 @@ function SearchScreen({navigation, route}) {
 </Input>
 </Center>
 
-    
-   
 
-  
-
-<Box alignSelf="center" marginTop={-8}>
-<FlatList
+<Box bg="white" borderRadius={25} alignSelf="center" marginTop={-20}>
+<AnimatedFlatList 
         data={results}
         renderItem={renderItem}
         keyExtractor={item => String(item.id)}
         scrollEnabled={false}
       />
 </Box>
+
+
+
+
 
       </ScrollView>
 

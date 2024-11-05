@@ -28,6 +28,15 @@ const userController = {
             res.status(500).json({ error: "Erro ao obter a lista de eventos" })
         }
     },
+    listAllEventsUser: async (req, res) => {
+        try {
+            const events = await clientController.getAllEventsUser(req.params.id);
+            res.status(200).json(events);
+        }
+        catch (error) {
+            res.status(500).json({ error: "Erro ao obter a lista de eventos" })
+        }
+    },
     listAllEventsPriv: async (req, res) => {
         try {
             const events = await clientController.getEventosPriv();
