@@ -19,7 +19,7 @@ import { AvatarFallbackText } from "@gluestack-ui/themed";
 import teste from '../../../src/img/evento1.png'
 import { useIsFocused } from '@react-navigation/native';
 import MaskInput, { Masks } from 'react-native-mask-input';
-import {  AlignJustify,  Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon,  PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut,} from "lucide-react-native";
+import {  AlignJustify,  Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon,  PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut, IdCard,} from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -382,16 +382,9 @@ useEffect(()=>{
 <Text color={'#AA7E39'} marginTop={8} marginHorizontal={30} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
 
 <VStack marginHorizontal={5} alignSelf="flex-end">
-  <Avatar marginTop={-55} bgColor="$coolGray500" size="md" borderRadius="$full">
+  <Avatar marginTop={-50} bgColor="$coolGray500" size="md" borderRadius="$full">
     <AvatarFallbackText>{nome}</AvatarFallbackText>
   </Avatar>
-  <Button variant="link" onPress={async() => {
-    await AsyncStorage.removeItem("id");
-    navigation.push('Start')
-  }
-  } alignSelf="center" marginTop={-10}>
-  <Text fontWeight={'$bold'} fontSize={10} color="red" >Log-Out</Text>
-  </Button>
   
 </VStack>
 
@@ -558,10 +551,10 @@ const [isLoading, setIsLoading] = useState(true);
 
   const renderItem = ({ item }) => (
     
-<Card flexDirection="row" w={'95%'} borderRadius="$lg" m="$3">
+<Card flexDirection="row" w={'95%'} padding={0} borderRadius="$lg" m="$3">
     
 <Animated.Image
-style={{marginBottom: 15, height: 150, width: 170, borderRadius: 5, alignSelf: 'center'}}
+style={{ height: 160, width: 170, borderTopRightRadius:0, borderTopLeftRadius: 7, borderBottomLeftRadius: 7, borderBottomRightRadius: 0, alignSelf: 'center'}}
   alt="imagemEvento"
   source={{
     uri: `data:image/jpeg;base64,${item.imagemBase64}`
@@ -1457,7 +1450,15 @@ marginTop={10}
 <Button borderRadius={10} bg='#A87B34' m={15}>
   <ButtonText>Editar Perfil</ButtonText>
 </Button>
-<Button variant="link" borderRadius={10} m={5}>
+<Button variant="link" borderRadius={10} >
+  <ButtonText color='$green600'>Registrar-se como colaborador de eventos</ButtonText>
+  <ButtonIcon marginLeft={"$1"} mt={"$0.9"} color="$green600" as={IdCard}/>
+</Button>
+<Button onPress={async() => {
+    await AsyncStorage.removeItem("id");
+    navigation.push('Start')
+  }
+  } variant="link" borderRadius={10} m={5}>
   <ButtonText m={"$2"} color="red">Sair</ButtonText>
   <ButtonIcon color="red" as={LogOut}/>
 </Button>
@@ -1561,7 +1562,7 @@ const enviarEventoParaApi = async () => {
           setIsLoading(false)
           return;
       }
-      if (!nomeEvento || !teste || !selectedDate || !value) {
+      if (!nomeEvento ||  !selectedDate || !value) {
           Alert.alert('Todos os campos são obrigatórios.');
           setIsLoading(false)
           return;
@@ -1625,20 +1626,13 @@ const[isLoading, setIsLoading]=useState(false)
       
         <Animated.View entering={FadeInDown} style={{backgroundColor: 'black', flex: 1}} alignItems="center">
           
-        <Button opacity={1} onPress={() => navigation.push('Home',  { userData })} alignSelf="flex-start" variant="link" w={50} h={50} position="absolute" >
-       <Icon w={30} h={30} color={'white'} as={ArrowLeftIcon} />
-       </Button>
-       
       
        <ScrollView zIndex={1} h={1000} showsVerticalScrollIndicator={false}>
-              <Box  marginVertical={25} alignItems="center">
-                <Text marginVertical={15} fontSize={15} color={"white"} fontWeight={'$bold'}>Imagem do Evento</Text>
-                <Button onPress={handleImageLibraryLaunch} w={320} h={220} variant="link">
-                <Avatar bgColor={'$white'} borderWidth={1} borderRadius={10} w={280} h={200} borderColor="$black">
-                  <AvatarImage w={'100%'} h={'100%'} borderRadius={10} alt="imgEvento" source={imagem ? { uri: imagem.uri } : require('../../../src/img/img.png')}/>
-                </Avatar>
+              <Box  marginVertical={0} alignItems="center">
+                <Button onPress={handleImageLibraryLaunch} w={"100%"} h={250} variant="link">
+                  <Image w={'100%'} h={'100%'} borderRadius={0} alt="imgEvento" source={imagem ? { uri: imagem.uri } : require('../../../src/img/img.png')}/>
                 </Button>
-                <Button onPress={() => {setImagem(null);}} w={320} h={20} variant="link">
+                <Button mt={5} onPress={() => {setImagem(null);}} w={320} h={20} variant="link">
                 <Text fontSize={12} color="$red500" fontWeight={'bold'}>Limpar </Text>
                 <ButtonIcon color="$red500" as={CircleX} />
                 </Button>

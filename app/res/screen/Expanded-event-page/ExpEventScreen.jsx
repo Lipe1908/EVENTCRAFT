@@ -74,7 +74,7 @@ export default function Evento({navigation, route})  {
       },[]);
       useEffect(()=>{
           // axios.get(`http://10.0.2.2:8085/api/readEventAdress/${id}`)
-          axios.get(`http://192.168.15.10:8085/api/readEventAdress/${id}`)
+          api.get(`/api/readEventAdress/${id}`)
          
           .then(response =>{  
             
