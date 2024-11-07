@@ -13,6 +13,7 @@ import { FadeIn, FadeOut } from 'react-native-reanimated';
 import { SharedTransition, withSpring } from 'react-native-reanimated';
 import moment from "moment";
 import { Building2, Calendar, Clock, LockKeyhole } from "lucide-react-native";
+import api from "../../props/api";
 
 
 export default function Evento({navigation, route})  {
@@ -54,7 +55,7 @@ export default function Evento({navigation, route})  {
   const AnimatedText = Animated.createAnimatedComponent(Text);
   const id = route.params.id
       useEffect(()=>{
-          axios.get(`http://10.0.2.2:8085/api/readEvent/${id}`)
+          api.get(`/api/readEvent/${id}`)
           // axios.get(`http://192.168.15.10:8085/api/readEvent/${id}`)
           .then(response =>{  
             setNConvidados(response.data.nConvidados)

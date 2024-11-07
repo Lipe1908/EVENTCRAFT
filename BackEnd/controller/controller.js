@@ -104,6 +104,22 @@ const userController = {
             return error
         }   
     },
+    listUserByID: async(req,res)=>{
+        try{
+            const sql = await clientController.getUserById(req.params.id);
+
+            if(sql.length> 0)
+            {
+                res.status(200).json(sql)
+            }
+            else{
+                res.status(401).json({msg:"Não existe registro no banco com este ID"})
+            }
+        }
+        catch(error){
+            return error
+        }   
+    },
     listEventByID: async(req,res)=>{
         try{
             const sql = await clientController.getByIdEvento(req.params.id);

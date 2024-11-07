@@ -15,6 +15,7 @@ import bottomImage from '../../../src/img/image-removebg-preview2.png';
 import logo from '../../../src/img/logo.png';
 import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, Keyframe, LightSpeedInLeft, ReduceMotion, SlideInLeft, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from "../../props/api";
 export default function LoginScreen({navigation})  {
   
   const AnimatedCenter = Animated.createAnimatedComponent(Center);
@@ -100,7 +101,7 @@ export default function LoginScreen({navigation})  {
             senha: senha
         }
         console.log(data)
-        const response = await axios.post('http://10.0.2.2:8085/api/validation', data);
+        const response = await api.post('/api/validation', data);
         if (response.status === 200) {
             setEmail('');
             setSenha('');

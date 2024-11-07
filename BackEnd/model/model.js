@@ -64,6 +64,11 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
+    getUserById: async (id) =>{
+        const [result] = await connection.query("SELECT * FROM usuarios WHERE id =?", [id])
+        .catch(erro => console.log(erro));
+        return result
+    },
     getByIdEvento: async (id) =>{
         const [result] = await connection.query("SELECT * FROM eventos WHERE id =?", [id])
         .catch(erro => console.log(erro));

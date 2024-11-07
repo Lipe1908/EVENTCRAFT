@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "@gluestack-ui/config/build/theme";
 import { AlertDialog } from "@gluestack-ui/themed";
 import axios from "axios";
+import api from "../../props/api";
 
     export default function LoadingScreen({navigation}) {
         
@@ -25,7 +26,7 @@ import axios from "axios";
                 if (id) { 
                     try{
                         // const response = await axios.post(`http://192.168.15.10:8085/api/validationID/${id}`,
-                        const response = await axios.post(`http://10.0.2.2:8085/api/validationID/${id}`,
+                        const response = await api.post(`/api/validationID/${id}`,
                         {Headers: {
                             Authorization: `Bearer ${id}`
                         }

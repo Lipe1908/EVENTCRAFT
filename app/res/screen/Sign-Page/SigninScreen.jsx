@@ -15,6 +15,7 @@ import logo from '../../../src/img/logo.png';
 import axios from 'axios'
 import { BounceIn, Easing, FadeIn, FadeInRight, FadeOut, FadeOutLeft, Keyframe, ReduceMotion, SlideInLeft, SlideInRight, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
+import api from "../../props/api";
 export default function SigninScreen({navigation}) {
   const AnimatedCenter = Animated.createAnimatedComponent(Center);
   const scale = useSharedValue(1);
@@ -69,7 +70,7 @@ export default function SigninScreen({navigation}) {
       }
       //envio de informações para a API cadastrar no banco de dados
       try {
-          await axios.post('http://10.0.2.2:8085/api/cadastro', formData);
+          await api.post('/api/cadastro', formData);
           // await axios.post('http://192.168.15.10:8085/api/cadastro', formData);
           setShowAlertDialog2(true)
           setFormData('');

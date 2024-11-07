@@ -19,7 +19,7 @@ import { AvatarFallbackText } from "@gluestack-ui/themed";
 import teste from '../../../src/img/evento1.png'
 import { useIsFocused } from '@react-navigation/native';
 import MaskInput, { Masks } from 'react-native-mask-input';
-import {  AlignJustify,  Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon,  PartyPopper, GlobeIcon, CircleAlert, SearchIcon,} from "lucide-react-native";
+import {  AlignJustify,  Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon,  PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut,} from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -38,6 +38,7 @@ import { Spinner } from "@gluestack-ui/themed";
 import logo from '../../../src/img/logo.png'
 import { InputSlot } from "@gluestack-ui/themed";
 import { InputIcon } from "@gluestack-ui/themed";
+import api from "../../props/api";
 
 function HomeScreen({navigation, route}) {
 
@@ -275,7 +276,7 @@ useEffect(()=>{
   if(value === 'Público') {
     setIsLoading(true)
     //  axios.get(`http://192.168.15.10:8085/api/readEvents`)
-     axios.get(`http://10.0.2.2:8085/api/readEvents`)
+     api.get(`/api/readEvents`)
      .then(response =>{
          //Ordenar os dados pelo id em ordem crescente
          const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -299,7 +300,7 @@ useEffect(()=>{
   else if(value === 'Privado') {
     setIsLoading(true)
     setIsPriv(true)
-    axios.get(`http://10.0.2.2:8085/api/readEventsPriv`)
+    api.get(`/api/readEventsPriv`)
     // axios.get(`http://192.168.15.10:8085/api/readEventsPriv`)
     .then(response =>{
 
@@ -329,7 +330,7 @@ useEffect(()=>{
   else if(value === 'Meus') {
     setIsLoading(true)
     //  axios.get(`http://192.168.15.10:8085/api/readEventsUser/${id}`)
-     axios.get(`http://10.0.2.2:8085/api/readEventsUser/${id}`)
+     api.get(`/api/readEventsUser/${id}`)
      .then(response =>{
          //Ordenar os dados pelo id em ordem crescente
          const sortData= response.data.sort((a,b) => a.id - b.id);
@@ -529,7 +530,7 @@ const [isLoading, setIsLoading] = useState(true);
   const fetchAllEvents = async () => {
     try {
       // const response = await axios.get('http://192.168.15.10:8085/api/readEvents');
-      const response = await axios.get('http://10.0.2.2:8085/api/readEvents');
+      const response = await api.get('/api/readEvents');
       setAllEvents(response.data);
       setResults(response.data[0]); 
     } catch (error) {
@@ -757,7 +758,7 @@ function EventsScreen({navigation, route}) {
   // const [dayy, setDayy] = useState('')
       useEffect(()=>{
           // axios.get(`http://192.168.15.10:8085/api/readEvents/dates/${id_usuario}`)
-           axios.get(`http://10.0.2.2:8085/api/readEvents/dates/${id_usuario}`)
+           api.get(`/api/readEvents/dates/${id_usuario}`)
           .then(response =>{
               //Ordenar os dados pelo id em ordem crescent
             
@@ -776,7 +777,7 @@ function EventsScreen({navigation, route}) {
         try {
           setIsLoadingDelete(true)
           // const response = await axios.delete(`http://192.168.15.10:8085/api/deleteEvent/${id}`);
-          const response = await axios.delete(`http://10.0.2.2:8085/api/deleteEvent/${id}`);
+          const response = await api.delete(`/api/deleteEvent/${id}`);
           if(response.status) {
             console.log("Evento deletado")
           }
@@ -808,7 +809,7 @@ function EventsScreen({navigation, route}) {
 
       try {
         
-        const response = await axios.get(`http://10.0.2.2:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
+        const response = await api.get(`/api/readEventsByDate/${dayy}/${id_usuario}`);
         // const response = await axios.get(`http://192.168.15.10:8085/api/readEventsByDate/${dayy}/${id_usuario}`);
     
         //Ordenar os dados pelo id em ordem crescente
@@ -927,8 +928,8 @@ const enviarEventoParaApi = async () => {
               'Content-Type': 'application/json',
           },
       };
-      const apiUrl = 'http://10.0.2.2:8085/api/edit/evento';
-      const response = await axios.put(apiUrl, dataaa, config);
+      const apiUrl = '/api/edit/evento';
+      const response = await api.put(apiUrl, dataaa, config);
       console.log('Resposta da API:', response.data);
       setShowActionsheet(false) 
       navigation.push('Home',  { userData });
@@ -1301,9 +1302,9 @@ const [isLoading, setIsLoading] = useState(true);
 let [img, setImg] = useState('');
 const [dataUser, setDataUser] = useState({})
 useEffect(()=>{
-  setIsLoading(true)
+  
     //  axios.get(`http://192.168.15.10:8085/api/readEvents`)
-     axios.get(`http://10.0.2.2:8085/api/read/${id}`)
+     api.get(`/api/readUser/${id}`)
      .then(responseUser =>{
 
          setDataUser(responseUser.data[0]);
@@ -1317,14 +1318,14 @@ useEffect(()=>{
 
 },[img]);
 
-
+console.log(dataUser)
 const handleCameraLaunch = async () => {
   const options = {
       mediaType: 'photo',
   };
 
   try {
-      const response = await launchCamera(options);
+      const response = await launchImageLibrary(options);
       console.log('pickedFile', response);
 
       // Verifica se a imagem foi capturada com sucesso
@@ -1341,8 +1342,8 @@ const handleCameraLaunch = async () => {
                             'Content-Type': 'application/json',
                         },
                     };
-                    const apiUrl = 'http://10.0.2.2:8085/api/edit/Perfil-pic';
-                    const Send = await axios.put(apiUrl, dataa, config);
+                    const apiUrl = '/api/edit/Perfil-pic';
+                    const Send = await api.put(apiUrl, dataa, config);
             
                     console.log('Resposta da API:', Send.data);
       } else {
@@ -1354,9 +1355,9 @@ const handleCameraLaunch = async () => {
 };
 
   return (
-    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg="#EDE9E4" >
-    <Box w={'100%'} h={'100%'}>
-<ScrollView>
+    <SafeAreaView bg="#EDE9E4" >
+    
+<ScrollView height={'100%'} >
 
   <Text alignSelf="center" fontWeight="bold" color="#A87B34" marginVertical={10} fontSize={35}>MEU PERFIL</Text>
 <Box>
@@ -1391,7 +1392,7 @@ const handleCameraLaunch = async () => {
 </>
 }
 
-<Box borderRadius={20} alignItens="center" bg={'white'}>
+<Box borderTopRightRadius={20} borderTopLeftRadius={20} borderBottomRightRadius={0} borderBottomLeftRadius={0}  alignItens="center" paddingBottom={15} bg={'white'}>
  <Text mt={10} alignSelf="center" color='#A87B34' fontWeight={'bold'}>Informações do usuário:</Text> 
 <Input
 alignSelf="center"
@@ -1453,10 +1454,17 @@ marginTop={10}
 </InputSlot>  
 <InputField $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
 </Input>
+<Button borderRadius={10} bg='#A87B34' m={15}>
+  <ButtonText>Editar Perfil</ButtonText>
+</Button>
+<Button variant="link" borderRadius={10} m={5}>
+  <ButtonText m={"$2"} color="red">Sair</ButtonText>
+  <ButtonIcon color="red" as={LogOut}/>
+</Button>
 </Box>
 </Box>
       </ScrollView>
-</Box>  
+ 
     </SafeAreaView>
   );
 }
@@ -1584,10 +1592,10 @@ const enviarEventoParaApi = async () => {
       // URL da sua API para enviar os dados e a imagem
       
       // const apiUrl = 'http://192.168.15.10:8085/api/register/evento';
-      const apiUrl = 'http://10.0.2.2:8085/api/register/evento';
+      const apiUrl = '/api/register/evento';
 
   
-      const response = await axios.post(apiUrl, data, config);
+      const response = await api.post(apiUrl, data, config);
       console.log('Resposta da API:', response.data);
 
 
