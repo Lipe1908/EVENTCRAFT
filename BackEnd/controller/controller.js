@@ -150,7 +150,7 @@ const userController = {
 
     //Criar um novo usuário
     createNewUser: async(req,res)=>{
-        const {id,nome,sobrenome,email,senha} = req.body;
+        const {id,nome,sobrenome,email,senha,imagemBase64} = req.body;
 
         console.log(req.body);
 
@@ -163,7 +163,7 @@ const userController = {
                 res.status(401).json({msg: "O email já esta cadastrado no Banco de Dados"})
             }
             else{
-                await clientController.registerUser(id,nome,sobrenome,email,senha);
+                await clientController.registerUser(id,nome,sobrenome,email,senha,imagemBase64);
                 res.status(201).json({msg:"Usuário cadastrado com sucesso"});
             }
         }
@@ -235,6 +235,23 @@ const userController = {
 
 
                 res.status(201).json({msg:"evento cadastrado com sucesso"});
+                return response;
+            }
+        
+        catch(error){
+            console.log(error)
+            return error
+        }
+    },
+    EditProfilePic: async(req,res)=>{
+        const {imagemBase64,id} = req.body;
+  
+        try{
+
+                const response = await clientController.EditProfilePic(imagemBase64,id);
+
+
+                res.status(201).json({msg:"foto cadastrada com sucesso"});
                 return response;
             }
         

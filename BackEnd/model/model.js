@@ -75,11 +75,11 @@ const userModel = {
         return result
     },
     
-    registerUser: async (id,nome,sobrenome,email,senha) =>{
+    registerUser: async (id,nome,sobrenome,email,senha,imagemBase64) =>{
 
         const hashPassword = await bcrypt.hash(senha,salt);
 
-        const [result] = await connection.query("INSERT INTO usuarios values(?,?,?,?,?)",[id,nome,sobrenome,email,hashPassword])
+        const [result] = await connection.query("INSERT INTO usuarios values(?,?,?,?,?,?)",[id,nome,sobrenome,email,hashPassword,imagemBase64])
         .catch(erro => console.log(erro));
         return result;
     },
@@ -92,6 +92,12 @@ const userModel = {
     EditEvent: async (nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id) =>{
 
         const [result] = await connection.query("UPDATE `eventos` SET `nomeEvento`= ?,`dataEvento`= ?,`descricao`= ?,`nConvidados`= ?,`id_usuario`= ?,`privacidade`= ?,`imagemBase64`= ?,`horaEvento`= ? WHERE id = ?" ,[nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id])
+        .catch(erro => console.log(erro));
+        return result;
+    },
+    EditProfilePic: async (imagemBase64,id) =>{
+
+        const [result] = await connection.query("UPDATE `usuarios` SET `imagemBase64`= ? WHERE id = ?" ,[imagemBase64,id])
         .catch(erro => console.log(erro));
         return result;
     },

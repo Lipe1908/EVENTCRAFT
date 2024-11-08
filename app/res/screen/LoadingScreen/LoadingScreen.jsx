@@ -39,6 +39,7 @@ import api from "../../props/api";
                                 sobrenome: response.data.sobrenome,
                                 email: response.data.email,
                                 senha: response.data.senha,
+                                imagemBase64: response.data.imagemBase64
                             }
                             navigation.navigate('Home', {userData});
                     }

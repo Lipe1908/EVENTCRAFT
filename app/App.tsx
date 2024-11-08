@@ -1,8 +1,8 @@
 
+import "../app/res/props/ignoreWarnings";
 import React, { useEffect } from 'react';
 import {GluestackUIProvider} from '@gluestack-ui/themed';
 import {config} from '@gluestack-ui/config';
-
 import StartNavigator from './res/screen/navigator';
 import LoginScreen from './res/screen/Log-page/LoginScreen';
 import { Platform } from 'react-native';

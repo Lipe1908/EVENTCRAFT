@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState} from "react";
-import {View, Alert, TouchableOpacity} from 'react-native';
+import {View, Alert, TouchableOpacity, Dimensions} from 'react-native';
 import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, HStack,  ScrollView, StatusBar, VStack,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
@@ -27,7 +27,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { ActivityIndicator, SegmentedButtons } from 'react-native-paper';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RNFS from 'react-native-fs';
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import moment from "moment";
 import CustomBottomTabBar from "../../props/customTabBar";
 import { Actionsheet } from "@gluestack-ui/themed";
@@ -39,26 +39,27 @@ import logo from '../../../src/img/logo.png'
 import { InputSlot } from "@gluestack-ui/themed";
 import { InputIcon } from "@gluestack-ui/themed";
 import api from "../../props/api";
-
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import Carousel from 'react-native-snap-carousel';
 function HomeScreen({navigation, route}) {
 
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  const { id, nome, sobrenome, email, senha } = route.params.obj;
+  
+
+  const { id, nome, sobrenome, email, senha, imagemBase64 } = route.params.obj;
+
+  const [dataUser, setDataUser] = useState({})
 
 
-  function getRandomElement(array) {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    const randomElement = array[randomIndex];
-    return randomElement;
-}
+//   function getRandomElement(array) {
+//     const randomIndex = Math.floor(Math.random() * array.length);
+//     const randomElement = array[randomIndex];
+//     return randomElement;
+// }
 
-const array = [
-'https://isep.org.br/wp-content/uploads/2021/02/sp_criancas_festa_aniversario_bacana-1.jpeg',
-'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeDfl-_svu8jLAcWyhD3DcjAbFmvIbBpQwwA&s',
-'https://i.em.com.br/IQ1l_dkc9VYK5P8PW-EaTphOuF4=/790x/smart/imgsapp.em.com.br/app/noticia_127983242361/2023/05/21/1496049/uma-cor-que-esta-totalmente-proibida-para-as-convidadas-de-acordo-com-a-etiqueta-de-casamento-e-o-branco-que-esta-reservado-para-as-noivas-a-nao-ser-que-o-casamento-seja-na-praia_1_55583.jpg',
-'https://cdn.prod.website-files.com/636d4036709c50b9ac704e98/65b157c74e6fb6c92b778c37_eventos-inovacao-tecnologia_2024_numerik.jpg',
-];
-const randomElement = getRandomElement(array);
+
+// const randomElement = getRandomElement(array);
 
  
 
@@ -117,7 +118,7 @@ const randomElement = getRandomElement(array);
       (
   
     
-        <Card w={350} p="$5" borderRadius="$lg" m="$3">
+        <Card w={350} p="$5" borderRadius="$lg" marginTop={-20} m="$3">
 
         
 <>
@@ -144,9 +145,7 @@ setIsLoading(false);
 </AlertDialogBody>
 <AlertDialogFooter>
   <Center space="lg">
-   
     <Button
-      
       variant="outline"
       borderColor={'#A87B34'}
       onPress={() => {
@@ -160,9 +159,7 @@ setIsLoading(false);
 </AlertDialogFooter>
 </AlertDialogContent>
 </AlertDialog>
-
 </>
-
       <Animated.Image
       style={{marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center'}}
         alt="imagemEvento"
@@ -175,8 +172,6 @@ setIsLoading(false);
       {item.nomeEvento}
       </Heading>
       </HStack> 
-     
-
     <Center>
     {item.id_usuario == id ? 
       <>
@@ -186,18 +181,13 @@ setIsLoading(false);
   
 </Badge>
 </> 
-
 : 
 <>
-
 </> 
 }
     </Center>
-     
-
      <HStack alignItems="center" justifyContent="center">
      <Text
-     
      fontSize="$sm"
      fontStyle="normal"
      fontFamily="$heading"
@@ -214,7 +204,6 @@ setIsLoading(false);
      Data Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
    </Text>
      </HStack>
-      
       <Text mb={10} color={'$black'} fontSize={13} >
        {item.descricao}
       </Text>
@@ -223,11 +212,9 @@ setIsLoading(false);
         <>
         {item.id_usuario == id ? 
       <>
-    
         <Button onPress={() => handleVizualizar(item.id)} bg='#AA7E39'>
         <ButtonText>Ver informações do evento</ButtonText>
        </Button>
-      
       </>
        :
       <>
@@ -235,13 +222,10 @@ setIsLoading(false);
         <HStack>
         <ButtonText color="gray">Evento Privado</ButtonText>
         <Icon marginHorizontal={5} as={LockKeyhole} color="gray" w={13} h={15} />
-        </HStack>
-        
+        </HStack>   
        </Button>
       </>
      }
-        
-        
         </>
          : 
          <>
@@ -250,8 +234,6 @@ setIsLoading(false);
        </Button>
          </>
        }
-      
-    
     </Card>
 
     
@@ -264,6 +246,7 @@ setIsLoading(false);
 
       const [isLogged, setIsLogged] = useState(false)
      const [isLoading, setIsLoading] = useState(true)
+     const [isLoadingPPic, setIsLoadingPPic] = useState(true)
      const [isPriv, setIsPriv] = useState(false)
      const [t, setT] = useState([]);
 
@@ -352,14 +335,116 @@ useEffect(()=>{
   }
 
 
-},[value]);
+},[value, refreshing]);
 
 
+useEffect(()=>{
+  setIsLoadingPPic(true)
+   api.get(`/api/readUser/${id}`)
+   .then(responseUser =>{
+
+       setDataUser(responseUser.data[0]);
+       setIsLoadingPPic(false)
+       
+   })
+   .catch(error => {
+    
+   });
+
+
+},[refreshing]);
+
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+  const { width: screenWidth } = Dimensions.get('window');
+
+  const cards = [
+        {
+            id: 1,
+            image: 'https://isep.org.br/wp-content/uploads/2021/02/sp_criancas_festa_aniversario_bacana-1.jpeg',
+            
+            
+        },
+        {
+            id: 2,
+            image: require('../../../src/img/101-Of-Planning-An-Unforgettable-Kids-Birthday-Party.jpg')
+            
+            
+        },
+        {
+            id: 3,
+            image: 'https://i.em.com.br/IQ1l_dkc9VYK5P8PW-EaTphOuF4=/790x/smart/imgsapp.em.com.br/app/noticia_127983242361/2023/05/21/1496049/uma-cor-que-esta-totalmente-proibida-para-as-convidadas-de-acordo-com-a-etiqueta-de-casamento-e-o-branco-que-esta-reservado-para-as-noivas-a-nao-ser-que-o-casamento-seja-na-praia_1_55583.jpg',
+            
+            
+        },
+        {
+            id: 4,
+            image: 'https://cdn.prod.website-files.com/636d4036709c50b9ac704e98/65b157c74e6fb6c92b778c37_eventos-inovacao-tecnologia_2024_numerik.jpg',
+            
+            
+        },
+        
+        
+    ]
+    
+    const MyCarousel = ({ data }) => {
+      const renderItem = ({ item, color }) => (
+        <AnimatedBox style={[scaleBoxStyles]} alignSelf="center" alignItems="center" marginTop={10}>
+
+
+        <Image 
+        opacity={1}
+        position="absolute"
+         h={160}
+         borderRadius={20}
+         w={'90%'}
+         source={item.image}
+         alt="logo"
+         />
+
+        <Image 
+        tintColor={'black'}
+        position="absolute"
+        opacity={0.5}
+         h={160}
+         borderRadius={20}
+         w={'90%'}
+         source={item.image}
+         alt="logo"
+         />
+        
+        
+         <Text bg={'red'} position="absolute" fontWeight={"$extrabold"} fontSize={15} color={'white'} marginTop={105}> Comece Já! </Text>
+         <Text marginTop={40} fontWeight={"$extrabold"} fontSize={25} color={'white'} position="absolute">Planeje seus eventos</Text>
+         <Text marginTop={70} fontWeight={"$extrabold"} fontSize={20} color={'white'} position="absolute">Da melhor maneira!</Text>
+        </AnimatedBox>
+      );
+  
+      return (
+          <Carousel
+              data={data}
+              renderItem={renderItem}
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth}
+              layout={'default'}
+              layoutCardOffset={300}
+              autoplay={true}
+              autoplayDelay={1000}
+              autoplayInterval={3000}
+              loop={true}
+          />
+      );
+  };
 
   return (
 
-    
-    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
+    <SafeAreaProvider>
+       <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='white'>
     
     <StatusBar hidden/>
 
@@ -367,7 +452,8 @@ useEffect(()=>{
     <AnimatedBox   w={'100%'} h={'100%'}>
 
 
-<ScrollView>
+<ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          } showsVerticalScrollIndicator={false}>
 <AnimatedBox  alignItems="center" justifyContent="center">
 
 
@@ -382,9 +468,13 @@ useEffect(()=>{
 <Text color={'#AA7E39'} marginTop={8} marginHorizontal={30} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
 
 <VStack marginHorizontal={5} alignSelf="flex-end">
-  <Avatar marginTop={-50} bgColor="$coolGray500" size="md" borderRadius="$full">
-    <AvatarFallbackText>{nome}</AvatarFallbackText>
-  </Avatar>
+  <TouchableOpacity onPress={()=> navigation.navigate("Perfil")}>
+  {isLoadingPPic ? <><Spinner color={'#AA7E39'} marginRight={10} marginTop={-40} alignSelf="center"/></> : <><Avatar marginTop={-50} bgColor="$coolGray500" size="md" borderRadius="$full">
+    {imagemBase64 != '' ? <><AvatarImage alt="profile-pic" source={{uri: `data:image/jpeg;base64,${dataUser.imagemBase64}`}}/></> : <><AvatarFallbackText>{nome}</AvatarFallbackText></>}
+  </Avatar></>}
+  
+  </TouchableOpacity>
+  
   
 </VStack>
 
@@ -393,41 +483,14 @@ useEffect(()=>{
 
 </Box>
 
-
+<Box marginTop={5}  w={'auto'} h={400}>     
+<MyCarousel data={cards}/>
+  </Box>
 </Box>
 
-<Center h={'auto'} marginVertical={-3}>
 
 
-
-<AnimatedBox style={[scaleBoxStyles]}  alignSelf="center" alignItems="center" w={400} h={190} marginTop={-40}>
-
-<Image 
-tintColor={'black'}
-position="absolute"
-opacity={0.95}
- h={160}
- borderRadius={20}
-
- w={'90%'}
- source={{ uri: randomElement }}
- alt="logo"
- />
-<Image 
-opacity={0.5}
- h={160}
- borderRadius={20}
- w={'90%'}
- source={{ uri: randomElement }}
- alt="logo"
- />
- <Text bg={'red'} position="absolute" fontWeight={"$extrabold"} fontSize={15} color={'white'} marginTop={105}> Comece Já! </Text>
- <Text marginTop={40} fontWeight={"$extrabold"} fontSize={25} color={'white'} position="absolute">Planeje seus eventos</Text>
- <Text marginTop={70} fontWeight={"$extrabold"} fontSize={20} color={'white'} position="absolute">Da melhor maneira!</Text>
-</AnimatedBox>
-
-
-
+<Center h={'auto'} marginVertical={75}>
 <Text marginBottom={5} color={'#AA7E39'} fontWeight={'$bold'}>Explorar eventos:</Text>
 
 
@@ -509,6 +572,9 @@ opacity={0.5}
 </AnimatedBox>
   
     </SafeAreaView>
+  
+    </SafeAreaProvider>
+  
   );
 }
 function SearchScreen({navigation, route}) {
@@ -1310,8 +1376,6 @@ useEffect(()=>{
 
 
 },[img]);
-
-console.log(dataUser)
 const handleCameraLaunch = async () => {
   const options = {
       mediaType: 'photo',
@@ -1328,14 +1392,14 @@ const handleCameraLaunch = async () => {
           const imageData = await RNFS.readFile(image.uri, 'base64');
           const dataa = {
             imagemBase64: imageData, 
-            id: id
+            id: id 
           }
           const config = {
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     };
-                    const apiUrl = '/api/edit/Perfil-pic';
+                    const apiUrl = '/api/edit/profile-pic';
                     const Send = await api.put(apiUrl, dataa, config);
             
                     console.log('Resposta da API:', Send.data);

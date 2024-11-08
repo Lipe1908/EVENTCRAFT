@@ -20,5 +20,6 @@ router.post('/api/validation', clientController.login); //login usuário
 router.post('/api/validationID/:id', clientController.loginId); //login usuário
 router.post('/api/register/evento', clientController.createEvent); //login usuário
 router.put('/api/edit/evento', clientController.EditEvent); //Editar evento
+router.put('/api/edit/profile-pic', clientController.EditProfilePic); //Editar evento
 router.delete('/api/deleteEvent/:id', clientController.DeleteEvent); //Editar evento
 module.exports = router;
