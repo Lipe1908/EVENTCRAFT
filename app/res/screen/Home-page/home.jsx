@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from "react";
 import {View, Alert, TouchableOpacity, Dimensions} from 'react-native';
-import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, HStack,  ScrollView, StatusBar, VStack,} from '@gluestack-ui/themed';
+import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, AddIcon, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, CloseIcon, HStack,  MenuItemLabel,  ScrollView, StatusBar, VStack,} from '@gluestack-ui/themed';
 import {Button,ButtonText,ButtonIcon,ButtonSpinner,} from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, } from "@gluestack-ui/themed";
@@ -19,7 +19,7 @@ import { AvatarFallbackText } from "@gluestack-ui/themed";
 import teste from '../../../src/img/evento1.png'
 import { useIsFocused } from '@react-navigation/native';
 import MaskInput, { Masks } from 'react-native-mask-input';
-import {  AlignJustify,  Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon,  PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut, IdCard,} from "lucide-react-native";
+import {  AlignJustify,  Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon,  PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut, IdCard, PuzzleIcon, PaintBucket, SettingsIcon, PersonStandingIcon,} from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -39,9 +39,14 @@ import logo from '../../../src/img/logo.png'
 import { InputSlot } from "@gluestack-ui/themed";
 import { InputIcon } from "@gluestack-ui/themed";
 import api from "../../props/api";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import Carousel from 'react-native-snap-carousel';
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Menu } from "@gluestack-ui/themed";
+import { MenuItem } from "@gluestack-ui/themed";
+import { ButtonGroup } from "@gluestack-ui/themed";
 function HomeScreen({navigation, route}) {
+
+
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -49,20 +54,95 @@ function HomeScreen({navigation, route}) {
 
   const { id, nome, sobrenome, email, senha, imagemBase64 } = route.params.obj;
 
+
+
+  const { width: screenWidth } = Dimensions.get('window');
+
+  const cards = [
+        {
+            id: 1,
+            image: 'https://isep.org.br/wp-content/uploads/2021/02/sp_criancas_festa_aniversario_bacana-1.jpeg',
+            text1: 'Planeje seus eventos',
+            text2: 'Da melhor maneira!'
+            
+            
+        },
+        {
+            id: 2,
+            image: require('../../../src/img/101-Of-Planning-An-Unforgettable-Kids-Birthday-Party.jpg'),
+            text1: 'Seus aniversários',
+            text2: 'Mais organizados e divertidos!'
+            
+        },
+        {
+            id: 3,
+            image: 'https://i.em.com.br/IQ1l_dkc9VYK5P8PW-EaTphOuF4=/790x/smart/imgsapp.em.com.br/app/noticia_127983242361/2023/05/21/1496049/uma-cor-que-esta-totalmente-proibida-para-as-convidadas-de-acordo-com-a-etiqueta-de-casamento-e-o-branco-que-esta-reservado-para-as-noivas-a-nao-ser-que-o-casamento-seja-na-praia_1_55583.jpg',
+            text1: 'Seu casamento',
+            text2: 'Mais romântico e perfeito!'
+            
+        },
+        {
+            id: 4,
+            image: 'https://cdn.prod.website-files.com/636d4036709c50b9ac704e98/65b157c74e6fb6c92b778c37_eventos-inovacao-tecnologia_2024_numerik.jpg',
+            text1: 'Seus shows e festas',
+            text2: 'Alucinantes e inesquecíveis!'
+            
+        },
+        
+        
+    ]
+    
+    const MyCarousel = ({ data }) => {
+      const renderItem = ({ item, color }) => ( 
+        <AnimatedBox style={[scaleBoxStyles]} alignSelf="center" alignItems="center" marginTop={50}>
+
+  <Image 
+        opacity={1}
+        position="absolute"
+         h={160}
+         borderRadius={20}
+         w={'90%'}
+         source={item.image}
+         alt="logo"
+         />
+
+        <Image 
+        tintColor={'black'}
+        position="absolute"
+        opacity={0.5}
+         h={160}
+         borderRadius={20}
+         w={'90%'}
+         source={item.image}
+         alt="logo"
+         />
+        
+        
+         <Text bg={'red'} position="absolute" fontWeight={"$extrabold"} fontSize={15} color={'white'} marginTop={105}> Comece Já! </Text>
+         <Text marginTop={40} fontWeight={"$extrabold"} fontSize={25} color={'white'} position="absolute">{item.text1}</Text>
+         <Text marginTop={70} fontWeight={"$extrabold"} fontSize={20} color={'white'} position="absolute">{item.text2}</Text>
+
+
+    
+        </AnimatedBox>
+      );
+  
+      return (
+          <Carousel
+              data={data}
+              renderItem={renderItem}
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth}
+              layout={'stack'}
+              layoutCardOffset={5}
+              autoplay={true}
+              autoplayDelay={0}
+              autoplayInterval={4000}
+              loop={true}
+          />
+      );
+  };
   const [dataUser, setDataUser] = useState({})
-
-
-//   function getRandomElement(array) {
-//     const randomIndex = Math.floor(Math.random() * array.length);
-//     const randomElement = array[randomIndex];
-//     return randomElement;
-// }
-
-
-// const randomElement = getRandomElement(array);
-
- 
-
 
   const AnimatedImage = Animated.createAnimatedComponent(Image);
   const AnimatedBox = Animated.createAnimatedComponent(Box);
@@ -112,6 +192,7 @@ function HomeScreen({navigation, route}) {
       const [showActionsheet, setShowActionsheet] = React.useState(false)
       const handleClose = () => setShowActionsheet(!showActionsheet)
       const [showAlertDialog, setShowAlertDialog] = React.useState(false)
+      
 
       const renderItem = ({item})=>
       
@@ -248,13 +329,12 @@ setIsLoading(false);
      const [isLoading, setIsLoading] = useState(true)
      const [isLoadingPPic, setIsLoadingPPic] = useState(true)
      const [isPriv, setIsPriv] = useState(false)
-     const [t, setT] = useState([]);
 
 
 
 const [value, setValue] = useState('Público');
 
-useEffect(()=>{
+React.useEffect(()=>{
   
   if(value === 'Público') {
     setIsLoading(true)
@@ -287,8 +367,6 @@ useEffect(()=>{
     // axios.get(`http://192.168.15.10:8085/api/readEventsPriv`)
     .then(response =>{
 
-      setT(response.data)
-
         const sortData= response.data.sort((a,b) => a.id - b.id);
       if(response.data == '') {
         setIsLoading(true)
@@ -296,7 +374,6 @@ useEffect(()=>{
       
       else{
       
-
        
           setData(sortData);
           setIsLoading(false)    
@@ -338,7 +415,7 @@ useEffect(()=>{
 },[value, refreshing]);
 
 
-useEffect(()=>{
+React.useEffect(()=>{
   setIsLoadingPPic(true)
    api.get(`/api/readUser/${id}`)
    .then(responseUser =>{
@@ -358,88 +435,12 @@ useEffect(()=>{
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
+      
       setRefreshing(false);
-    }, 2000);
+      
+    }, 500);
   }, []);
-  const { width: screenWidth } = Dimensions.get('window');
 
-  const cards = [
-        {
-            id: 1,
-            image: 'https://isep.org.br/wp-content/uploads/2021/02/sp_criancas_festa_aniversario_bacana-1.jpeg',
-            
-            
-        },
-        {
-            id: 2,
-            image: require('../../../src/img/101-Of-Planning-An-Unforgettable-Kids-Birthday-Party.jpg')
-            
-            
-        },
-        {
-            id: 3,
-            image: 'https://i.em.com.br/IQ1l_dkc9VYK5P8PW-EaTphOuF4=/790x/smart/imgsapp.em.com.br/app/noticia_127983242361/2023/05/21/1496049/uma-cor-que-esta-totalmente-proibida-para-as-convidadas-de-acordo-com-a-etiqueta-de-casamento-e-o-branco-que-esta-reservado-para-as-noivas-a-nao-ser-que-o-casamento-seja-na-praia_1_55583.jpg',
-            
-            
-        },
-        {
-            id: 4,
-            image: 'https://cdn.prod.website-files.com/636d4036709c50b9ac704e98/65b157c74e6fb6c92b778c37_eventos-inovacao-tecnologia_2024_numerik.jpg',
-            
-            
-        },
-        
-        
-    ]
-    
-    const MyCarousel = ({ data }) => {
-      const renderItem = ({ item, color }) => (
-        <AnimatedBox style={[scaleBoxStyles]} alignSelf="center" alignItems="center" marginTop={10}>
-
-
-        <Image 
-        opacity={1}
-        position="absolute"
-         h={160}
-         borderRadius={20}
-         w={'90%'}
-         source={item.image}
-         alt="logo"
-         />
-
-        <Image 
-        tintColor={'black'}
-        position="absolute"
-        opacity={0.5}
-         h={160}
-         borderRadius={20}
-         w={'90%'}
-         source={item.image}
-         alt="logo"
-         />
-        
-        
-         <Text bg={'red'} position="absolute" fontWeight={"$extrabold"} fontSize={15} color={'white'} marginTop={105}> Comece Já! </Text>
-         <Text marginTop={40} fontWeight={"$extrabold"} fontSize={25} color={'white'} position="absolute">Planeje seus eventos</Text>
-         <Text marginTop={70} fontWeight={"$extrabold"} fontSize={20} color={'white'} position="absolute">Da melhor maneira!</Text>
-        </AnimatedBox>
-      );
-  
-      return (
-          <Carousel
-              data={data}
-              renderItem={renderItem}
-              sliderWidth={screenWidth}
-              itemWidth={screenWidth}
-              layout={'default'}
-              layoutCardOffset={300}
-              autoplay={true}
-              autoplayDelay={1000}
-              autoplayInterval={3000}
-              loop={true}
-          />
-      );
-  };
 
   return (
 
@@ -448,7 +449,7 @@ useEffect(()=>{
     
     <StatusBar hidden/>
 
-   
+  
     <AnimatedBox   w={'100%'} h={'100%'}>
 
 
@@ -460,37 +461,54 @@ useEffect(()=>{
 
 <Box  w={'100%'} h={230} bg='#EDE9E4' marginHorizontal={30}>
 
-<Box h={'auto'}>
 
+<Box  alignSelf="center" w={'100%'}>
 
-<Text color={'#AA7E39'} marginTop={70} marginHorizontal={30} fontSize={15}>Olá</Text>
+  <Box marginHorizontal={25} marginTop={40} marginRight={'35%'} alignSelf="flex-start">
+  <VStack>
+  <Text color={'#AA7E39'}  fontSize={15}>Olá</Text>
 
-<Text color={'#AA7E39'} marginTop={8} marginHorizontal={30} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
+  <Text color={'#AA7E39'} fontWeight='bold' fontSize={15}>{nome} {sobrenome}</Text>
+  </VStack>
+  </Box>
+<Box position="absolute" marginVertical={40} alignSelf="flex-end">
 
-<VStack marginHorizontal={5} alignSelf="flex-end">
-  <TouchableOpacity onPress={()=> navigation.navigate("Perfil")}>
-  {isLoadingPPic ? <><Spinner color={'#AA7E39'} marginRight={10} marginTop={-40} alignSelf="center"/></> : <><Avatar marginTop={-50} bgColor="$coolGray500" size="md" borderRadius="$full">
-    {imagemBase64 != '' ? <><AvatarImage alt="profile-pic" source={{uri: `data:image/jpeg;base64,${dataUser.imagemBase64}`}}/></> : <><AvatarFallbackText>{nome}</AvatarFallbackText></>}
-  </Avatar></>}
+<Menu
+  placement="bottom"
+  trigger={({ ...triggerProps }) => {
+    return (
+      <Button w={30} marginHorizontal={15} variant="link" {...triggerProps} >
+      {isLoadingPPic ? <><Spinner color={'#AA7E39'}  alignSelf="center"/></> : <><Avatar bgColor="$coolGray500" size="md" borderRadius="$full">
+        {dataUser.imagemBase64 != '' ? <><AvatarImage alt="profile-pic" source={{uri: `data:image/jpeg;base64,${dataUser.imagemBase64}`}}/></> : <><AvatarFallbackText>{nome}</AvatarFallbackText></>}
+      </Avatar></>}
+      
+      </Button>
+    )
+  }}
+>
+  <MenuItem key="Settings" textValue="Settings" onPress={()=> navigation.navigate('Perfil')}>
+    <Icon as={IdCard} size="sm" mr="$2" />
+    <MenuItemLabel size="sm">Ver Perfil</MenuItemLabel>
+  </MenuItem>
+  <MenuItem key="Add account" textValue="Add account" onPress={()=> navigation.push('SignIn')}>
+    <Icon as={AddIcon} size="sm" mr="$2" />
+    <MenuItemLabel size="sm">Add account</MenuItemLabel>
+  </MenuItem>
+</Menu>
   
-  </TouchableOpacity>
-  
-  
-</VStack>
-
-
-
 
 </Box>
+</Box>
 
-<Box marginTop={5}  w={'auto'} h={400}>     
+
+<Box marginTop={0} h={400}>     
 <MyCarousel data={cards}/>
   </Box>
 </Box>
 
 
 
-<Center h={'auto'} marginVertical={75}>
+<Center position="relative" marginTop={90} h={'auto'}>
 <Text marginBottom={5} color={'#AA7E39'} fontWeight={'$bold'}>Explorar eventos:</Text>
 
 
@@ -536,6 +554,8 @@ useEffect(()=>{
       />
 
 
+
+
 </Center>
 
 {isLoading ? <>
@@ -544,6 +564,7 @@ useEffect(()=>{
 </> : 
 <>
 <FlatList
+                  style={{marginVertical: 25}}
                    data={data}
                    renderItem={renderItem}
                    keyExtractor={item => String(item.id)}
@@ -1411,9 +1432,53 @@ const handleCameraLaunch = async () => {
   }
 };
 
+const [showAlertDialogProfile, setShowAlertDialogProfile] = React.useState(false)
+
   return (
     <SafeAreaView bg="#EDE9E4" >
-    
+    <>
+    <AlertDialog
+        isOpen={showAlertDialogProfile}
+        onClose={() => {
+          setShowAlertDialogProfile(false)
+        }}
+      >
+        <AlertDialogBackdrop />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <Heading size="lg">Editar Perfil</Heading>
+            <AlertDialogCloseButton>
+              <Icon as={CloseIcon} />
+            </AlertDialogCloseButton>
+          </AlertDialogHeader>
+          <AlertDialogBody>
+            
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <ButtonGroup space="lg">
+              <Button
+                variant="outline"
+                action="secondary"
+                onPress={() => {
+                  setShowAlertDialog(false)
+                }}
+              >
+                <ButtonText>Cancel</ButtonText>
+              </Button>
+              <Button
+                bg="$error600"
+                action="negative"
+                onPress={() => {
+                  setShowAlertDialog(false)
+                }}
+              >
+                <ButtonText>Deactivate</ButtonText>
+              </Button>
+            </ButtonGroup>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
 <ScrollView height={'100%'} >
 
   <Text alignSelf="center" fontWeight="bold" color="#A87B34" marginVertical={10} fontSize={35}>MEU PERFIL</Text>
@@ -1511,7 +1576,7 @@ marginTop={10}
 </InputSlot>  
 <InputField $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'}  />
 </Input>
-<Button borderRadius={10} bg='#A87B34' m={15}>
+<Button onPress={()=> setShowAlertDialogProfile(true)} borderRadius={10} bg='#A87B34' m={15}>
   <ButtonText>Editar Perfil</ButtonText>
 </Button>
 <Button variant="link" borderRadius={10} >

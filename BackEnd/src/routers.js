@@ -8,7 +8,7 @@ router.get('/api/read', clientController.listAllUsers); //Listar todos os usuár
 router.get('/api/read/:id', clientController.listByID); //Listar todos os usuários
 router.get('/api/readUser/:id', clientController.listUserByID); //Listar todos os usuários
 router.get('/api/readEvents', clientController.listAllEvents); //Listar todos os usuários
-router.get('/api/readEventsUser/:id_usuario', clientController.listAllEventsUser); //Listar todos os usuários
+router.get('/api/readEventsUser/:id', clientController.listAllEventsUser); //Listar todos os usuários
 router.get('/api/readEventsPriv', clientController.listAllEventsPriv); //Listar todos os usuários
 router.get('/api/readEventsPrivUser/:id_usuario', clientController.listAllEventsUserPriv); //Listar todos os usuários
 router.get('/api/readEvents/dates/:id_usuario', clientController.listAllEventsDates); //Listar todos os usuários
