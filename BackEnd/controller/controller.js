@@ -243,6 +243,22 @@ const userController = {
             return error
         }
     },
+    EditProfile: async(req,res)=>{
+        const {nome, sobrenome, email, id,} = req.body;
+        try{
+
+                const response = await clientController.EditProfile(nome,sobrenome, email, id,);
+
+
+                res.status(201).json({msg:"evento cadastrado com sucesso"});
+                return response;
+            }
+        
+        catch(error){
+            console.log(error)
+            return error
+        }
+    },
     EditProfilePic: async(req,res)=>{
         const {imagemBase64,id} = req.body;
   

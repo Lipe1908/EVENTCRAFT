@@ -95,6 +95,12 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result;
     },
+    EditProfile: async (nome, sobrenome, email, id) =>{
+
+        const [result] = await connection.query("UPDATE `usuarios` SET `nome`= ?, `sobrenome`= ?, `email` = ? WHERE id = ?" ,[nome,sobrenome,email,id])
+        .catch(erro => console.log(erro));
+        return result;
+    },
     EditProfilePic: async (imagemBase64,id) =>{
 
         const [result] = await connection.query("UPDATE `usuarios` SET `imagemBase64`= ? WHERE id = ?" ,[imagemBase64,id])

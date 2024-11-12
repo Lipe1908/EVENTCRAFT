@@ -120,10 +120,11 @@ export default function LoginScreen({navigation})  {
             await AsyncStorage.setItem("id", dataId.id)
             const teste = await AsyncStorage.getItem("id")
 
+
             console.log(teste)
 
 
-            
+           
             navigation.push('Home', {userData});
             setIsLoading(false);
         }
