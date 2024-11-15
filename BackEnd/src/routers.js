@@ -16,6 +16,7 @@ router.get('/api/readEventsByDate/:dayy/:id_usuario', clientController.listEvent
 router.get('/api/readEvent/:id', clientController.listEventByID); //Listar Usuários por ID
 router.get('/api/readEventAdress/:id', clientController.listEventAdressById); //Listar Usuários por ID
 router.post('/api/cadastro', clientController.createNewUser); //Cadastrar novo Usuário
+router.post('/api/register/colaborator', clientController.createNewColaborator); //Cadastrar novo Usuário
 router.post('/api/validation', clientController.login); //login usuário
 router.post('/api/validationID/:id', clientController.loginId); //login usuário
 router.post('/api/register/evento', clientController.createEvent); //login usuário

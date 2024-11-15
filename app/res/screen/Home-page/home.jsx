@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { View, Alert, TouchableOpacity, Dimensions } from 'react-native';
-import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, AddIcon, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, CloseIcon, HStack, MenuItemLabel, ScrollView, StatusBar, VStack, } from '@gluestack-ui/themed';
+import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, AddIcon, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, CloseIcon, HStack, MenuItemLabel, ScrollView, Select, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, SelectIcon, SelectPortal, StatusBar, VStack, } from '@gluestack-ui/themed';
 import { Button, ButtonText, ButtonIcon, ButtonSpinner, } from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter, AlertDialogBody, Input, InputField, } from "@gluestack-ui/themed";
@@ -19,7 +19,7 @@ import { AvatarFallbackText } from "@gluestack-ui/themed";
 import teste from '../../../src/img/evento1.png'
 import { useIsFocused } from '@react-navigation/native';
 import MaskInput, { Masks } from 'react-native-mask-input';
-import { AlignJustify, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon, PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut, IdCard, PuzzleIcon, PaintBucket, SettingsIcon, PersonStandingIcon, } from "lucide-react-native";
+import { AlignJustify, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon, PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut, IdCard, PuzzleIcon, PaintBucket, SettingsIcon, PersonStandingIcon, ChevronDownIcon, } from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -44,6 +44,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Menu } from "@gluestack-ui/themed";
 import { MenuItem } from "@gluestack-ui/themed";
 import { ButtonGroup } from "@gluestack-ui/themed";
+import { SelectTrigger } from "@gluestack-ui/themed";
+import { SelectInput } from "@gluestack-ui/themed";
+import { SelectItem } from "@gluestack-ui/themed";
 function HomeScreen({ navigation, route }) {
 
 
@@ -794,7 +797,7 @@ function SearchScreen({ navigation, route }) {
           <Center bg='#EDE9E4' marginBottom={0} h={'auto'} justifyContent="center">
             <Text alignSelf="flex-start" marginHorizontal={30} marginTop={30} fontSize={20} fontWeight="bold" color="#A87B34">PESQUISAR EVENTOS...
             </Text>
-            <Text alignSelf="flex-start" marginHorizontal={30} marginTop={10} marginBottom={30} fontSize={15} fontWeight="light" color="#A87B34">Encontre o evento que quiser na Eventcraft
+            <Text alignSelf="flex-start" marginHorizontal={30} marginTop={10} marginBottom={30} fontSize={15} fontWeight="light" color="#A87B34">Encontre o evento e colaborador que quiser na Eventcraft
             </Text>
             <Input
 
@@ -1579,17 +1582,28 @@ function ProfileScreen({ navigation, route }) {
   };
 
   const [showAlertDialogProfile, setShowAlertDialogProfile] = React.useState(false)
-
+  const [showAlertDialogColaborator, setShowAlertDialogColaborator] = React.useState(false)
   const [formData, setFormData] = useState({
     id: '',
     nome: '',
     sobrenome: '',
     email: '',
   });
+  const [formData2, setFormdata2] = useState({
+    id: '',
+    nome: '',
+    sobrenome: '',
+    descricao: '',
+    telefone: '',
+    categoria: '',
+    id_usuario: id  });
   const handleInputChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
-
+  const handleInputChange2 = (name, value) => {
+    setFormdata2({ ...formData2, [name]: value });
+  };
+  
   const handleEditProfile = async () => {
     setFormData({
       id: dataUser.id,
@@ -1599,6 +1613,27 @@ function ProfileScreen({ navigation, route }) {
     })
 
     setShowAlertDialogProfile(true)
+
+    
+  }
+  const handleRegisterColaborator = async () => {
+
+    try {
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const apiUrl = '/api/register/colaborator';
+      const response = await api.post(apiUrl, formData2, config);
+      console.log('Resposta da API:', response.data);
+      setShowAlertDialogColaborator(false)
+      navigation.push('Home', {userData})
+    } catch (error) {
+
+     console.log(error)
+    }
 
     
   }
@@ -1625,7 +1660,7 @@ function ProfileScreen({ navigation, route }) {
 
   
 
-  console.log(formData)
+  console.log(formData2)
   return (
     <SafeAreaView bg="#EDE9E4" >
       <>
@@ -1715,6 +1750,145 @@ function ProfileScreen({ navigation, route }) {
                   onPress={enviarProfileInfo}
                 >
                   <ButtonText>Editar</ButtonText>
+                </Button>
+              </ButtonGroup>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
+      <>
+        <AlertDialog
+          isOpen={showAlertDialogColaborator}
+          onClose={() => {
+            setShowAlertDialogColaborator(false)
+          }}
+        >
+          <AlertDialogBackdrop />
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <Heading size="lg">Criar perfil de colaborador de eventos</Heading>
+              <AlertDialogCloseButton>
+                <Icon as={CloseIcon} />
+              </AlertDialogCloseButton>
+            </AlertDialogHeader>
+            <AlertDialogBody>
+            <VStack w={'100%'} space="xs">
+              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Nome de colaborador:</Text>
+              <Input
+                borderRadius={12}
+                bg='#FFFF'
+                w={'100%'}
+                h={'auto'}
+                variant="outline"
+                size="md"
+                isDisabled={false}
+                isInvalid={false}
+                isReadOnly={false}
+                $focus-borderColor={'#A87B34'}
+                justifyContent="flex-start"
+              >
+                <InputField onChangeText={(text) => handleInputChange2('nome', text)} value={formData2.nome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
+              </Input>
+            </VStack>
+            <VStack w={'100%'} space="xs">
+              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Sobrenome de colaborador:</Text>
+              <Input
+                borderRadius={12}
+                bg='#FFFF'
+                w={'100%'}
+                h={'auto'}
+                variant="outline"
+                size="md"
+                isDisabled={false}
+                isInvalid={false}
+                isReadOnly={false}
+                $focus-borderColor={'#A87B34'}
+                justifyContent="flex-start"
+              >
+                <InputField onChangeText={(text) => handleInputChange2('sobrenome', text)} value={formData2.sobrenome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
+              </Input>
+            </VStack>
+            <VStack mt={5} w={'100%'} space="xs">
+              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Descrição de colaborador:</Text>
+              <Input
+                borderRadius={12}
+                bg='#FFFF'
+                w={'100%'}
+                h={'auto'}
+                variant="outline"
+                size="md"
+                isDisabled={false}
+                isInvalid={false}
+                isReadOnly={false}
+                $focus-borderColor={'#A87B34'}
+                justifyContent="flex-start"
+              >
+                <InputField multiline onChangeText={(text) => handleInputChange2('descricao', text)} value={formData2.descricao} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
+              </Input>
+            </VStack>
+            <VStack mt={5} w={'100%'} space="xs">
+              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Telefone de contato:</Text>
+              <MaskInput
+                value={formData2.telefone}
+                onChangeText={(text)=> handleInputChange2('telefone', text)}
+                placeholder=""
+                placeholderTextColor={'black'}
+                style={{ backgroundColor: 'white', borderRadius: 10, borderWidth: 0.7, borderColor: '#CECDCD', width: 'auto', color: '#A87B34', fontWeight: 'bold', fontSize: 14, textAlign: 'auto', }}
+                mask={Masks.BRL_PHONE}
+
+              />
+            </VStack>
+
+            <VStack mt={5} w={'100%'} space="xs">
+            <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Categoria de colaborador:</Text>
+             <Select onValueChange={(text) => handleInputChange2('categoria', text)} mt={2}>
+          <SelectTrigger variant="outline" size="md" >
+            <SelectInput 
+            placeholder="Categoria" placeholderTextColor={'black'} />
+            <SelectIcon mr="$3">
+              <Icon as={ChevronDownIcon} />
+            </SelectIcon>
+          </SelectTrigger>
+          <SelectPortal>
+            <SelectBackdrop/>
+            <SelectContent>
+              <SelectDragIndicatorWrapper>
+                <SelectDragIndicator />
+              </SelectDragIndicatorWrapper>
+              <SelectItem label="Decoração" value="Decoração" />
+              <SelectItem label="Comida" value="Comida" />
+              <SelectItem
+                label="Entretenimento"
+                value="Entretenimento"
+              />
+              <SelectItem
+                label="Segurança"
+                value="Segurança"
+              />
+            </SelectContent>
+          </SelectPortal>
+        </Select>
+         </VStack>
+        
+      
+            
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <ButtonGroup space="lg">
+                <Button
+                  variant="outline"
+                  action="secondary"
+                  onPress={() => {
+                    setShowAlertDialogProfile(false)
+                  }}
+                >
+                  <ButtonText>Cancelar</ButtonText>
+                </Button>
+                <Button
+                  bg="#A87B34"
+                  onPress={handleRegisterColaborator}
+                >
+                  <ButtonText>Cadastrar-se</ButtonText>
                 </Button>
               </ButtonGroup>
             </AlertDialogFooter>
@@ -1821,7 +1995,7 @@ function ProfileScreen({ navigation, route }) {
             <Button onPress={handleEditProfile} borderRadius={10} bg='#A87B34' m={15}>
               <ButtonText>Editar Perfil</ButtonText>
             </Button>
-            <Button variant="link" borderRadius={10} >
+            <Button onPress={()=> setShowAlertDialogColaborator(true)} variant="link" borderRadius={10} >
               <ButtonText color='$green600'>Registrar-se como colaborador de eventos</ButtonText>
               <ButtonIcon marginLeft={"$1"} mt={"$0.9"} color="$green600" as={IdCard} />
             </Button>
@@ -2264,8 +2438,6 @@ function CreateEventScreen({ navigation, route }) {
 
 
         <AnimatedImageBackground style={{ zIndex: -1, opacity: 0.4, position: "absolute" }} alignItems="center" flex={1} w={'100%'} h={750} source={{ uri: imageBg }}>
-
-
 
         </AnimatedImageBackground>
 

@@ -172,6 +172,23 @@ const userController = {
             return error
         }
     },
+    createNewColaborator: async(req,res)=>{
+        const {id,nome,sobrenome,descricao,telefone,categoria, id_usuario} = req.body;
+
+        console.log(req.body);
+
+        try{
+            const sql =  await clientController.registerColaborator(id,nome,sobrenome,descricao,telefone,categoria,id_usuario);
+            res.status(201).json({msg:"Colaborador cadastrado com sucesso"});
+            
+            console.log(sql);
+
+        }
+        catch(error){
+            console.log(error)
+            return error
+        }
+    },
     createEvent: async(req,res)=>{
         const {id,nomeEvento,dataEvento,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento,rua,bairro,numero} = req.body;
 

@@ -83,6 +83,12 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result;
     },
+    registerColaborator: async (id,nome,sobrenome,descricao,telefone,categoria,id_usuario) =>{
+
+        const [result] = await connection.query("INSERT INTO colaboradores values(?,?,?,?,?,?,?)",[id,nome,sobrenome,telefone,categoria,descricao,id_usuario])
+        .catch(erro => console.log(erro));
+        return result;
+    },
     registerEvent: async (id,nomeEvento,dataEvento,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento) =>{
 
         const [result] = await connection.query("INSERT INTO eventos values(?,?,?,?,?,?,?,?,?)",[id,nomeEvento,dataEvento,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento])
