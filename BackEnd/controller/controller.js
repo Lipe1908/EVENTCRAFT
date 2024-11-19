@@ -28,6 +28,15 @@ const userController = {
             res.status(500).json({ error: "Erro ao obter a lista de eventos" })
         }
     },
+    listAllColaborators: async (req, res) => {
+        try {
+            const events = await clientController.getAllColaborators();
+            res.status(200).json(events);
+        }
+        catch (error) {
+            res.status(500).json({ error: "Erro ao obter a lista de eventos" })
+        }
+    },
     listAllEventsUser: async (req, res) => {
         try {
             const events = await clientController.getAllEventsUser(req.params.id);
@@ -173,12 +182,12 @@ const userController = {
         }
     },
     createNewColaborator: async(req,res)=>{
-        const {id,nome,sobrenome,descricao,telefone,categoria, id_usuario} = req.body;
+        const {id,nome,sobrenome,descricao,telefone,categoria, imagemBase64, id_usuario} = req.body;
 
         console.log(req.body);
 
         try{
-            const sql =  await clientController.registerColaborator(id,nome,sobrenome,descricao,telefone,categoria,id_usuario);
+            const sql =  await clientController.registerColaborator(id,nome,sobrenome,descricao,telefone,categoria,imagemBase64,id_usuario);
             res.status(201).json({msg:"Colaborador cadastrado com sucesso"});
             
             console.log(sql);

@@ -13,6 +13,11 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result
     },
+    getAllColaborators: async () =>{
+        const [result] = await connection.query("SELECT * FROM colaboradores")
+        .catch(erro => console.log(erro));
+        return result
+    },
     getAllEventsUser: async (id_usuario) =>{
         const [result] = await connection.query("SELECT * FROM eventos WHERE id_usuario = ? ", [id_usuario])
         .catch(erro => console.log(erro));
@@ -83,9 +88,9 @@ const userModel = {
         .catch(erro => console.log(erro));
         return result;
     },
-    registerColaborator: async (id,nome,sobrenome,descricao,telefone,categoria,id_usuario) =>{
+    registerColaborator: async (id,nome,sobrenome,descricao,telefone,categoria,imagemBase64,id_usuario) =>{
 
-        const [result] = await connection.query("INSERT INTO colaboradores values(?,?,?,?,?,?,?)",[id,nome,sobrenome,telefone,categoria,descricao,id_usuario])
+        const [result] = await connection.query("INSERT INTO colaboradores values(?,?,?,?,?,?,?,?)",[id,nome,sobrenome,telefone,categoria,descricao,id_usuario,imagemBase64])
         .catch(erro => console.log(erro));
         return result;
     },

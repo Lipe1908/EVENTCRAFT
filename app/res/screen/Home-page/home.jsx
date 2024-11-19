@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { View, Alert, TouchableOpacity, Dimensions } from 'react-native';
-import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, AddIcon, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, CloseIcon, HStack, MenuItemLabel, ScrollView, Select, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, SelectIcon, SelectPortal, StatusBar, VStack, } from '@gluestack-ui/themed';
+import { ActionsheetBackdrop, ActionsheetContent, ActionsheetDragIndicator, AddIcon, ArrowLeftIcon, Avatar, AvatarImage, Badge, BadgeIcon, BadgeText, CalendarDaysIcon, Center, CloseIcon, HStack, MenuItemLabel, ScrollView, Select, SelectBackdrop, SelectContent, SelectDragIndicator, SelectDragIndicatorWrapper, SelectIcon, SelectPortal, StatusBar, TooltipContent, TooltipText, VStack, } from '@gluestack-ui/themed';
 import { Button, ButtonText, ButtonIcon, ButtonSpinner, } from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter, AlertDialogBody, Input, InputField, } from "@gluestack-ui/themed";
@@ -19,7 +19,7 @@ import { AvatarFallbackText } from "@gluestack-ui/themed";
 import teste from '../../../src/img/evento1.png'
 import { useIsFocused } from '@react-navigation/native';
 import MaskInput, { Masks } from 'react-native-mask-input';
-import { AlignJustify, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon, PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut, IdCard, PuzzleIcon, PaintBucket, SettingsIcon, PersonStandingIcon, ChevronDownIcon, } from "lucide-react-native";
+import { AlignJustify, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon, PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut, IdCard, PuzzleIcon, PaintBucket, SettingsIcon, PersonStandingIcon, ChevronDownIcon, SlidersHorizontal, } from "lucide-react-native";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -47,6 +47,7 @@ import { ButtonGroup } from "@gluestack-ui/themed";
 import { SelectTrigger } from "@gluestack-ui/themed";
 import { SelectInput } from "@gluestack-ui/themed";
 import { SelectItem } from "@gluestack-ui/themed";
+import { Tooltip } from "@gluestack-ui/themed";
 function HomeScreen({ navigation, route }) {
 
 
@@ -246,22 +247,22 @@ function HomeScreen({ navigation, route }) {
       </>
       {isPriv && item.id_usuario != dataUser.id ? <>
         <Animated.Image
-      blurRadius={20}
-        style={{ marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center', }}
-        alt="imagemEvento"
-        source={{
-          uri: `data:image/jpeg;base64,${item.imagemBase64}`
-        }}
-      />
+          blurRadius={20}
+          style={{ marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center', }}
+          alt="imagemEvento"
+          source={{
+            uri: `data:image/jpeg;base64,${item.imagemBase64}`
+          }}
+        />
       </> : <><Animated.Image
-      blurRadius={0}
+        blurRadius={0}
         style={{ marginBottom: 15, height: 240, width: 315, borderRadius: 9, alignSelf: 'center', }}
         alt="imagemEvento"
         source={{
           uri: `data:image/jpeg;base64,${item.imagemBase64}`
         }}
       /></>}
-      
+
       <HStack justifyContent="center">
         <Heading size="md" fontFamily="$heading">
           {item.nomeEvento}
@@ -284,51 +285,51 @@ function HomeScreen({ navigation, route }) {
       <HStack alignItems="center" justifyContent="center">
         {isPriv && item.id_usuario != dataUser.id ? <>
           <Text
-          fontSize="$sm"
-          fontStyle="normal"
-          fontFamily="$heading"
-          fontWeight="$normal"
-          lineHeight="$sm"
-          mb={10}
-          sx={{
-            color: "$textLight700",
-            _dark: {
-              color: "$textDark200",
-            },
-          }}
-        >
-        Data do evento: ##/##/####
-        </Text>
+            fontSize="$sm"
+            fontStyle="normal"
+            fontFamily="$heading"
+            fontWeight="$normal"
+            lineHeight="$sm"
+            mb={10}
+            sx={{
+              color: "$textLight700",
+              _dark: {
+                color: "$textDark200",
+              },
+            }}
+          >
+            Data do evento: ##/##/####
+          </Text>
         </> : <>
-        
-        <Text
-          fontSize="$sm"
-          fontStyle="normal"
-          fontFamily="$heading"
-          fontWeight="$normal"
-          lineHeight="$sm"
-          mb={10}
-          sx={{
-            color: "$textLight700",
-            _dark: {
-              color: "$textDark200",
-            },
-          }}
-        >
-          Data do Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
-        </Text>
+
+          <Text
+            fontSize="$sm"
+            fontStyle="normal"
+            fontFamily="$heading"
+            fontWeight="$normal"
+            lineHeight="$sm"
+            mb={10}
+            sx={{
+              color: "$textLight700",
+              _dark: {
+                color: "$textDark200",
+              },
+            }}
+          >
+            Data do Evento: {moment(item.dataEvento).format('DD/MM/YYYY')}
+          </Text>
         </>}
-       
+
       </HStack>
 
       {isPriv && item.id_usuario != dataUser.id ? <>
         <Text mb={10} color={'$gray'} fontSize={13}>
-        Descrição Indisponivel devido a privacidade do evento!
-      </Text> 
-        </> : <><Text mb={10} color={'$black'} fontSize={13}>
+          Descrição Indisponivel devido a privacidade do evento!
+        </Text>
+      </> : <><Text mb={10} color={'$black'} fontSize={13}>
         {item.descricao}
       </Text></>}
-     
+
       {isPriv
         ?
         <>
@@ -650,17 +651,32 @@ function SearchScreen({ navigation, route }) {
 
 
   const { id, nome, sobrenome, email, senha } = route.params.obj;
-
+  const [filter, setFilter] = useState('events')
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [isOpen, setIsOpen] = useState(false)
+  const handleOpen = () => {
+    setIsOpen(true)
+  }
+  const handleClose = () => {
+    setIsOpen(false)
+  }
   const fetchAllEvents = async () => {
     try {
-      // const response = await axios.get('http://192.168.15.10:8085/api/readEvents');
-      const response = await api.get('/api/readEvents');
-      setAllEvents(response.data);
-      setResults(response.data[0]);
+      if (filter === "events") {
+        const response = await api.get('/api/readEvents');
+        setAllEvents(response.data);
+        setResults(response.data[0]);
+      }
+      else {
+        const response = await api.get('/api/readColaborators');
+        setAllEvents(response.data);
+        setResults(response.data[0]);
+      }
+
     } catch (error) {
       console.error(error);
     }
@@ -669,7 +685,7 @@ function SearchScreen({ navigation, route }) {
   useEffect(() => {
     fetchAllEvents();
     setIsLoading(false)
-  }, []);
+  }, [filter]);
 
   useEffect(() => {
     if (searchQuery) {
@@ -775,6 +791,153 @@ function SearchScreen({ navigation, route }) {
 
 
   );
+  const renderItem2 = ({ item }) => (
+
+    <Card flexDirection="row" w={'100%'} padding={10} borderRadius={20}>
+
+      <Image
+        rounded={"$full"}
+        style={{ height: 130, width: 130, alignSelf: 'center', marginHorizontal:5 }}
+        alt="imagemColaborador"
+        source={{
+          uri: `data:image/jpeg;base64,${item.imagemBase64}`
+        }}
+      />
+      <VStack justifyContent="center" w={'60%'} alignSelf="">
+
+
+
+        <Center w={'100%'}>
+
+          <Text fontSize={15} fontWeight="bold"> {item.nome}
+          </Text>
+
+
+          <HStack alignItems="center" justifyContent="center">
+            <Text
+
+              fontSize="$sm"
+              fontStyle="normal"
+              fontFamily="$heading"
+              fontWeight="$normal"
+              lineHeight="$sm"
+              mb={5}
+              sx={{
+                color: "$textLight700",
+                _dark: {
+                  color: "$textDark200",
+                },
+              }}
+            >
+              Sobrenome: {item.sobrenome}
+            </Text>
+          </HStack>
+
+
+          <HStack alignItems="center" justifyContent="center">
+            <Text
+
+              fontSize="$sm"
+              fontStyle="normal"
+              fontFamily="$heading"
+              fontWeight="$normal"
+              lineHeight="$sm"
+              mb={5}
+              sx={{
+                color: "$textLight700",
+                _dark: {
+                  color: "$textDark200",
+                },
+              }}
+            >
+              Telefone: {item.telefone}
+            </Text>
+          </HStack>
+          <HStack alignItems="center" justifyContent="center">
+            <Text
+
+              fontSize="$sm"
+              fontStyle="normal"
+              fontFamily="$heading"
+              fontWeight="$normal"
+              lineHeight="$sm"
+              
+              sx={{
+                color: "$textLight700",
+                _dark: {
+                  color: "$textDark200",
+                },
+              }}
+            >
+              Categoria: {item.categoria}
+            </Text>
+
+           
+          </HStack>
+          <HStack alignItems="center" justifyContent="center">
+            <Text
+
+              fontSize="$sm"
+              fontStyle="normal"
+              fontFamily="$heading"
+              fontWeight="$normal"
+              lineHeight="$sm"
+              
+              sx={{
+                color: "$textLight700",
+                _dark: {
+                  color: "$textDark200",
+                },
+              }}
+            >
+              Descrição: 
+            </Text>
+
+           
+          </HStack>
+          <Menu
+                  placement="top"
+                  trigger={({ ...triggerProps }) => {
+                    return (
+                      <Button h="$5.5" variant="link" {...triggerProps}>
+                        <ButtonText color="#A87B34">Ver</ButtonText>
+                      </Button>
+                    );
+                  }}
+                >
+                  <MenuItem flexDirection="column" h={'auto'} key="Community" textValue="Community">
+                    <Text alignSelf="center" fontWeight={'bold'}>Descrição desse colaborador:</Text>
+                    <Text fontWeight={'light'}>{item.descricao}</Text>
+                  </MenuItem>
+                </Menu>
+
+          {item.id_usuario == id ?
+            <>
+              <Badge size="md" m="$1" variant="solid" borderRadius="$none" action="success">
+                <BadgeIcon as={CircleAlert} marginHorizontal="$1" />
+                <BadgeText fontWeight="bold">Você</BadgeText>
+
+              </Badge>
+            </>
+
+            :
+            <>
+
+            </>
+          }
+
+        </Center>
+
+
+
+
+      </VStack>
+
+
+    </Card>
+
+
+  );
 
   const handleVizualizar = (id) => {
     navigation.push('Evento', { id })
@@ -820,17 +983,54 @@ function SearchScreen({ navigation, route }) {
                 <InputIcon color="#A87B34" as={SearchIcon} />
               </InputSlot>
               <InputField placeholderTextColor={"#A87B34"} placeholder="Pesquisar.." value={searchQuery} onChangeText={setSearchQuery} />
+              <InputSlot marginHorizontal={'$4'}>
+
+                <Menu
+                  placement="bottom"
+                  trigger={({ ...triggerProps }) => {
+                    return (
+                      <Button variant="link" {...triggerProps}>
+                        <Icon color="#A87B34" as={SlidersHorizontal} />
+                      </Button>
+                    );
+                  }}
+                >
+                  <MenuItem onPress={() => setFilter('colaborator')} key="Colaborators" textValue="Community">
+                    <Icon as={GlobeIcon} size="sm" mr='$2' />
+                    <MenuItemLabel size='sm'>
+                      Colaboradores
+                    </MenuItemLabel>
+                  </MenuItem>
+                  <MenuItem onPress={() => setFilter('events')} key="Events" textValue="Plugins">
+                    {/* PuzzleIcon is imported from 'lucide-react-native' */}
+                    <Icon as={PuzzleIcon} size="sm" mr='$2' />
+                    <MenuItemLabel size='sm'>
+                      Eventos
+                    </MenuItemLabel>
+                  </MenuItem>
+                </Menu>
+              </InputSlot>
             </Input>
           </Center>
 
 
           <Box bg="white" borderRadius={25} alignSelf="center" marginTop={-20}>
-            <AnimatedFlatList
-              data={results}
-              renderItem={renderItem}
-              keyExtractor={item => String(item.id)}
-              scrollEnabled={false}
-            />
+            {filter === 'colaborator' ? <>
+              <AnimatedFlatList
+                data={results}
+                renderItem={renderItem2}
+                keyExtractor={item => String(item.id)}
+                scrollEnabled={false}
+              />
+            </> : <>
+              <AnimatedFlatList
+                data={results}
+                renderItem={renderItem}
+                keyExtractor={item => String(item.id)}
+                scrollEnabled={false}
+              />
+            </>}
+
           </Box>
 
 
@@ -1341,14 +1541,14 @@ function EventsScreen({ navigation, route }) {
         </Heading>
       </HStack>
       <Center>
-      
-        
-            <Badge size="md" variant="solid" borderRadius="$none" action="success">
-              <BadgeIcon as={CircleAlert} marginHorizontal="$1" />
-              <BadgeText fontWeight="bold">Seu Evento</BadgeText>
 
-            </Badge>
-          
+
+        <Badge size="md" variant="solid" borderRadius="$none" action="success">
+          <BadgeIcon as={CircleAlert} marginHorizontal="$1" />
+          <BadgeText fontWeight="bold">Seu Evento</BadgeText>
+
+        </Badge>
+
       </Center>
       <HStack alignItems="center" justifyContent="center">
         <Text
@@ -1372,11 +1572,11 @@ function EventsScreen({ navigation, route }) {
         {item.descricao}
       </Text>
 
-          <Button onPress={() => handleEvento(moment(item.dataEvento).format('YYYY-MM-DD'))} bg='#AA7E39'>
-            <ButtonText>Editar Evento</ButtonText>
-          </Button>
-  
-      
+      <Button onPress={() => handleEvento(moment(item.dataEvento).format('YYYY-MM-DD'))} bg='#AA7E39'>
+        <ButtonText>Editar Evento</ButtonText>
+      </Button>
+
+
     </Card>
 
 
@@ -1388,63 +1588,63 @@ function EventsScreen({ navigation, route }) {
   return (
     <SafeAreaView flex={1} alignItens='center' bg='#EDE9E4'>
       <ScrollView>
-      <>
-        <AlertDialog position="absolute"
-          isOpen={showAlertDialog}
-          onClose={() => {
-            setShowAlertDialog(false);
+        <>
+          <AlertDialog position="absolute"
+            isOpen={showAlertDialog}
+            onClose={() => {
+              setShowAlertDialog(false);
 
 
-          }}
-        >
-          <AlertDialogBackdrop />
-          <AlertDialogContent bg='#EDE9E4'>
-            <AlertDialogHeader>
-              <Heading color='#A87B34' size="lg">Nenhum evento encontrado nessa data!</Heading>
-              <AlertDialogCloseButton>
+            }}
+          >
+            <AlertDialogBackdrop />
+            <AlertDialogContent bg='#EDE9E4'>
+              <AlertDialogHeader>
+                <Heading color='#A87B34' size="lg">Nenhum evento encontrado nessa data!</Heading>
+                <AlertDialogCloseButton>
 
-              </AlertDialogCloseButton>
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              <Text size="sm">
-                Deseja criar um evento nessa data?
-              </Text>
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Center flexDirection="row" space="lg">
+                </AlertDialogCloseButton>
+              </AlertDialogHeader>
+              <AlertDialogBody>
+                <Text size="sm">
+                  Deseja criar um evento nessa data?
+                </Text>
+              </AlertDialogBody>
+              <AlertDialogFooter>
+                <Center flexDirection="row" space="lg">
 
-                <Button
-                  marginHorizontal={10}
-                  variant="outline"
-                  borderColor={'#A87B34'}
-                  onPress={() => {
-                    setShowAlertDialog(false)
-                  }}
-                >
-                  <ButtonText color={'#A87B34'}>Não, obrigado</ButtonText>
-                </Button>
+                  <Button
+                    marginHorizontal={10}
+                    variant="outline"
+                    borderColor={'#A87B34'}
+                    onPress={() => {
+                      setShowAlertDialog(false)
+                    }}
+                  >
+                    <ButtonText color={'#A87B34'}>Não, obrigado</ButtonText>
+                  </Button>
 
-                <Button
+                  <Button
 
-                  variant="outline"
-                  borderColor={'#A87B34'}
-                  onPress={() => {
-                    navigation.navigate('Criar Evento', { clickedDate })
-                    setShowAlertDialog(false)
-                  }}
-                >
-                  <ButtonText color={'#A87B34'}>Sim</ButtonText>
-                </Button>
-              </Center>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+                    variant="outline"
+                    borderColor={'#A87B34'}
+                    onPress={() => {
+                      navigation.navigate('Criar Evento', { clickedDate })
+                      setShowAlertDialog(false)
+                    }}
+                  >
+                    <ButtonText color={'#A87B34'}>Sim</ButtonText>
+                  </Button>
+                </Center>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
-      </>
+        </>
         <Center>
-        
+
           <Box flexDirection="row" alignItems="center">
-          <Text color={'#AA7E39'} marginHorizontal={10} fontSize={24} fontWeight='$bold' marginVertical={0}>MEUS EVENTOS</Text>
+            <Text color={'#AA7E39'} marginHorizontal={10} fontSize={24} fontWeight='$bold' marginVertical={0}>MEUS EVENTOS</Text>
             <Image
               size="md"
               w={100}
@@ -1452,8 +1652,8 @@ function EventsScreen({ navigation, route }) {
               alt="logo"
             />
           </Box>
-          <Text fontSize={15} fontWeight={'light'} color={'#AA7E39'}>Gerencie seus eventos criados na Eventcraft!!</Text>        
-          
+          <Text fontSize={15} fontWeight={'light'} color={'#AA7E39'}>Gerencie seus eventos criados na Eventcraft!!</Text>
+
         </Center>
 
 
@@ -1503,16 +1703,16 @@ function EventsScreen({ navigation, route }) {
             markedDates={mark}
           />
           <Center mt={15} w={'100%'}>
-          <Text color={'#AA7E39'} fontSize={20} fontWeight='$bold' marginTop={15} marginBottom={5}>Vizualize seus eventos:</Text>
-          <FlatList
-            data={data3}
-            renderItem={renderItem2}
-            keyExtractor={item => String(item.id)}
-            extraData={data3}
-            scrollEnabled={false}
-          />
+            <Text color={'#AA7E39'} fontSize={20} fontWeight='$bold' marginTop={15} marginBottom={5}>Vizualize seus eventos:</Text>
+            <FlatList
+              data={data3}
+              renderItem={renderItem2}
+              keyExtractor={item => String(item.id)}
+              extraData={data3}
+              scrollEnabled={false}
+            />
           </Center>
-          
+
         </Center>
       </ScrollView>
 
@@ -1528,6 +1728,7 @@ function ProfileScreen({ navigation, route }) {
   const userData = route.params.obj;
   const [isLoading, setIsLoading] = useState(true);
   let [img, setImg] = useState('');
+  let [img2, setImg2] = useState('');
   const [dataUser, setDataUser] = useState({})
   useEffect(() => {
 
@@ -1544,7 +1745,7 @@ function ProfileScreen({ navigation, route }) {
       });
 
 
-  }, [img,isLoading]);
+  }, [img, isLoading]);
   const handleCameraLaunch = async () => {
     const options = {
       mediaType: 'photo',
@@ -1596,14 +1797,16 @@ function ProfileScreen({ navigation, route }) {
     descricao: '',
     telefone: '',
     categoria: '',
-    id_usuario: id  });
+    imagemBase64:'',
+    id_usuario: id
+  });
   const handleInputChange = (name, value) => {
     setFormData({ ...formData, [name]: value });
   };
   const handleInputChange2 = (name, value) => {
     setFormdata2({ ...formData2, [name]: value });
   };
-  
+
   const handleEditProfile = async () => {
     setFormData({
       id: dataUser.id,
@@ -1614,8 +1817,38 @@ function ProfileScreen({ navigation, route }) {
 
     setShowAlertDialogProfile(true)
 
-    
+
   }
+
+  const handleCameraLaunchColaborator = async () => {
+    const options = {
+      mediaType: 'photo',
+    };
+
+    try {
+      const response = await launchImageLibrary(options);
+      console.log('pickedFile', response);
+
+      // Verifica se a imagem foi capturada com sucesso
+      if (response.assets && response.assets.length > 0) {
+        const image = response.assets[0];
+        setImg2(image)
+        const imageColaborator = await RNFS.readFile(image.uri, 'base64');
+        setFormdata2({ id: '',
+        nome: formData2.nome,
+        sobrenome: formData2.sobrenome,
+        descricao: formData2.descricao,
+        telefone: formData2.telefone,
+        categoria: formData2.categoria,
+        imagemBase64:imageColaborator,
+        id_usuario: id })
+      } else {
+        console.log('Nenhuma imagem capturada.');
+      }
+    } catch (error) {
+      console.error('Erro ao capturar a imagem:', error);
+    }
+  };
   const handleRegisterColaborator = async () => {
 
     try {
@@ -1629,16 +1862,16 @@ function ProfileScreen({ navigation, route }) {
       const response = await api.post(apiUrl, formData2, config);
       console.log('Resposta da API:', response.data);
       setShowAlertDialogColaborator(false)
-      navigation.push('Home', {userData})
+      navigation.push('Home', { userData })
     } catch (error) {
 
-     console.log(error)
+      console.log(error)
     }
 
-    
+
   }
 
-  const enviarProfileInfo = async ()=> {
+  const enviarProfileInfo = async () => {
     try {
 
       const config = {
@@ -1650,17 +1883,13 @@ function ProfileScreen({ navigation, route }) {
       const response = await api.put(apiUrl, formData, config);
       console.log('Resposta da API:', response.data);
       setShowAlertDialogProfile(false)
-      navigation.push('Home', {userData})
+      navigation.push('Home', { userData })
     } catch (error) {
 
-     console.log(error)
+      console.log(error)
     }
   }
-
-
-  
-
-  console.log(formData2)
+console.log(formData2)
   return (
     <SafeAreaView bg="#EDE9E4" >
       <>
@@ -1679,60 +1908,61 @@ function ProfileScreen({ navigation, route }) {
               </AlertDialogCloseButton>
             </AlertDialogHeader>
             <AlertDialogBody>
-            <VStack w={'100%'} space="xs">
-              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Nome do Usuário:</Text>
-              <Input
-                borderRadius={12}
-                bg='#FFFF'
-                w={'100%'}
-                h={'auto'}
-                variant="outline"
-                size="md"
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}
-                $focus-borderColor={'#A87B34'}
-                justifyContent="flex-start"
-              >
-                <InputField onChangeText={(text) => handleInputChange('nome', text)} value={formData.nome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={formData.nome} placeholderTextColor={'black'} />
-              </Input>
-            </VStack>
-            <VStack mt={5} w={'100%'} space="xs">
-              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Sobrenome do Usuário:</Text>
-              <Input
-                borderRadius={12}
-                bg='#FFFF'
-                w={'100%'}
-                h={'auto'}
-                variant="outline"
-                size="md"
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}
-                $focus-borderColor={'#A87B34'}
-                justifyContent="flex-start"
-              >
-                <InputField onChangeText={(text) => handleInputChange('sobrenome', text)} value={formData.sobrenome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={formData.sobrenome} placeholderTextColor={'black'} />
-              </Input>
-            </VStack>
-            <VStack mt={5} w={'100%'} space="xs">
-              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Email do Usuário:</Text>
-              <Input
-                borderRadius={12}
-                bg='#FFFF'
-                w={'100%'}
-                h={'auto'}
-                variant="outline"
-                size="md"
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}
-                $focus-borderColor={'#A87B34'}
-                justifyContent="flex-start"
-              >
-                <InputField onChangeText={(text) => handleInputChange('email', text)} value={formData.email} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={formData.email} placeholderTextColor={'black'} />
-              </Input>
-            </VStack>
+
+              <VStack w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Nome do Usuário:</Text>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'100%'}
+                  h={'auto'}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  justifyContent="flex-start"
+                >
+                  <InputField onChangeText={(text) => handleInputChange('nome', text)} value={formData.nome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={formData.nome} placeholderTextColor={'black'} />
+                </Input>
+              </VStack>
+              <VStack mt={5} w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Sobrenome do Usuário:</Text>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'100%'}
+                  h={'auto'}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  justifyContent="flex-start"
+                >
+                  <InputField onChangeText={(text) => handleInputChange('sobrenome', text)} value={formData.sobrenome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={formData.sobrenome} placeholderTextColor={'black'} />
+                </Input>
+              </VStack>
+              <VStack mt={5} w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Email do Usuário:</Text>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'100%'}
+                  h={'auto'}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  justifyContent="flex-start"
+                >
+                  <InputField onChangeText={(text) => handleInputChange('email', text)} value={formData.email} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={formData.email} placeholderTextColor={'black'} />
+                </Input>
+              </VStack>
             </AlertDialogBody>
             <AlertDialogFooter>
               <ButtonGroup space="lg">
@@ -1772,106 +2002,118 @@ function ProfileScreen({ navigation, route }) {
               </AlertDialogCloseButton>
             </AlertDialogHeader>
             <AlertDialogBody>
-            <VStack w={'100%'} space="xs">
-              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Nome de colaborador:</Text>
-              <Input
-                borderRadius={12}
-                bg='#FFFF'
-                w={'100%'}
-                h={'auto'}
-                variant="outline"
-                size="md"
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}
-                $focus-borderColor={'#A87B34'}
-                justifyContent="flex-start"
-              >
-                <InputField onChangeText={(text) => handleInputChange2('nome', text)} value={formData2.nome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
-              </Input>
-            </VStack>
-            <VStack w={'100%'} space="xs">
-              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Sobrenome de colaborador:</Text>
-              <Input
-                borderRadius={12}
-                bg='#FFFF'
-                w={'100%'}
-                h={'auto'}
-                variant="outline"
-                size="md"
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}
-                $focus-borderColor={'#A87B34'}
-                justifyContent="flex-start"
-              >
-                <InputField onChangeText={(text) => handleInputChange2('sobrenome', text)} value={formData2.sobrenome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
-              </Input>
-            </VStack>
-            <VStack mt={5} w={'100%'} space="xs">
-              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Descrição de colaborador:</Text>
-              <Input
-                borderRadius={12}
-                bg='#FFFF'
-                w={'100%'}
-                h={'auto'}
-                variant="outline"
-                size="md"
-                isDisabled={false}
-                isInvalid={false}
-                isReadOnly={false}
-                $focus-borderColor={'#A87B34'}
-                justifyContent="flex-start"
-              >
-                <InputField multiline onChangeText={(text) => handleInputChange2('descricao', text)} value={formData2.descricao} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
-              </Input>
-            </VStack>
-            <VStack mt={5} w={'100%'} space="xs">
-              <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Telefone de contato:</Text>
-              <MaskInput
-                value={formData2.telefone}
-                onChangeText={(text)=> handleInputChange2('telefone', text)}
-                placeholder=""
-                placeholderTextColor={'black'}
-                style={{ backgroundColor: 'white', borderRadius: 10, borderWidth: 0.7, borderColor: '#CECDCD', width: 'auto', color: '#A87B34', fontWeight: 'bold', fontSize: 14, textAlign: 'auto', }}
-                mask={Masks.BRL_PHONE}
 
-              />
-            </VStack>
+            <TouchableOpacity onPress={handleCameraLaunchColaborator} style={{ alignItems: 'center', marginVertical: 10 }}>
 
-            <VStack mt={5} w={'100%'} space="xs">
-            <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Categoria de colaborador:</Text>
-             <Select onValueChange={(text) => handleInputChange2('categoria', text)} mt={2}>
-          <SelectTrigger variant="outline" size="md" >
-            <SelectInput 
-            placeholder="Categoria" placeholderTextColor={'black'} />
-            <SelectIcon mr="$3">
-              <Icon as={ChevronDownIcon} />
-            </SelectIcon>
-          </SelectTrigger>
-          <SelectPortal>
-            <SelectBackdrop/>
-            <SelectContent>
-              <SelectDragIndicatorWrapper>
-                <SelectDragIndicator />
-              </SelectDragIndicatorWrapper>
-              <SelectItem label="Decoração" value="Decoração" />
-              <SelectItem label="Comida" value="Comida" />
-              <SelectItem
-                label="Entretenimento"
-                value="Entretenimento"
-              />
-              <SelectItem
-                label="Segurança"
-                value="Segurança"
-              />
-            </SelectContent>
-          </SelectPortal>
-        </Select>
-         </VStack>
-        
-      
-            
+<Avatar bg={'$coolGray500'} w={150} h={150}>
+  {img2 ? <>
+  <AvatarImage alt="colboratorImg" source={{uri: img2.uri}}/>
+  </> : <>
+  <AvatarFallbackText fontSize={65}>{dataUser.nome}</AvatarFallbackText>  
+  </>}
+
+</Avatar>
+</TouchableOpacity>
+              <VStack w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Nome de colaborador:</Text>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'100%'}
+                  h={'auto'}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  justifyContent="flex-start"
+                >
+                  <InputField onChangeText={(text) => handleInputChange2('nome', text)} value={formData2.nome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
+                </Input>
+              </VStack>
+              <VStack w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Sobrenome de colaborador:</Text>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'100%'}
+                  h={'auto'}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  justifyContent="flex-start"
+                >
+                  <InputField onChangeText={(text) => handleInputChange2('sobrenome', text)} value={formData2.sobrenome} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
+                </Input>
+              </VStack>
+              <VStack mt={5} w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Descrição de colaborador:</Text>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'100%'}
+                  h={'auto'}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  justifyContent="flex-start"
+                >
+                  <InputField multiline onChangeText={(text) => handleInputChange2('descricao', text)} value={formData2.descricao} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'black'} />
+                </Input>
+              </VStack>
+              <VStack mt={5} w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Telefone de contato:</Text>
+                <MaskInput
+                  value={formData2.telefone}
+                  onChangeText={(text) => handleInputChange2('telefone', text)}
+                  placeholder="(##) #####-####"
+                  placeholderTextColor={'gray'}
+                  style={{ backgroundColor: 'white', borderRadius: 10, borderWidth: 0.7, borderColor: '#CECDCD', width: 'auto', color: '#A87B34', fontWeight: 'bold', fontSize: 14, textAlign: 'auto', }}
+                  mask={Masks.BRL_PHONE}
+
+                />
+              </VStack>
+
+              <VStack mt={5} w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Categoria de colaborador:</Text>
+                <Select onValueChange={(text) => handleInputChange2('categoria', text)} mt={2}>
+                  <SelectTrigger variant="outline" size="md" >
+                    <SelectInput
+                      placeholder="Categoria" placeholderTextColor={'black'} />
+                    <SelectIcon mr="$3">
+                      <Icon as={ChevronDownIcon} />
+                    </SelectIcon>
+                  </SelectTrigger>
+                  <SelectPortal>
+                    <SelectBackdrop />
+                    <SelectContent>
+                      <SelectDragIndicatorWrapper>
+                        <SelectDragIndicator />
+                      </SelectDragIndicatorWrapper>
+                      <SelectItem label="Decoração" value="Decoração" />
+                      <SelectItem label="Comida" value="Comida" />
+                      <SelectItem
+                        label="Entretenimento"
+                        value="Entretenimento"
+                      />
+                      <SelectItem
+                        label="Segurança"
+                        value="Segurança"
+                      />
+                    </SelectContent>
+                  </SelectPortal>
+                </Select>
+              </VStack>
+
+
+
             </AlertDialogBody>
             <AlertDialogFooter>
               <ButtonGroup space="lg">
@@ -1995,7 +2237,7 @@ function ProfileScreen({ navigation, route }) {
             <Button onPress={handleEditProfile} borderRadius={10} bg='#A87B34' m={15}>
               <ButtonText>Editar Perfil</ButtonText>
             </Button>
-            <Button onPress={()=> setShowAlertDialogColaborator(true)} variant="link" borderRadius={10} >
+            <Button onPress={() => setShowAlertDialogColaborator(true)} variant="link" borderRadius={10} >
               <ButtonText color='$green600'>Registrar-se como colaborador de eventos</ButtonText>
               <ButtonIcon marginLeft={"$1"} mt={"$0.9"} color="$green600" as={IdCard} />
             </Button>
