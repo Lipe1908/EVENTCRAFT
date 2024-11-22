@@ -1,4 +1,4 @@
-// Gabriel / RC
+
 import React, {useState} from "react";
 import {View, Alert, StyleSheet} from 'react-native';
 import { Center, ScrollView, StatusBar,} from '@gluestack-ui/themed';

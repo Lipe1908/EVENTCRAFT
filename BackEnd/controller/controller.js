@@ -16,7 +16,7 @@ const userController = {
             res.status(200).json(clients);
         }
         catch (error) {
-            res.status(500).json({ error: "Erro ao obter a lista de eventos" })
+            res.status(500).json({ error: "Erro ao obter a lista de usuários" })
         }
     },
     listAllEvents: async (req, res) => {
@@ -257,11 +257,19 @@ const userController = {
         console.log(dataFormatada)
         try{
 
-                const response = await clientController.EditEvent(nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id);
+         const sql = await clientController.getEventsById(id);
+
+         if(sql.length > 0) {
+            const response = await clientController.EditEvent(nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id);
 
 
-                res.status(201).json({msg:"evento cadastrado com sucesso"});
-                return response;
+            res.status(201).json({msg:"evento editado com sucesso"});
+            return response;
+         }
+         else{
+            res.status(401).json({msg:"evento não existe na nossa base de dados"});
+         }
+               
             }
         
         catch(error){
@@ -311,11 +319,11 @@ const userController = {
              await clientController.DeleteEvent(req.params.id);
 
         
-                res.status(201).json({msg:"evento deletado com sucesso"});
+                res.status(204).json({msg:"evento deletado com sucesso"});
                
             }
             else{
-                
+                res.status(404).json({msg:"O evento não existe na base de dados"})
             }
         }
         

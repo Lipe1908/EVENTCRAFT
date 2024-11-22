@@ -141,7 +141,7 @@ function HomeScreen({ navigation, route }) {
         layoutCardOffset={5}
         autoplay={true}
         autoplayDelay={0}
-        autoplayInterval={4000}
+        autoplayInterval={3000}
         loop={true}
       />
     );
@@ -2233,6 +2233,26 @@ console.log(formData2)
                 <Text fontSize={12.5} fontWeight='$bold'>{dataUser.email}</Text>
               </InputSlot>
               <InputField $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'} />
+            </Input>
+            <Input
+              alignSelf="center"
+              borderRadius={12}
+              bg='#FFFF'
+              w={'80%'}
+              h={50}
+              variant="outline"
+              size="md"
+              isDisabled={false}
+              isInvalid={false}
+              isReadOnly={true}
+              $focus-borderColor={'#A87B34'}
+              marginTop={10}
+            >
+              <InputSlot flexDirection="row" marginHorizontal={10}>
+                <Text fontSize={12.5} color='#A87B34' fontWeight='$bold'>SENHA: </Text>
+                <Icon as={LockKeyhole} />
+              </InputSlot>
+              <InputField secureTextEntry $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="" placeholderTextColor={'#A87B34'} />
             </Input>
             <Button onPress={handleEditProfile} borderRadius={10} bg='#A87B34' m={15}>
               <ButtonText>Editar Perfil</ButtonText>
