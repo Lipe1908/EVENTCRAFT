@@ -688,14 +688,29 @@ function SearchScreen({ navigation, route }) {
   }, [filter]);
 
   useEffect(() => {
-    if (searchQuery) {
-      const filteredResults = allEvents.filter(event =>
-        event.nomeEvento.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setResults(filteredResults);
-    } else {
-      setResults(allEvents);
+    if(filter === 'events' ){
+      if (searchQuery) {
+        const filteredResults = allEvents.filter(event =>
+          event.nomeEvento.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setResults(filteredResults);
+      }
+      else {
+        setResults(allEvents);
+      }
     }
+    else {
+      if (searchQuery) {
+        const filteredResults = allEvents.filter(event =>
+          event.nome.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setResults(filteredResults);
+      }
+      else {
+        setResults(allEvents);
+      }
+    }
+     
   }, [searchQuery, allEvents]);
 
 
@@ -1783,12 +1798,18 @@ function ProfileScreen({ navigation, route }) {
   };
 
   const [showAlertDialogProfile, setShowAlertDialogProfile] = React.useState(false)
+  const [showAlertDialogPassWord, setShowAlertDialogPassWord] = React.useState(false)
   const [showAlertDialogColaborator, setShowAlertDialogColaborator] = React.useState(false)
   const [formData, setFormData] = useState({
     id: '',
     nome: '',
     sobrenome: '',
     email: '',
+  });
+  const [formData3, setFormData3] = useState({
+    senhaAtual: '',
+    senha:'',
+    id: id,
   });
   const [formData2, setFormdata2] = useState({
     id: '',
@@ -1805,6 +1826,9 @@ function ProfileScreen({ navigation, route }) {
   };
   const handleInputChange2 = (name, value) => {
     setFormdata2({ ...formData2, [name]: value });
+  };
+  const handleInputChange3 = (name, value) => {
+    setFormData3({ ...formData3, [name]: value });
   };
 
   const handleEditProfile = async () => {
@@ -1889,9 +1913,110 @@ function ProfileScreen({ navigation, route }) {
       console.log(error)
     }
   }
-console.log(formData2)
+
+  const [isError, setIsError] = useState(false)
+
+const handleChangePassWord = async () => {
+try{
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  const apiUrl2 = '/api/edit/password';
+  const response = await api.put(apiUrl2, formData3,config);
+
+
+  if(response.status == 200 ) {
+    setShowAlertDialogPassWord(false)
+    setShowAlertDialogProfile(false)
+    navigation.push('Login')
+  }
+  
+} catch(error) {
+  setIsError(true)
+}
+}
   return (
     <SafeAreaView bg="#EDE9E4" >
+      <>
+      <AlertDialog
+          isOpen={showAlertDialogPassWord}
+          onClose={() => {
+            setShowAlertDialogPassWord(false)
+          }}
+        >
+          <AlertDialogBackdrop />
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <Heading size="lg">Alterar sua senha</Heading>
+              <AlertDialogCloseButton>
+                <Icon as={CloseIcon} />
+              </AlertDialogCloseButton>
+            </AlertDialogHeader>
+            <AlertDialogBody>
+
+              <VStack w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Senha atual:</Text>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'100%'}
+                  h={'auto'}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={isError}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  justifyContent="flex-start"
+                  
+                >
+                  <InputField onChangeText={(text) => handleInputChange3('senhaAtual', text)} value={formData3.senhaAtual} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color={isError ? 'red' :'#A87B34'} fontWeight='$bold' placeholder={'Insira sua senha atual:'} placeholderTextColor={isError ?'red' : '$coolGray500'} />
+                </Input>
+                {isError ? <><Text color={'red'} fontWeight={'bold'} fontSize={11}>Senha atual incorreta</Text></> : <></>}
+              </VStack>
+              <VStack mt={5} w={'100%'} space="xs">
+                <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Nova senha:</Text>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'100%'}
+                  h={'auto'}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
+                  justifyContent="flex-start"
+                >
+                  <InputField secureTextEntry onChangeText={(text) => handleInputChange3('senha', text)} value={formData3.senha} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={'Insira sua nova senha:'} placeholderTextColor={'$coolGray500'} />
+                </Input>
+              </VStack>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <ButtonGroup space="lg">
+                <Button
+                  variant="outline"
+                  action="secondary"
+                  onPress={() => {
+                    setShowAlertDialogPassWord(false)
+                  }}
+                >
+                  <ButtonText>Cancelar</ButtonText>
+                </Button>
+                <Button
+                  bg="#A87B34"
+                  onPress={handleChangePassWord}
+                >
+                  <ButtonText>Alterar senha</ButtonText>
+                </Button>
+              </ButtonGroup>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
       <>
         <AlertDialog
           isOpen={showAlertDialogProfile}
@@ -1962,6 +2087,10 @@ console.log(formData2)
                 >
                   <InputField onChangeText={(text) => handleInputChange('email', text)} value={formData.email} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={formData.email} placeholderTextColor={'black'} />
                 </Input>
+                <Button onPress={()=> setShowAlertDialogPassWord(true)} variant="link">
+                  <ButtonText color={'#A87B34'} fontSize={12}>Alterar senha</ButtonText>
+                  <ButtonIcon m={'$1'} color={'#A87B34'} size={'sm'} as={LockKeyhole}/>
+                </Button>
               </VStack>
             </AlertDialogBody>
             <AlertDialogFooter>

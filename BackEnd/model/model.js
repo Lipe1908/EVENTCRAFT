@@ -1,55 +1,55 @@
-const connection= require("../config/db");
+const connection = require("../config/db");
 const bcrypt = require('bcrypt');
 const moment = require('moment');
 const salt = 10;
 const userModel = {
-    getAllUsers: async () =>{
+    getAllUsers: async () => {
         const [result] = await connection.query("SELECT * FROM usuarios ")
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getEventsById: async (id) =>{
+    getEventsById: async (id) => {
         const [result] = await connection.query("SELECT * FROM eventos WHERE id = ? ", [id])
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getAllEvents: async () =>{
+    getAllEvents: async () => {
         const [result] = await connection.query("SELECT * FROM eventos WHERE privacidade = 'Público' ")
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getAllColaborators: async () =>{
+    getAllColaborators: async () => {
         const [result] = await connection.query("SELECT * FROM colaboradores")
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getAllEventsUser: async (id_usuario) =>{
+    getAllEventsUser: async (id_usuario) => {
         const [result] = await connection.query("SELECT * FROM eventos WHERE id_usuario = ? ", [id_usuario])
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getAllEventsUserPriv: async (id_usuario) =>{
+    getAllEventsUserPriv: async (id_usuario) => {
         const [result] = await connection.query("SELECT * FROM eventos WHERE privacidade = 'Privado' AND id_usuario = ? ", [id_usuario])
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getEventosPriv: async () =>{
+    getEventosPriv: async () => {
         const [result] = await connection.query("SELECT * FROM eventos WHERE privacidade ='Privado' ")
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getEventsByDates: async (dayy, id_usuario) =>{
-        const [result] = await connection.query("SELECT * FROM eventos WHERE dataEvento = ? AND id_usuario = ?", [dayy , id_usuario])
-        .catch(erro => console.log(erro));
-        
+    getEventsByDates: async (dayy, id_usuario) => {
+        const [result] = await connection.query("SELECT * FROM eventos WHERE dataEvento = ? AND id_usuario = ?", [dayy, id_usuario])
+            .catch(erro => console.log(erro));
+
         return result
     },
-    getAllEventsDates: async (id_usuario) =>{
+    getAllEventsDates: async (id_usuario) => {
         const [result] = await connection.query("SELECT dataEvento FROM eventos WHERE id_usuario = ?", [id_usuario])
         const dates = []
-        result.forEach(function(result) {
-           
-           
+        result.forEach(function (result) {
+
+
             dates.push(moment(result.dataEvento).format('YYYY-MM-DD'))
         }
         )
@@ -58,97 +58,97 @@ const userModel = {
         return dates;
     },
 
-    getAllEventsAdress: async (id_evento) =>{
+    getAllEventsAdress: async (id_evento) => {
         const [result] = await connection.query("SELECT * FROM endereco WHERE id_evento = ? ", [id_evento])
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getEventAdressById: async (id) =>{
+    getEventAdressById: async (id) => {
         const [result] = await connection.query("SELECT * FROM endereco WHERE id_evento = ? ", [id])
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
 
-    getByEmail: async (email) =>{
-        const [result] = await connection.query("SELECT * FROM usuarios WHERE email =?", [email])
-        .catch(erro => console.log(erro));
+    getByEmail: async (email) => {
+        const [result] = await connection.query("SELECT * FROM usuarios WHERE email = ?", [email])
+            .catch(erro => console.log(erro));
         return result
     },
-    getUserById: async (id) =>{
+    getUserById: async (id) => {
         const [result] = await connection.query("SELECT * FROM usuarios WHERE id =?", [id])
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    getByIdEvento: async (id) =>{
+    getByIdEvento: async (id) => {
         const [result] = await connection.query("SELECT * FROM eventos WHERE id =?", [id])
-        .catch(erro => console.log(erro));
+            .catch(erro => console.log(erro));
         return result
     },
-    
-    registerUser: async (id,nome,sobrenome,email,senha,imagemBase64) =>{
 
-        const hashPassword = await bcrypt.hash(senha,salt);
+    registerUser: async (id, nome, sobrenome, email, senha, imagemBase64) => {
 
-        const [result] = await connection.query("INSERT INTO usuarios values(?,?,?,?,?,?)",[id,nome,sobrenome,email,hashPassword,imagemBase64])
-        .catch(erro => console.log(erro));
+        const hashPassword = await bcrypt.hash(senha, salt);
+
+        const [result] = await connection.query("INSERT INTO usuarios values(?,?,?,?,?,?)", [id, nome, sobrenome, email, hashPassword, imagemBase64])
+            .catch(erro => console.log(erro));
         return result;
     },
-    registerColaborator: async (id,nome,sobrenome,descricao,telefone,categoria,imagemBase64,id_usuario) =>{
+    registerColaborator: async (id, nome, sobrenome, descricao, telefone, categoria, imagemBase64, id_usuario) => {
 
-        const [result] = await connection.query("INSERT INTO colaboradores values(?,?,?,?,?,?,?,?)",[id,nome,sobrenome,telefone,categoria,descricao,id_usuario,imagemBase64])
-        .catch(erro => console.log(erro));
+        const [result] = await connection.query("INSERT INTO colaboradores values(?,?,?,?,?,?,?,?)", [id, nome, sobrenome, telefone, categoria, descricao, id_usuario, imagemBase64])
+            .catch(erro => console.log(erro));
         return result;
     },
-    registerEvent: async (id,nomeEvento,dataEvento,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento) =>{
+    registerEvent: async (id, nomeEvento, dataEvento, descricao, nConvidados, idUsuario, privacidade, imagemBase64, horaEvento) => {
 
-        const [result] = await connection.query("INSERT INTO eventos values(?,?,?,?,?,?,?,?,?)",[id,nomeEvento,dataEvento,descricao,nConvidados,idUsuario,privacidade,imagemBase64,horaEvento])
-        .catch(erro => console.log(erro));
+        const [result] = await connection.query("INSERT INTO eventos values(?,?,?,?,?,?,?,?,?)", [id, nomeEvento, dataEvento, descricao, nConvidados, idUsuario, privacidade, imagemBase64, horaEvento])
+            .catch(erro => console.log(erro));
         return result;
     },
-    EditEvent: async (nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id) =>{
+    EditEvent: async (nomeEvento, dataFormatada, descricao, nConvidados, id_usuario, privacidade, imagemBase64, horaEvento, id) => {
 
-        const [result] = await connection.query("UPDATE `eventos` SET `nomeEvento`= ?,`dataEvento`= ?,`descricao`= ?,`nConvidados`= ?,`id_usuario`= ?,`privacidade`= ?,`imagemBase64`= ?,`horaEvento`= ? WHERE id = ?" ,[nomeEvento,dataFormatada,descricao,nConvidados,id_usuario,privacidade,imagemBase64,horaEvento,id])
-        .catch(erro => console.log(erro));
+        const [result] = await connection.query("UPDATE `eventos` SET `nomeEvento`= ?,`dataEvento`= ?,`descricao`= ?,`nConvidados`= ?,`id_usuario`= ?,`privacidade`= ?,`imagemBase64`= ?,`horaEvento`= ? WHERE id = ?", [nomeEvento, dataFormatada, descricao, nConvidados, id_usuario, privacidade, imagemBase64, horaEvento, id])
+            .catch(erro => console.log(erro));
         return result;
     },
-    EditProfile: async (nome, sobrenome, email, id) =>{
+    EditProfile: async (nome, sobrenome, email, id) => {
 
-        const [result] = await connection.query("UPDATE `usuarios` SET `nome`= ?, `sobrenome`= ?, `email` = ? WHERE id = ?" ,[nome,sobrenome,email,id])
-        .catch(erro => console.log(erro));
+        const [result] = await connection.query("UPDATE `usuarios` SET `nome`= ?, `sobrenome`= ?, `email` = ? WHERE id = ?", [nome, sobrenome, email, id])
+            .catch(erro => console.log(erro));
         return result;
     },
-    EditProfilePic: async (imagemBase64,id) =>{
+    EditProfilePic: async (imagemBase64, id) => {
 
-        const [result] = await connection.query("UPDATE `usuarios` SET `imagemBase64`= ? WHERE id = ?" ,[imagemBase64,id])
-        .catch(erro => console.log(erro));
+        const [result] = await connection.query("UPDATE `usuarios` SET `imagemBase64`= ? WHERE id = ?", [imagemBase64, id])
+            .catch(erro => console.log(erro));
         return result;
     },
-    DeleteEvent: async (id) =>{
-        const [result] = await connection.query("DELETE FROM `eventos` WHERE id = ?" ,[id])
-        .catch(erro => console.log(erro));
+    DeleteEvent: async (id) => {
+        const [result] = await connection.query("DELETE FROM `eventos` WHERE id = ?", [id])
+            .catch(erro => console.log(erro));
         return result;
     },
-    DeleteEventAdress: async (id) =>{
-        const [result] = await connection.query("DELETE FROM `endereco` WHERE id_evento = ?" ,[id])
-        .catch(erro => console.log(erro));
+    DeleteEventAdress: async (id) => {
+        const [result] = await connection.query("DELETE FROM `endereco` WHERE id_evento = ?", [id])
+            .catch(erro => console.log(erro));
         return result;
     },
-    registerEventAdress: async (id,rua,bairro,numero,id_evento) =>{
+    registerEventAdress: async (id, rua, bairro, numero, id_evento) => {
 
-        const [result] = await connection.query("INSERT INTO endereco values(?,?,?,?,?)",[id,rua,bairro,numero,id_evento])
-        .catch(erro => console.log(erro));
+        const [result] = await connection.query("INSERT INTO endereco values(?,?,?,?,?)", [id, rua, bairro, numero, id_evento])
+            .catch(erro => console.log(erro));
         return result;
     },
-    
 
-    validateLogin: async(email, senha)=> {
-      
-        const [result] = await connection.query("SELECT * FROM usuarios WHERE email=?",[email])
-        try{
+
+    validateLogin: async (email, senha) => {
+
+        const [result] = await connection.query("SELECT * FROM usuarios WHERE email=?", [email])
+        try {
             if (result.length > 0) {
-              const user = result[0]  
-              
-              const match = await bcrypt.compare(senha, user.senha)
+                const user = result[0]
+
+                const match = await bcrypt.compare(senha, user.senha)
                 console.log(match)
 
                 if (match) {
@@ -164,22 +164,68 @@ const userModel = {
                 return null;
             }
         }
-       
 
-        catch(erro) {
+
+        catch (erro) {
             console.log(erro)
         };
-      
-        
-    }, 
-    
+
+
+    },
+    validateAndEditSenha: async (senhaAtual, senha, id) => {
+        const [result] = await connection.query("SELECT senha FROM usuarios WHERE id=?", [id])
+        try {
+            if (result.length > 0) {
+                const userSenha = result[0]
+
+                const match = await bcrypt.compare(senhaAtual, userSenha.senha)
+                console.log(match)
+
+                if (match) {
+                    const hashPassword = await bcrypt.hash(senha, salt);
+                    const Edit = await connection.query("UPDATE `usuarios` SET `senha`= ? WHERE id = ?", [hashPassword, id])
+                    return Edit
+                }
+
+                else {
+                    return null;
+                }
+            }
+
+            else {
+                return null;
+            }
+        }
+
+
+        catch (erro) {
+            console.log(erro)
+        };
+
+
+    },
+    ResetSenha: async (senha, email) => {
+        try {
+            const hashPassword = await bcrypt.hash(senha, salt);
+            const Edit = await connection.query("UPDATE `usuarios` SET `senha`= ? WHERE email = ?", [hashPassword, email])
+            return Edit
+
+        }
+
+        catch (erro) {
+            console.log(erro)
+        };
+
+
+    },
+
     validateLoginId: async (id) => {
         const [result] = await connection.query("SELECT * FROM usuarios WHERE id=?", [id])
             .catch(erro => console.log(erro));
         return result
     },
 
-   
+
 };
 
 module.exports = userModel;

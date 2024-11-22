@@ -16,7 +16,7 @@ import logo from '../../../src/img/logo.png';
 import Animated, { BounceIn, Easing, FadeInRight, FadeOutLeft, Keyframe, LightSpeedInLeft, ReduceMotion, SlideInLeft, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from "../../props/api";
-export default function LoginScreen({navigation})  {
+export default function ResetScreen({navigation})  {
   
   const AnimatedCenter = Animated.createAnimatedComponent(Center);
   const scale = useSharedValue(1);
@@ -85,10 +85,10 @@ export default function LoginScreen({navigation})  {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const handleLogin = async () => {
+  const handleCheckEmail = async () => {
     try {
       setIsLoading(true);
-        if (!email || !senha) {
+        if (!email) {
             setShowAlertDialog(true)
             return;
         }
@@ -96,59 +96,51 @@ export default function LoginScreen({navigation})  {
             setShowAlertDialog3(true)
             return;
         }
-        const data = {
-            email: email.toLowerCase(),
-            senha: senha
-        }
-        console.log(data)
-        const response = await api.post('/api/validation', data);
-        if (response.status === 200) {
-            setEmail('');
-            setSenha('');
-            const userData = {
-                id: response.data.id,
-                nome: response.data.nome,
-                sobrenome: response.data.sobrenome,
-                email: response.data.email,
-                senha: response.data.senha,
-                imagemBase64: response.data.imagemBase64
-            }
-            const dataId = {
-              id: response.data.id.toString(),
-        
-            } 
-            await AsyncStorage.setItem("id", dataId.id)
-            const teste = await AsyncStorage.getItem("id")
-
-
-            console.log(teste)
-
-
-           
-            navigation.push('Home', {userData});
-            setIsLoading(false);
-        }
-        else {
-          setShowAlertDialog2(true)
-        }
+    const response = await api.get(`/api/readUserByEmail/${email}`)
+    
+    if(response.status == 200) {
+        setIsError(false)
+        setEmailExists(true)
+        setIsLoading(false);
+    }
+    
 
     }
     catch (error) {
-        if (error.response && error.response.status === 401) {
-          setShowAlertDialog2(true)
-
-
+        console.log('email errado')
+        setEmailExists(false)
+        setIsError(true)
+        setIsLoading(false);
+    };
+  };
+  const handleChangeSenha = async () => {
+    try {
+        const formdata = {
+            email: email,
+            senha: senha
         }
-
-        else {
-            console.log(error)
-            Alert.alert('Ocorreu um erro ao tentar fazer login')
+      setIsLoading(true);
+        if (!senha) {
+            setShowAlertDialog2(true)
+            return;
         }
+    const response = await api.put(`/api/resetSenhaByEmail` , formdata )
+    
+    if(response.status == 200) {
+        navigation.push('Login')
+        setIsLoading(false);
+    }
+    
+
+    }
+    catch (error) {
+        console.log('Erro')
+        setIsLoading(false);
     };
   };
 
   
-
+  console.log(email)
   const [showPassword, setShowPassword] = useState(false)
   const handleState = () => {
     setShowPassword((showState) => {
@@ -156,6 +148,8 @@ export default function LoginScreen({navigation})  {
     })};
 
   
+    const [emailExists, setEmailExists] = useState(false)
+    const [isError, setIsError] = useState(false)
     
     
 
@@ -198,7 +192,7 @@ alt="topimg"
 
 
 
-<Center marginTop={75} alignItems="center" justifyContent="center">
+<Center marginVertical={40} alignItems="center" justifyContent="center">
 
 <Box h={'auto'} w={'100%'} marginTop={-35} marginBottom={15} justifyContent="center" alignItems="center">
 <Animated.View>
@@ -214,7 +208,7 @@ alt="logo"
 
 
 <Animated.View entering={enteringAnimation}>
-<Text color={'#A87B34'} fontSize={24} fontWeight='$extrabold' marginVertical={10}>LOGIN</Text>
+<Text color={'#A87B34'} fontSize={24} fontWeight='$extrabold' marginVertical={10}>RESETE SUA SENHA:</Text>
 </Animated.View>
 
 
@@ -226,17 +220,19 @@ w={'80%'}
 h={50}
 variant="outline"
 size="md"
-isDisabled={false}
-isInvalid={false}
+isDisabled={emailExists}
+isInvalid={isError}
 isReadOnly={false}
 $focus-borderColor={'#A87B34'}
 
 >
-<InputField onChangeText={setEmail} value={email} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="EMAIL:" placeholderTextColor={'#A87B34'}  />
+<InputField onChangeText={setEmail} value={email} $focus-borderColor={isError ? 'red' : '#A87B34'} fontSize={12.5} color={isError ? 'red' : '#A87B34'} fontWeight='$bold' placeholder="INSIRA SEU EMAIL:" placeholderTextColor={isError ? 'red' : '#A87B34' }  />
 </Input>
+{isError ? <><Text marginLeft={10} fontSize={12} color={'red'} fontWeight={'bold'}>Email incorreto!</Text></> : <></>}
+
 </Animated.View>
 
-<Animated.View entering={enteringInputAnimation}>
+{emailExists ? <><Animated.View entering={enteringInputAnimation}>
 <Input
 marginVertical={10}
 borderRadius={12}
@@ -252,7 +248,7 @@ $focus-borderColor={'#A87B34'}
 
 >
 <InputField $focus-borderColor={'#A87B34'} onChangeText={setSenha}
-value={senha} type={showPassword ? "text" : "password"} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="SENHA:" placeholderTextColor={'#A87B34'}  />
+value={senha} type={showPassword ? "text" : "password"} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="NOVA SENHA:" placeholderTextColor={'#A87B34'}  />
 
 <InputSlot pr="$3" onPress={handleState}>
           <InputIcon
@@ -261,17 +257,29 @@ value={senha} type={showPassword ? "text" : "password"} fontSize={12.5} color='#
           />
 </InputSlot>
 </Input>
-</Animated.View>
+</Animated.View></> : <></>}
 
 
 
-<Button w={170} borderRadius={15} borderWidth={1.5} borderColor={'#A87B34'} marginTop={20} marginBottom={35} variant="outline" onPress={handleLogin}>
+{emailExists ? <>
+    <Button w={170} borderRadius={15} borderWidth={1.5} borderColor={'#A87B34'} marginTop={20} marginBottom={35} variant="outline" onPress={handleChangeSenha}>
 {isLoading && <ButtonSpinner color={'#A87B34'}/>}
           <Text color={'#A87B34'} fontWeight='$bold' >
-            {isLoading ? "" : "ENTRAR"}
+            {isLoading ? "" : "MUDAR SENHA"}
           </Text>
 
 </Button>
+</> : <>
+<Button w={170} borderRadius={15} borderWidth={1.5} borderColor={'#A87B34'} marginTop={20} marginBottom={35} variant="outline" onPress={handleCheckEmail}>
+{isLoading && <ButtonSpinner color={'#A87B34'}/>}
+          <Text color={'#A87B34'} fontWeight='$bold' >
+            {isLoading ? "" : "ENVIAR"}
+          </Text>
+
+</Button>
+</>}
+
+
 
 
 <Center flexDirection="row">
@@ -284,15 +292,6 @@ value={senha} type={showPassword ? "text" : "password"} fontSize={12.5} color='#
 </Button>
 
 </Center>
-<Center flexDirection="row">
-
-<Button w={'100%'} borderWidth={0} marginTop={0} variant="link" onPress={() => navigation.push('ResetPassWord')}>
-<ButtonText color={'#6FBFEF'} fontSize={12} fontWeight='$bold' >Esqueceu sua senha?</ButtonText>
-</Button>
-
-</Center>
-
-
 
 
 </Center>
@@ -324,14 +323,14 @@ setIsLoading(false);
 <AlertDialogBackdrop/>
 <AlertDialogContent bg='#EDE9E4'>
 <AlertDialogHeader>
-  <Heading color='#A87B34' size="lg">Insira um email e uma senha!</Heading>
+  <Heading color='#A87B34' size="lg">Insira um email!</Heading>
   <AlertDialogCloseButton>
    
   </AlertDialogCloseButton>
 </AlertDialogHeader>
 <AlertDialogBody>
   <Text  size="sm">
-   Os campos para login estão vazios, para continuar você deve inserir um email e uma senha válidos!
+   Os campos para resetar senha estão vazios, para continuar você deve inserir um email válido!
   </Text>
 </AlertDialogBody>
 <AlertDialogFooter>
@@ -368,14 +367,14 @@ setIsLoading(false);
 <AlertDialogBackdrop />
 <AlertDialogContent>
 <AlertDialogHeader>
-  <Heading color='#A87B34' size="lg">Email ou senha incorretos!</Heading>
+  <Heading color='#A87B34' size="lg">Insira uma senha</Heading>
   <AlertDialogCloseButton>
    
   </AlertDialogCloseButton>
 </AlertDialogHeader>
 <AlertDialogBody>
   <Text size="sm">
-   Os campos para login não constam em nossa base de dados, para continuar você deve inserir um email e uma senha válidos!
+   Insira uma nova senha para ser atribuida a sua conta!
   </Text>
 </AlertDialogBody>
 <AlertDialogFooter>

@@ -19,6 +19,21 @@ const userController = {
             res.status(500).json({ error: "Erro ao obter a lista de usuários" })
         }
     },
+    getUserByEmail: async (req, res) => {
+        let email = req.params.email
+        try {
+            const clients = await clientController.getByEmail(email);
+            if(clients.length > 0) {
+                res.status(200).json(clients);
+            }
+            else {
+                res.status(500).json({ error: "Email não existe na base de dados" })
+            }
+        }
+        catch (error) {
+            res.status(500).json({ error: "Email não existe na base de dados" })
+        }
+    },
     listAllEvents: async (req, res) => {
         try {
             const events = await clientController.getAllEvents();
@@ -241,6 +256,50 @@ const userController = {
             else{
                 res.status(401).json({msg:"Email ou senha incorretos"});
             }
+        }
+        catch(error) {
+            if(error) {
+                console.log(error)
+                res.status(500).json(error);
+            }
+        }
+    },
+    EditPassword: async(req,res) => {
+
+        let {senhaAtual,senha,id} = req.body;
+
+       
+        try{
+            
+            const sql = await clientController.validateAndEditSenha(senhaAtual,senha, id);
+            if(sql != null) {
+                res.status(200).json(sql[0])
+            }
+
+            else{
+                console.log('erro')
+                res.status(401).json({msg:"Senha atual incorreta"});
+            }
+        }
+        catch(error) {
+            if(error) {
+                console.log(error)
+                res.status(500).json(error);
+            }
+        }
+    },
+    ResetPassword: async(req,res) => {
+
+        let {senha,email} = req.body;
+
+       
+        try{
+            
+            const sql = await clientController.ResetSenha(senha, email);
+        
+                res.status(200).json(sql[0])
+        
+         
         }
         catch(error) {
             if(error) {
