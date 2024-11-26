@@ -1,10 +1,10 @@
 
-import React, {useState} from "react";
-import {View, Alert, StyleSheet} from 'react-native';
-import { Center, ScrollView, StatusBar,} from '@gluestack-ui/themed';
-import {Button,ButtonText,ButtonIcon,ButtonSpinner,ButtonGroup,} from "@gluestack-ui/themed";
+import React, { useState } from "react";
+import { View, Alert, StyleSheet } from 'react-native';
+import { Center, ScrollView, StatusBar, } from '@gluestack-ui/themed';
+import { Button, ButtonText, ButtonIcon, ButtonSpinner, ButtonGroup, } from "@gluestack-ui/themed";
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
-import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter,AlertDialogBody,Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
+import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter, AlertDialogBody, Input, InputField, InputSlot, InputIcon, EyeOffIcon, EyeIcon } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed"
 import { Heading } from "@gluestack-ui/themed";
 import { Icon } from "@gluestack-ui/themed";
@@ -16,7 +16,7 @@ import axios from 'axios'
 import { BounceIn, Easing, FadeIn, FadeInRight, FadeOut, FadeOutLeft, Keyframe, ReduceMotion, SlideInLeft, SlideInRight, StretchInX, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
 import api from "../../props/api";
-export default function SigninScreen({navigation}) {
+export default function SigninScreen({ navigation }) {
   const AnimatedCenter = Animated.createAnimatedComponent(Center);
   const scale = useSharedValue(1);
 
@@ -41,64 +41,65 @@ export default function SigninScreen({navigation}) {
   const handleState = () => {
     setShowPassword((showState) => {
       return !showState
-    })}
+    })
+  }
 
-    const [formData, setFormData] = useState({
-      id: '',
-      email: '',
-      nome: '',
-      sobrenome: '',
-      senha: '',
-      imagemBase64: ''
-      
+  const [formData, setFormData] = useState({
+    id: '',
+    email: '',
+    nome: '',
+    sobrenome: '',
+    senha: '',
+    imagemBase64: ''
+
   });
 
   const handleInputChange = (name, value) => {
-      setFormData({...formData, [name]:value});
+    setFormData({ ...formData, [name]: value });
   };
 
   //validar se campos estão vazios
 
   const handleCadastrar = async () => {
-  
+
 
     setIsLoading(true);
 
-      if(!formData.email || !formData.nome || !formData.sobrenome || !formData.senha){
-        setShowAlertDialog(true)
-          return;
-      }
-      //envio de informações para a API cadastrar no banco de dados
-      try {
-          await api.post('/api/cadastro', formData);
-          // await axios.post('http://192.168.15.10:8085/api/cadastro', formData);
-          setShowAlertDialog2(true)
-          setFormData('');
-          setIsLoading(false);
+    if (!formData.email || !formData.nome || !formData.sobrenome || !formData.senha) {
+      setShowAlertDialog(true)
+      return;
+    }
+    //envio de informações para a API cadastrar no banco de dados
+    try {
+      await api.post('/api/cadastro', formData);
+      // await axios.post('http://192.168.15.10:8085/api/cadastro', formData);
+      setShowAlertDialog2(true)
+      setFormData('');
+      setIsLoading(false);
 
-          
-      } 
-      catch(error){
-          console.log(error)
-          if(error.response.status === 401) {
-              setShowAlertDialog3(true)
-          }
-          else {
-              console.log(error)
-          }
+
+    }
+    catch (error) {
+      console.log(error)
+      if (error.response.status === 401) {
+        setShowAlertDialog3(true)
       }
+      else {
+        console.log(error)
+      }
+    }
   };
 
   const enteringAnimation = new Keyframe({
     0: {
       opacity: 0,
-     
-    
+
+
     },
     30: {
       opacity: 0.3,
-     
-    
+
+
     },
     50: {
       opacity: 0.5,
@@ -110,7 +111,7 @@ export default function SigninScreen({navigation}) {
     },
     100: {
       opacity: 1,
-      
+
     },
   }).duration(900);
 
@@ -121,18 +122,18 @@ export default function SigninScreen({navigation}) {
         { translateX: -150 },
       ]
     },
-    
+
     50: {
       transform: [
         { translateX: -50 },
       ]
     },
-  
+
     100: {
       transform: [
         { translateX: 0 },
       ]
-      
+
     },
   }).duration(650);
 
@@ -142,18 +143,18 @@ export default function SigninScreen({navigation}) {
         { translateX: 150 },
       ]
     },
-    
+
     50: {
       transform: [
         { translateX: 50 },
       ]
     },
-  
+
     100: {
       transform: [
         { translateX: 0 },
       ]
-      
+
     },
   }).duration(650);
 
@@ -162,38 +163,35 @@ export default function SigninScreen({navigation}) {
 
 
   return (
-   
-    <SafeAreaView  alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='#EDE9E4'>
-    
-    <StatusBar hidden/>
 
+    <SafeAreaView alignItens='center' justifyContent="center" w={'100%'} h={'100%'} bg='#EDE9E4'>
 
-<Animated.View entering={enteringAnimation} exiting={FadeOutLeft} w={'100%'} h={'100%'}>
+      <StatusBar hidden />
 
-    
 
-<KeyboardAvoidingView behavior="height">
+      <Animated.View entering={enteringAnimation} exiting={FadeOutLeft} w={'100%'} h={'100%'}>
 
 
 
+        <KeyboardAvoidingView behavior="height">
 
-<ScrollView>
-<StatusBar hidden/>
 
-<AnimatedCenter AnimatedCenter style={[scaleStyles]} h={100} w={'100%'} marginBottom={25}>
 
 
-<Image
-w={'100%'}
-size="lg"
-source={topImage}
-alt="topimg"
-/>
+          <ScrollView>
+            <StatusBar hidden />
 
-</AnimatedCenter>
+            <AnimatedCenter AnimatedCenter style={[scaleStyles]} h={100} w={'100%'} marginBottom={25}>
 
 
+              <Image
+                w={'100%'}
+                size="lg"
+                source={topImage}
+                alt="topimg"
+              />
 
+            </AnimatedCenter>
 
 
 
@@ -201,298 +199,301 @@ alt="topimg"
 
 
 
-<Center marginTop={75} alignItems="center" justifyContent="center">
 
-<Box h={'auto'} w={'100%'} marginTop={-35} marginBottom={15} justifyContent="center" alignItems="center">
-<Animated.View w={'auto'} h={'auto'}>
-<Image
-w={130}
-h={100}
-source={logo}
-alt="logo"
-/>
-</Animated.View>
 
-</Box>
 
+            <Center marginTop={75} alignItems="center" justifyContent="center">
 
-<Animated.View>
-<Text color={'#A87B34'} fontSize={24} fontWeight='$extrabold' marginVertical={10}>REGISTRE-SE</Text>
-</Animated.View>
+              <Box h={'auto'} w={'100%'} marginTop={-35} marginBottom={15} justifyContent="center" alignItems="center">
+                <Animated.View w={'auto'} h={'auto'}>
+                  <Image
+                    w={130}
+                    h={100}
+                    source={logo}
+                    alt="logo"
+                  />
+                </Animated.View>
 
-<Animated.View entering={enteringInputAnimation}>
-<Input
-borderRadius={12}
-bg='#FFFF'
-w={'80%'}
-h={50}
-variant="outline"
-size="md"
-isDisabled={false}
-isInvalid={false}
-isReadOnly={false}
-$focus-borderColor={'#A87B34'}
+              </Box>
 
->
-<InputField onChangeText={(text)=> handleInputChange('nome' , text)} value={formData.nome} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="NOME:" placeholderTextColor={'#A87B34'}  />
-</Input>
 
+              <Animated.View>
+                <Text color={'#A87B34'} fontSize={24} fontWeight='$extrabold' marginVertical={10}>REGISTRE-SE</Text>
+              </Animated.View>
 
+              <Animated.View entering={enteringInputAnimation}>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'80%'}
+                  h={50}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
 
-<Input
-marginVertical={10}
-borderRadius={12}
-bg='#FFFF'
-w={'80%'}
-h={50}
-variant="outline"
-size="md"
-isDisabled={false}
-isInvalid={false}
-isReadOnly={false}
-$focus-borderColor={'#A87B34'}
+                >
+                  <InputField onChangeText={(text) => handleInputChange('nome', text)} value={formData.nome} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="NOME:" placeholderTextColor={'#A87B34'} />
+                </Input>
 
->
-<InputField onChangeText={(text)=> handleInputChange('sobrenome' , text)} value={formData.sobrenome} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="SOBRENOME:" placeholderTextColor={'#A87B34'}  />
-</Input>
-</Animated.View>
 
 
-<Animated.View entering={enteringInput2Animation}>
-<Input
-marginVertical={10}
-borderRadius={12}
-bg='#FFFF'
-w={'80%'}
-h={50}
-variant="outline"
-size="md"
-isDisabled={false}
-isInvalid={false}
-isReadOnly={false}
-$focus-borderColor={'#A87B34'}
+                <Input
+                  marginVertical={10}
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'80%'}
+                  h={50}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
 
->
-<InputField  onChangeText={(text)=> handleInputChange('email' , text.toLowerCase())} value={formData.email} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="EMAIL:" placeholderTextColor={'#A87B34'}  />
-</Input>
+                >
+                  <InputField onChangeText={(text) => handleInputChange('sobrenome', text)} value={formData.sobrenome} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="SOBRENOME:" placeholderTextColor={'#A87B34'} />
+                </Input>
+              </Animated.View>
 
-<Input
-borderRadius={12}
-bg='#FFFF'
-w={'80%'}
-h={50}
-variant="outline"
-size="md"
-isDisabled={false}
-isInvalid={false}
-isReadOnly={false}
-$focus-borderColor={'#A87B34'}
 
->
-<InputField  onChangeText={(text)=> handleInputChange('senha' , text)}  value={formData.senha} $focus-borderColor={'#A87B34'}  type={showPassword ? "text" : "password"} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="SENHA:" placeholderTextColor={'#A87B34'}  />
+              <Animated.View entering={enteringInput2Animation}>
+                <Input
+                  marginVertical={10}
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'80%'}
+                  h={50}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
 
-<InputSlot pr="$3" onPress={handleState}>
-          <InputIcon
-            as={showPassword ? EyeIcon : EyeOffIcon}
-            color="#A87B34"
-          />
-</InputSlot>
-</Input>
+                >
+                  <InputField onChangeText={(text) => handleInputChange('email', text.toLowerCase())} value={formData.email} $focus-borderColor={'#A87B34'} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="EMAIL:" placeholderTextColor={'#A87B34'} />
+                </Input>
 
-</Animated.View>
+                <Input
+                  borderRadius={12}
+                  bg='#FFFF'
+                  w={'80%'}
+                  h={50}
+                  variant="outline"
+                  size="md"
+                  isDisabled={false}
+                  isInvalid={false}
+                  isReadOnly={false}
+                  $focus-borderColor={'#A87B34'}
 
+                >
+                  <InputField onChangeText={(text) => handleInputChange('senha', text)} value={formData.senha} $focus-borderColor={'#A87B34'} type={showPassword ? "text" : "password"} fontSize={12.5} color='#A87B34' fontWeight='$bold' placeholder="SENHA:" placeholderTextColor={'#A87B34'} />
 
-<Button w={170} onPress={handleCadastrar} borderRadius={15} borderWidth={1.5} borderColor={'#A87B34'} marginTop={20} marginBottom={35} variant="outline">
-{isLoading && <ButtonSpinner color={'#A87B34'}/>}
-          <Text color={'#A87B34'} fontWeight='$bold' >
-            {isLoading ? "" : "REGISTRAR-SE"}
-          </Text>
-</Button>
+                  <InputSlot pr="$3" onPress={handleState}>
+                    <InputIcon
+                      as={showPassword ? EyeIcon : EyeOffIcon}
+                      color="#A87B34"
+                    />
+                  </InputSlot>
+                </Input>
 
+              </Animated.View>
 
-<Center flexDirection="row">
 
-<Text color={'#A87B34'} fontSize={13} fontWeight='$extrabold' marginTop={10}>Já tem uma conta?</Text> 
+              <Button w={170} onPress={handleCadastrar} borderRadius={15} borderWidth={1.5} borderColor={'#A87B34'} marginTop={20} marginBottom={35} variant="outline">
+                {isLoading && <ButtonSpinner color={'#A87B34'} />}
+                <Text color={'#A87B34'} fontWeight='$bold' >
+                  {isLoading ? "" : "REGISTRAR-SE"}
+                </Text>
+              </Button>
 
 
-<Button w={48} borderWidth={0} marginTop={10} variant="link" onPress={() => navigation.push('Login')}>
-<ButtonText color={'#6FBFEF'} fontSize={15} fontWeight='$bold' >Entre</ButtonText>
-</Button>
-
-</Center>
-
-
-
-
-</Center>
-
-
-<AnimatedCenter style={[scaleStyles]} h={100} w={'100%'} marginTop={-8}>
-
-<Image
-w={'100%'}
-size="lg"
-source={bottomImage}
-alt="Bottomimg"
-/>
-
-</AnimatedCenter>
-
-
-</ScrollView>
-
-
-
-
-
-
-
-
-
-
-
-<>
-<AlertDialog
-isOpen={showAlertDialog}
-onClose={() => {
-setShowAlertDialog(false)
-setIsLoading(false);
-}}
->
-<AlertDialogBackdrop/>
-<AlertDialogContent bg='#EDE9E4'>
-<AlertDialogHeader>
-  <Heading color='#A87B34' size="lg">Prencha todos os campos para o cadastro!</Heading>
-  <AlertDialogCloseButton>
-   
-  </AlertDialogCloseButton>
-</AlertDialogHeader>
-<AlertDialogBody>
-  <Text  size="sm">
-   Os campos para cadastro estão vazios, para continuar você deve preencher todos!
-  </Text>
-</AlertDialogBody>
-<AlertDialogFooter>
-  <Center space="lg">
-   
-    <Button
-      
-      variant="outline"
-      borderColor={'#A87B34'}
-      onPress={() => {
-        setShowAlertDialog(false)
-        setIsLoading(false);
-      }}
-    >
-      <ButtonText color={'#A87B34'}>OK</ButtonText>
-    </Button>
-  </Center>
-</AlertDialogFooter>
-</AlertDialogContent>
-</AlertDialog>
-
-</>
-
-
-
-<>
-<AlertDialog
-isOpen={showAlertDialog2}
-onClose={() => {
-setShowAlertDialog2(false)
-setIsLoading(false);
-}}
->
-<AlertDialogBackdrop />
-<AlertDialogContent>
-<AlertDialogHeader>
-  <Heading color='#A87B34' size="lg">Cadastro realizado com sucesso!</Heading>
-  <AlertDialogCloseButton>
-   
-  </AlertDialogCloseButton>
-</AlertDialogHeader>
-<AlertDialogBody>
-  <Text size="sm">
-  Você se cadastrou com sucesso em EventCraft, agora acesse sua nova conta fazendo login!
-  </Text>
-</AlertDialogBody>
-<AlertDialogFooter>
-  <Center space="lg">
-   
-  <Button
-      
-      variant="outline"
-      borderColor={'#A87B34'}
-      onPress={() => {
-        setShowAlertDialog2(false)
-        navigation.navigate('Login')
-        setIsLoading(false);
-      }}
-    >
-      <ButtonText color={'#A87B34'}>OK</ButtonText>
-    </Button>
-  </Center>
-</AlertDialogFooter>
-</AlertDialogContent>
-</AlertDialog>
-
-</>
-
-<>
-<AlertDialog
-isOpen={showAlertDialog3}
-onClose={() => {
-setShowAlertDialog3(false)
-setIsLoading(false);
-}}
->
-<AlertDialogBackdrop />
-<AlertDialogContent>
-<AlertDialogHeader>
-  <Heading color='#A87B34' size="lg">Email já cadastrado!</Heading>
-  <AlertDialogCloseButton>
-   
-  </AlertDialogCloseButton>
-</AlertDialogHeader>
-<AlertDialogBody>
-  <Text size="sm">
- Parece que esse email já foi usado para o cadastro em uma conta EventCraft, troque o email ou faça login em sua conta. 
-  </Text>
-</AlertDialogBody>
-<AlertDialogFooter>
-  <Center space="lg">
-   
-  <Button
-      
-      variant="outline"
-      borderColor={'#A87B34'}
-      onPress={() => {
-        setShowAlertDialog3(false)
-        setIsLoading(false);
-      }}
-    >
-      <ButtonText color={'#A87B34'}>OK</ButtonText>
-    </Button>
-  </Center>
-</AlertDialogFooter>
-</AlertDialogContent>
-</AlertDialog>
-
-</>
-
-
-</KeyboardAvoidingView>
-
-</Animated.View>
-
-
-   
-
-
-
-      
+              <Center flexDirection="row">
+
+                <Text color={'#A87B34'} fontSize={13} fontWeight='$extrabold' marginTop={10}>Já tem uma conta?</Text>
+
+
+                <Button w={48} borderWidth={0} marginTop={10} variant="link" onPress={() => navigation.push('Login')}>
+                  <ButtonText color={'#6FBFEF'} fontSize={15} fontWeight='$bold' >Entre</ButtonText>
+                </Button>
+
+              </Center>
+
+
+
+
+            </Center>
+
+
+            <AnimatedCenter style={[scaleStyles]} h={100} w={'100%'} marginTop={-8}>
+
+              <Image
+                w={'100%'}
+                size="lg"
+                source={bottomImage}
+                alt="Bottomimg"
+              />
+
+            </AnimatedCenter>
+
+
+          </ScrollView>
+
+
+
+
+
+
+
+
+
+
+
+          <>
+            <AlertDialog
+              isOpen={showAlertDialog}
+              onClose={() => {
+                setShowAlertDialog(false)
+                setIsLoading(false);
+              }}
+            >
+              <AlertDialogBackdrop />
+              <AlertDialogContent bg='#EDE9E4'>
+                <AlertDialogHeader>
+                  <Heading color='#A87B34' size="lg">Prencha todos os campos para o cadastro!</Heading>
+                  <AlertDialogCloseButton>
+
+                  </AlertDialogCloseButton>
+                </AlertDialogHeader>
+                <AlertDialogBody>
+                  <Text size="sm">
+                    Os campos para cadastro estão vazios, para continuar você deve preencher todos!
+                  </Text>
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                  <Center space="lg">
+
+                    <Button
+
+                      variant="outline"
+                      borderColor={'#A87B34'}
+                      onPress={() => {
+                        setShowAlertDialog(false)
+                        setIsLoading(false);
+                      }}
+                    >
+                      <ButtonText color={'#A87B34'}>OK</ButtonText>
+                    </Button>
+                  </Center>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+          </>
+
+
+
+          <>
+            <AlertDialog
+              isOpen={showAlertDialog2}
+              onClose={() => {
+                setShowAlertDialog2(false)
+                setIsLoading(false);
+              }}
+            >
+              <AlertDialogBackdrop />
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <Heading color='#A87B34' size="lg">Cadastro realizado com sucesso!</Heading>
+                  <AlertDialogCloseButton>
+
+                  </AlertDialogCloseButton>
+                </AlertDialogHeader>
+                <AlertDialogBody>
+                  <Text size="sm">
+                    Você se cadastrou com sucesso em EventCraft, agora acesse sua nova conta fazendo login!
+                  </Text>
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                  <Center space="lg">
+
+                    <Button
+
+                      variant="outline"
+                      borderColor={'#A87B34'}
+                      onPress={() => {
+                        setShowAlertDialog2(false)
+                        navigation.navigate('Login')
+                        setIsLoading(false);
+                      }}
+                    >
+                      <ButtonText color={'#A87B34'}>OK</ButtonText>
+                    </Button>
+                  </Center>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+          </>
+
+          <>
+            <AlertDialog
+              isOpen={showAlertDialog3}
+              onClose={() => {
+                setShowAlertDialog3(false)
+                setIsLoading(false);
+              }}
+            >
+              <AlertDialogBackdrop />
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <Heading color='#A87B34' size="lg">Email já cadastrado!</Heading>
+                  <AlertDialogCloseButton>
+
+                  </AlertDialogCloseButton>
+                </AlertDialogHeader>
+                <AlertDialogBody>
+                  <Text size="sm">
+                    Parece que esse email já foi usado para o cadastro em uma conta EventCraft, troque o email ou faça login em sua conta.
+                  </Text>
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                  <Center space="lg">
+
+                    <Button
+
+                      variant="outline"
+                      borderColor={'#A87B34'}
+                      onPress={() => {
+                        setShowAlertDialog3(false)
+                        setIsLoading(false);
+                      }}
+                    >
+                      <ButtonText color={'#A87B34'}>OK</ButtonText>
+                    </Button>
+                  </Center>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+          </>
+
+
+        </KeyboardAvoidingView>
+
+      </Animated.View>
+
+
+
+
+
+
+
     </SafeAreaView>
-    
+
   )
 }
 
@@ -501,6 +502,6 @@ const styles = StyleSheet.create({
   center: {
     height: 'auto',
     width: 'auto',
-  
+
   },
 });

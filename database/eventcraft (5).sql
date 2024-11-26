@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 24-Set-2024 às 17:25
+-- Tempo de geração: 26-Nov-2024 às 12:16
 -- Versão do servidor: 10.4.25-MariaDB
 -- versão do PHP: 7.4.30
 
@@ -31,9 +31,11 @@ CREATE TABLE `colaboradores` (
   `id` int(11) NOT NULL,
   `nome` varchar(500) NOT NULL,
   `sobrenome` varchar(500) NOT NULL,
-  `telefone` char(11) NOT NULL,
+  `telefone` char(15) NOT NULL,
   `categoria` varchar(100) NOT NULL,
-  `descricao` text NOT NULL
+  `descricao` text NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `imagemBase64` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -65,7 +67,7 @@ CREATE TABLE `eventos` (
   `id_usuario` int(11) NOT NULL,
   `privacidade` varchar(50) NOT NULL DEFAULT '1',
   `imagemBase64` longtext NOT NULL,
-  `horaEvento` time NOT NULL
+  `horaEvento` char(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -79,7 +81,8 @@ CREATE TABLE `usuarios` (
   `nome` varchar(500) NOT NULL,
   `sobrenome` varchar(500) NOT NULL,
   `email` varchar(500) NOT NULL,
-  `senha` varchar(500) NOT NULL
+  `senha` varchar(500) NOT NULL,
+  `imagemBase64` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -90,21 +93,22 @@ CREATE TABLE `usuarios` (
 -- Índices para tabela `colaboradores`
 --
 ALTER TABLE `colaboradores`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_usuario` (`id_usuario`);
 
 --
 -- Índices para tabela `endereco`
 --
 ALTER TABLE `endereco`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_evento` (`id_evento`);
+  ADD KEY `endereco_ibfk_1` (`id_evento`);
 
 --
 -- Índices para tabela `eventos`
 --
 ALTER TABLE `eventos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_usuario` (`id_usuario`);
+  ADD KEY `eventos_ibfk_1` (`id_usuario`);
 
 --
 -- Índices para tabela `usuarios`
@@ -145,16 +149,22 @@ ALTER TABLE `usuarios`
 --
 
 --
+-- Limitadores para a tabela `colaboradores`
+--
+ALTER TABLE `colaboradores`
+  ADD CONSTRAINT `colaboradores_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
+
+--
 -- Limitadores para a tabela `endereco`
 --
 ALTER TABLE `endereco`
-  ADD CONSTRAINT `endereco_ibfk_1` FOREIGN KEY (`id_evento`) REFERENCES `eventos` (`id`);
+  ADD CONSTRAINT `endereco_ibfk_1` FOREIGN KEY (`id_evento`) REFERENCES `eventos` (`id`) ON DELETE CASCADE;
 
 --
 -- Limitadores para a tabela `eventos`
 --
 ALTER TABLE `eventos`
-  ADD CONSTRAINT `eventos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+  ADD CONSTRAINT `eventos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

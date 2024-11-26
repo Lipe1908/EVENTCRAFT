@@ -371,8 +371,7 @@ function HomeScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingPPic, setIsLoadingPPic] = useState(true)
   const [isPriv, setIsPriv] = useState(false)
-
-
+ 
 
   const [value, setValue] = useState('Público');
 
@@ -688,7 +687,7 @@ function SearchScreen({ navigation, route }) {
   }, [filter]);
 
   useEffect(() => {
-    if(filter === 'events' ){
+    if (filter === 'events') {
       if (searchQuery) {
         const filteredResults = allEvents.filter(event =>
           event.nomeEvento.toLowerCase().includes(searchQuery.toLowerCase())
@@ -710,7 +709,7 @@ function SearchScreen({ navigation, route }) {
         setResults(allEvents);
       }
     }
-     
+
   }, [searchQuery, allEvents]);
 
 
@@ -812,7 +811,7 @@ function SearchScreen({ navigation, route }) {
 
       <Image
         rounded={"$full"}
-        style={{ height: 130, width: 130, alignSelf: 'center', marginHorizontal:5 }}
+        style={{ height: 130, width: 130, alignSelf: 'center', marginHorizontal: 5 }}
         alt="imagemColaborador"
         source={{
           uri: `data:image/jpeg;base64,${item.imagemBase64}`
@@ -876,7 +875,7 @@ function SearchScreen({ navigation, route }) {
               fontFamily="$heading"
               fontWeight="$normal"
               lineHeight="$sm"
-              
+
               sx={{
                 color: "$textLight700",
                 _dark: {
@@ -887,7 +886,7 @@ function SearchScreen({ navigation, route }) {
               Categoria: {item.categoria}
             </Text>
 
-           
+
           </HStack>
           <HStack alignItems="center" justifyContent="center">
             <Text
@@ -897,7 +896,7 @@ function SearchScreen({ navigation, route }) {
               fontFamily="$heading"
               fontWeight="$normal"
               lineHeight="$sm"
-              
+
               sx={{
                 color: "$textLight700",
                 _dark: {
@@ -905,26 +904,26 @@ function SearchScreen({ navigation, route }) {
                 },
               }}
             >
-              Descrição: 
+              Descrição:
             </Text>
 
-           
+
           </HStack>
           <Menu
-                  placement="top"
-                  trigger={({ ...triggerProps }) => {
-                    return (
-                      <Button h="$5.5" variant="link" {...triggerProps}>
-                        <ButtonText color="#A87B34">Ver</ButtonText>
-                      </Button>
-                    );
-                  }}
-                >
-                  <MenuItem flexDirection="column" h={'auto'} key="Community" textValue="Community">
-                    <Text alignSelf="center" fontWeight={'bold'}>Descrição desse colaborador:</Text>
-                    <Text fontWeight={'light'}>{item.descricao}</Text>
-                  </MenuItem>
-                </Menu>
+            placement="top"
+            trigger={({ ...triggerProps }) => {
+              return (
+                <Button h="$5.5" variant="link" {...triggerProps}>
+                  <ButtonText color="#A87B34">Ver</ButtonText>
+                </Button>
+              );
+            }}
+          >
+            <MenuItem flexDirection="column" h={'auto'} key="Community" textValue="Community">
+              <Text alignSelf="center" fontWeight={'bold'}>Descrição desse colaborador:</Text>
+              <Text fontWeight={'light'}>{item.descricao}</Text>
+            </MenuItem>
+          </Menu>
 
           {item.id_usuario == id ?
             <>
@@ -1808,7 +1807,7 @@ function ProfileScreen({ navigation, route }) {
   });
   const [formData3, setFormData3] = useState({
     senhaAtual: '',
-    senha:'',
+    senha: '',
     id: id,
   });
   const [formData2, setFormdata2] = useState({
@@ -1818,7 +1817,7 @@ function ProfileScreen({ navigation, route }) {
     descricao: '',
     telefone: '',
     categoria: '',
-    imagemBase64:'',
+    imagemBase64: '',
     id_usuario: id
   });
   const handleInputChange = (name, value) => {
@@ -1858,14 +1857,16 @@ function ProfileScreen({ navigation, route }) {
         const image = response.assets[0];
         setImg2(image)
         const imageColaborator = await RNFS.readFile(image.uri, 'base64');
-        setFormdata2({ id: '',
-        nome: formData2.nome,
-        sobrenome: formData2.sobrenome,
-        descricao: formData2.descricao,
-        telefone: formData2.telefone,
-        categoria: formData2.categoria,
-        imagemBase64:imageColaborator,
-        id_usuario: id })
+        setFormdata2({
+          id: '',
+          nome: formData2.nome,
+          sobrenome: formData2.sobrenome,
+          descricao: formData2.descricao,
+          telefone: formData2.telefone,
+          categoria: formData2.categoria,
+          imagemBase64: imageColaborator,
+          id_usuario: id
+        })
       } else {
         console.log('Nenhuma imagem capturada.');
       }
@@ -1916,31 +1917,31 @@ function ProfileScreen({ navigation, route }) {
 
   const [isError, setIsError] = useState(false)
 
-const handleChangePassWord = async () => {
-try{
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  const apiUrl2 = '/api/edit/password';
-  const response = await api.put(apiUrl2, formData3,config);
+  const handleChangePassWord = async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const apiUrl2 = '/api/edit/password';
+      const response = await api.put(apiUrl2, formData3, config);
 
 
-  if(response.status == 200 ) {
-    setShowAlertDialogPassWord(false)
-    setShowAlertDialogProfile(false)
-    navigation.push('Login')
+      if (response.status == 200) {
+        setShowAlertDialogPassWord(false)
+        setShowAlertDialogProfile(false)
+        navigation.push('Login')
+      }
+
+    } catch (error) {
+      setIsError(true)
+    }
   }
-  
-} catch(error) {
-  setIsError(true)
-}
-}
   return (
     <SafeAreaView bg="#EDE9E4" >
       <>
-      <AlertDialog
+        <AlertDialog
           isOpen={showAlertDialogPassWord}
           onClose={() => {
             setShowAlertDialogPassWord(false)
@@ -1970,9 +1971,9 @@ try{
                   isReadOnly={false}
                   $focus-borderColor={'#A87B34'}
                   justifyContent="flex-start"
-                  
+
                 >
-                  <InputField onChangeText={(text) => handleInputChange3('senhaAtual', text)} value={formData3.senhaAtual} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color={isError ? 'red' :'#A87B34'} fontWeight='$bold' placeholder={'Insira sua senha atual:'} placeholderTextColor={isError ?'red' : '$coolGray500'} />
+                  <InputField onChangeText={(text) => handleInputChange3('senhaAtual', text)} value={formData3.senhaAtual} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color={isError ? 'red' : '#A87B34'} fontWeight='$bold' placeholder={'Insira sua senha atual:'} placeholderTextColor={isError ? 'red' : '$coolGray500'} />
                 </Input>
                 {isError ? <><Text color={'red'} fontWeight={'bold'} fontSize={11}>Senha atual incorreta</Text></> : <></>}
               </VStack>
@@ -2087,9 +2088,9 @@ try{
                 >
                   <InputField onChangeText={(text) => handleInputChange('email', text)} value={formData.email} $focus-borderColor={'#A87B34'} fontSize={12} justifyContent="flex-start" alignItems="flex-start" color='#A87B34' fontWeight='$bold' placeholder={formData.email} placeholderTextColor={'black'} />
                 </Input>
-                <Button onPress={()=> setShowAlertDialogPassWord(true)} variant="link">
+                <Button onPress={() => setShowAlertDialogPassWord(true)} variant="link">
                   <ButtonText color={'#A87B34'} fontSize={12}>Alterar senha</ButtonText>
-                  <ButtonIcon m={'$1'} color={'#A87B34'} size={'sm'} as={LockKeyhole}/>
+                  <ButtonIcon m={'$1'} color={'#A87B34'} size={'sm'} as={LockKeyhole} />
                 </Button>
               </VStack>
             </AlertDialogBody>
@@ -2132,17 +2133,17 @@ try{
             </AlertDialogHeader>
             <AlertDialogBody>
 
-            <TouchableOpacity onPress={handleCameraLaunchColaborator} style={{ alignItems: 'center', marginVertical: 10 }}>
+              <TouchableOpacity onPress={handleCameraLaunchColaborator} style={{ alignItems: 'center', marginVertical: 10 }}>
 
-<Avatar bg={'$coolGray500'} w={150} h={150}>
-  {img2 ? <>
-  <AvatarImage alt="colboratorImg" source={{uri: img2.uri}}/>
-  </> : <>
-  <AvatarFallbackText fontSize={65}>{dataUser.nome}</AvatarFallbackText>  
-  </>}
+                <Avatar bg={'$coolGray500'} w={150} h={150}>
+                  {img2 ? <>
+                    <AvatarImage alt="colboratorImg" source={{ uri: img2.uri }} />
+                  </> : <>
+                    <AvatarFallbackText fontSize={65}>{dataUser.nome}</AvatarFallbackText>
+                  </>}
 
-</Avatar>
-</TouchableOpacity>
+                </Avatar>
+              </TouchableOpacity>
               <VStack w={'100%'} space="xs">
                 <Text color='#A87B34' fontSize={13} fontWeight="bold" lineHeight={'$xs'}>Nome de colaborador:</Text>
                 <Input
