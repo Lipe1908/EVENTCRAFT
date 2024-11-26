@@ -18,6 +18,7 @@ import api from "../../props/api";
 
 export default function Evento({ navigation, route }) {
 
+// const de animação de entrada da tela
   const enteringScreenAnimation = new Keyframe({
     0: {
       opacity: 0

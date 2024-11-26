@@ -6,7 +6,6 @@ import { Button, ButtonText, ButtonIcon, ButtonSpinner, } from "@gluestack-ui/th
 import { KeyboardAvoidingView } from '@gluestack-ui/themed';
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogFooter, AlertDialogBody, Input, InputField, } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
-import axios from 'axios';
 import { Icon } from "@gluestack-ui/themed";
 import { Heading } from "@gluestack-ui/themed";
 import { Box, SafeAreaView, Image, ImageBackground } from '@gluestack-ui/themed';
@@ -16,7 +15,6 @@ import { withTiming, useAnimatedStyle, withRepeat, useSharedValue, BounceInLeft,
 import Animated from 'react-native-reanimated';
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
 import { AvatarFallbackText } from "@gluestack-ui/themed";
-import teste from '../../../src/img/evento1.png'
 import { useIsFocused } from '@react-navigation/native';
 import MaskInput, { Masks } from 'react-native-mask-input';
 import { AlignJustify, Pencil, Clock, StretchVertical, Building2, House, ArrowBigRight, CircleX, LockKeyhole, MailQuestionIcon, PartyPopper, GlobeIcon, CircleAlert, SearchIcon, LogOut, IdCard, PuzzleIcon, PaintBucket, SettingsIcon, PersonStandingIcon, ChevronDownIcon, SlidersHorizontal, } from "lucide-react-native";
@@ -47,21 +45,24 @@ import { ButtonGroup } from "@gluestack-ui/themed";
 import { SelectTrigger } from "@gluestack-ui/themed";
 import { SelectInput } from "@gluestack-ui/themed";
 import { SelectItem } from "@gluestack-ui/themed";
-import { Tooltip } from "@gluestack-ui/themed";
+
+//Tela Inicial (HOME)
 function HomeScreen({ navigation, route }) {
 
 
-
-  const [refreshing, setRefreshing] = React.useState(false);
-
-
-
-  const { id, nome, sobrenome, email, senha, imagemBase64 } = route.params.obj;
+  const [refreshing, setRefreshing] = React.useState(false); //const utilizada para fazer o refresh (recarregar a página).
 
 
 
-  const { width: screenWidth } = Dimensions.get('window');
+  const { id, nome, sobrenome, email, senha, imagemBase64 } = route.params.obj; //const obtida do login (informações do usuário que está logado)
 
+
+
+  const { width: screenWidth } = Dimensions.get('window'); //const de tamanho da tela
+
+
+
+  //informações utilizadas no carroussel da tela inicial
   const cards = [
     {
       id: 1,
@@ -96,6 +97,7 @@ function HomeScreen({ navigation, route }) {
 
   ]
 
+  //Componente do carrosel
   const MyCarousel = ({ data }) => {
     const renderItem = ({ item, color }) => (
       <AnimatedBox style={[scaleBoxStyles]} alignSelf="center" alignItems="center" marginTop={50}>
@@ -130,7 +132,6 @@ function HomeScreen({ navigation, route }) {
 
       </AnimatedBox>
     );
-
     return (
       <Carousel
         data={data}
@@ -146,13 +147,15 @@ function HomeScreen({ navigation, route }) {
       />
     );
   };
+
+
   const [dataUser, setDataUser] = useState({})
 
+
+  //componentes animados utilizados e suas animações
   const AnimatedImage = Animated.createAnimatedComponent(Image);
   const AnimatedBox = Animated.createAnimatedComponent(Box);
   const scale = useSharedValue(1);
-
-
   React.useEffect(() => {
     scale.value = withRepeat(
       withTiming(scale.value * 0.9, { duration: 900 }),
@@ -178,26 +181,26 @@ function HomeScreen({ navigation, route }) {
   const scaleBoxStyles = useAnimatedStyle(() => ({
     transform: [{ scale: scaleBox.value }],
   }));
+
+
   const [imageSource, setImageSource] = useState('');
 
 
   const [data, setData] = useState([]);
 
 
-
+//const de vizualização de um respectivo evento 
   const handleVizualizar = (id) => {
     navigation.push('Evento', { id })
   };
-
-
-
-
 
   const [showActionsheet, setShowActionsheet] = React.useState(false)
   const handleClose = () => setShowActionsheet(!showActionsheet)
   const [showAlertDialog, setShowAlertDialog] = React.useState(false)
 
 
+
+  //componentes dos cards dos eventos presentes na tela inicial
   const renderItem = ({ item }) =>
 
   (
@@ -363,26 +366,20 @@ function HomeScreen({ navigation, route }) {
 
   );
 
+  const [isLoading, setIsLoading] = useState(true) //const de loading 
+  const [isLoadingPPic, setIsLoadingPPic] = useState(true) //const de loading (imagem de perfil)
+  const [isPriv, setIsPriv] = useState(false) 
+  const [value, setValue] = useState('Público');// const para monitorar em qual setor de eventos o usuário está ('Privado' ou 'Público)
 
 
 
-
-  const [isLogged, setIsLogged] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isLoadingPPic, setIsLoadingPPic] = useState(true)
-  const [isPriv, setIsPriv] = useState(false)
- 
-
-  const [value, setValue] = useState('Público');
-
+  //useEffect usado para fazer a transição entre as categorias de eventos 'PÚBLICOS' ou 'PRIVADOS'
   React.useEffect(() => {
 
     if (value === 'Público') {
       setIsLoading(true)
-      //  axios.get(`http://192.168.15.10:8085/api/readEvents`)
       api.get(`/api/readEvents`)
         .then(response => {
-          //Ordenar os dados pelo id em ordem crescente
           const sortData = response.data.sort((a, b) => a.id - b.id);
 
           if (response.data == '') {
@@ -405,7 +402,6 @@ function HomeScreen({ navigation, route }) {
       setIsLoading(true)
       setIsPriv(true)
       api.get(`/api/readEventsPriv`)
-        // axios.get(`http://192.168.15.10:8085/api/readEventsPriv`)
         .then(response => {
 
           const sortData = response.data.sort((a, b) => a.id - b.id);
@@ -430,7 +426,6 @@ function HomeScreen({ navigation, route }) {
     }
     else if (value === 'Meus') {
       setIsLoading(true)
-      //  axios.get(`http://192.168.15.10:8085/api/readEventsUser/${id}`)
       api.get(`/api/readEventsUser/${id}`)
         .then(response => {
           //Ordenar os dados pelo id em ordem crescente
@@ -473,6 +468,8 @@ function HomeScreen({ navigation, route }) {
   }, [refreshing]);
 
 
+
+  //const que realiza o recarregamento da página
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     setTimeout(() => {
@@ -482,7 +479,7 @@ function HomeScreen({ navigation, route }) {
     }, 500);
   }, []);
 
-
+//Componente que é retornado ao usuário em react native.
   return (
 
     <SafeAreaProvider>
@@ -646,6 +643,7 @@ function HomeScreen({ navigation, route }) {
 
   );
 }
+//Tela de Pesquisa (SEARCH)
 function SearchScreen({ navigation, route }) {
 
 
@@ -1066,7 +1064,7 @@ function SearchScreen({ navigation, route }) {
 }
 
 
-
+//Tela de Eventos do usuário (EVENTS)
 function EventsScreen({ navigation, route }) {
   LocaleConfig.locales['br'] = {
     monthNames: [
@@ -1735,7 +1733,7 @@ function EventsScreen({ navigation, route }) {
     </SafeAreaView>
   );
 }
-
+//Tela de Perfil do usuário (PROFILE)
 function ProfileScreen({ navigation, route }) {
   const { id, nome, sobrenome, email, senha, imagemBase64 } = route.params.obj;
   const obj = route.params.obj;
@@ -2407,7 +2405,7 @@ function ProfileScreen({ navigation, route }) {
   );
 }
 
-
+//Tela de criação de eventos (CREATE-EVENTS)
 function CreateEventScreen({ navigation, route }) {
 
 
