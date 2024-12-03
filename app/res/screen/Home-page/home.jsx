@@ -45,7 +45,6 @@ import { ButtonGroup } from "@gluestack-ui/themed";
 import { SelectTrigger } from "@gluestack-ui/themed";
 import { SelectInput } from "@gluestack-ui/themed";
 import { SelectItem } from "@gluestack-ui/themed";
-
 //Tela Inicial (HOME)
 function HomeScreen({ navigation, route }) {
 
@@ -661,6 +660,8 @@ function SearchScreen({ navigation, route }) {
   const handleClose = () => {
     setIsOpen(false)
   }
+
+  //const que monitora o filtro escolhidopelo usuário e monitora sua pesquisa retornando apenas os eventos correspondentes.
   const fetchAllEvents = async () => {
     try {
       if (filter === "events") {
@@ -724,8 +725,6 @@ function SearchScreen({ navigation, route }) {
         }}
       />
       <VStack justifyContent="center" w={'50%'} alignSelf="">
-
-
 
         <Center w={'100%'}>
 
@@ -1062,8 +1061,6 @@ function SearchScreen({ navigation, route }) {
     </SafeAreaView>
   );
 }
-
-
 //Tela de Eventos do usuário (EVENTS)
 function EventsScreen({ navigation, route }) {
   LocaleConfig.locales['br'] = {
@@ -2906,7 +2903,6 @@ export default function Home({ navigation, route }) {
         tabBarInactiveTintColor: '#AA7E39',
 
       }
-
       )}
     >
       <Tab.Screen initialParams={{ obj }} options={{ headerShown: false }} name="Página Inicial" component={HomeScreen} />
